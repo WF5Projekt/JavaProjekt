@@ -5,8 +5,8 @@ import javax.swing.JOptionPane;
 public class MD5 {
 	//Static Methode um eine MD5 verschlüsselung zu ermöglichen.
 	
-	public static String MD5(String md5) {
-		   try {
+	public static String MD5(String md5) {  
+		try {
 		        java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
 		        byte[] array = md.digest(md5.getBytes());
 		        StringBuffer sb = new StringBuffer();

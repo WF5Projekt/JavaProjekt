@@ -1,23 +1,30 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import sonstiges.MD5;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 
 @SuppressWarnings("serial")
 public class Login_View extends JFrame {
@@ -36,35 +43,44 @@ public class Login_View extends JFrame {
 	 */
 	public Login_View() {
 		setResizable(false);
-		setBackground(Color.LIGHT_GRAY);
+		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 383, 223);
+		setBounds(100, 100, 190, 238);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.GRAY);
+		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		txt_username.setBackground(Color.LIGHT_GRAY);
+		txt_username.setFont(new Font("Dialog", Font.BOLD, 12));
 		
 		
-		txt_username.setBounds(79, 70, 95, 25);
+		txt_username.setBounds(79, 39, 95, 25);
 		contentPane.add(txt_username);
 		txt_username.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setForeground(Color.LIGHT_GRAY);
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblUsername.setBounds(10, 74, 70, 14);
+		lblUsername.setBounds(11, 43, 68, 14);
 		contentPane.add(lblUsername);
 		
 		JLabel lblPasswort = new JLabel("Passwort");
+		lblPasswort.setForeground(Color.LIGHT_GRAY);
 		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblPasswort.setBounds(202, 74, 69, 14);
+		lblPasswort.setBounds(11, 83, 68, 14);
 		contentPane.add(lblPasswort);
+		txt_passwort.setFont(new Font("Dialog", Font.BOLD, 12));
+		txt_passwort.setBackground(Color.LIGHT_GRAY);
 
 		
-		txt_passwort.setBounds(272, 70, 95, 25);
+		txt_passwort.setBounds(79, 79, 95, 25);
 		contentPane.add(txt_passwort);
+		btn_Login.setBackground(Color.LIGHT_GRAY);
+		btn_Login.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		btn_Login.setBounds(9, 145, 357, 40);
+		btn_Login.setBounds(10, 144, 164, 56);
 		contentPane.add(btn_Login);
 		
 		this.setLocationRelativeTo(null);

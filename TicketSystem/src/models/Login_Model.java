@@ -15,7 +15,7 @@ public class Login_Model extends Database_Model {
 	//wenn Userdaten korrekt sind liefert Login() "FALSE" 	-> Login_View wird ausgeblendet
 	//wenn Userdaten falsch sind liefert login() "TRUE" 	-> Login_View bleibt sichtbar. (siehe Login_Controller)
 	public boolean login() {
-		boolean ret = true;
+		boolean login = false;
 		try {
 			Connection con = getConnection();
 			
@@ -37,7 +37,7 @@ public class Login_Model extends Database_Model {
 				//--> Hier das Programm starten
 				JOptionPane.showMessageDialog(null, "Hallo " + this.vorname
 						+ ", du bist jetzt eingeloggt!");
-				ret = false;
+				login = true;
 			} else {
 
 			
@@ -50,7 +50,7 @@ public class Login_Model extends Database_Model {
 			JOptionPane.showMessageDialog(null, "Fehler bei LoginMethode...");
 
 		}
-		return ret;
+		return login;
 	}
 	
 	//Setter werden von Controller genutzt um dem LoginModel die Daten zu übergeben (welche von der View kommen)

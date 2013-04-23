@@ -11,12 +11,12 @@ import views.Login_View;
 
 //Login_Controller erstellt das LoginModel und LoginView und macht die View sichtbar.
 //Wenn der Nutzer den Login-Button drückt, liefert login() True oder False um die View wieder auszublenden.
-public class Login_Controller {
+public class Login_Controller{
 
 	private Login_View loginView;
 	private Login_Model loginModel;
 
-	public Login_Controller() {
+	public Login_Controller(){
 
 		this.loginView = new Login_View();
 		this.loginModel = new Login_Model();
@@ -24,10 +24,10 @@ public class Login_Controller {
 		//Listener für Enter-Taste und Login-Button
 		this.loginView.addKeyListener(new LoginKeyListener());
 		this.loginView.addLoginListener(new LoginListener());
-		
 		this.loginView.setVisible(true);
+	
 	}
-
+	
 	class LoginListener implements ActionListener {
 
 		@Override
@@ -36,10 +36,13 @@ public class Login_Controller {
 			try {
 				loginModel.setUsername(loginView.getTxt_username());
 				loginModel.setPasswort(loginView.getTxt_passwort());
-
+				
 				boolean login = loginModel.login();
-				loginView.setVisible(login);
-
+				if(login){
+					Main.setMain();
+					loginView.dispose();
+				}
+				
 			} catch (Exception e) {
 				JOptionPane.showInputDialog(this, e);
 			}
@@ -58,7 +61,11 @@ public class Login_Controller {
 					loginModel.setPasswort(loginView.getTxt_passwort());
 
 					boolean login = loginModel.login();
-					loginView.setVisible(login);
+					if(login){
+						Main.setMain();
+						loginView.dispose();
+					}
+					
 
 				} catch (Exception e) {
 					JOptionPane.showInputDialog(this, e);
@@ -79,4 +86,6 @@ public class Login_Controller {
 		}
 
 	}
+
+	
 }
