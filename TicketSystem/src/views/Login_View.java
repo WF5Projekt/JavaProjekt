@@ -1,28 +1,17 @@
 package views;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import sonstiges.MD5;
 
