@@ -8,5 +8,11 @@ public class SecondClass {
 	public void Ausgabe3(){
 		
 	}
+	public void Erstellt(){
+		
+	}
+	public void ERstellt2(){
+		
+	}
 
 }
