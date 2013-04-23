@@ -29,7 +29,6 @@ public class Login_Model extends Database_Model {
 				this.vorname = result.getString("vorname");
 				
             }
-            JOptionPane.showMessageDialog(null, this.passwort_eingabe);
             query.close();
 			con.close();
 			if (this.username_eingabe.equals(this.username)

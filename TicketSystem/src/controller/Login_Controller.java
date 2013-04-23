@@ -2,9 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JOptionPane;
-
 import models.Login_Model;
 import views.Login_View;
 
@@ -13,10 +11,10 @@ public class Login_Controller {
 	private Login_View loginView;
 	private Login_Model loginModel;
 	
-	public Login_Controller(Login_View loginView, Login_Model loginModel) {
-		this.loginView = loginView;
-		this.loginModel = loginModel;
-	
+	public Login_Controller() {
+		this.loginView = new Login_View();
+		this.loginModel = new Login_Model();
+		this.loginView.setVisible(true);
 		this.loginView.addLoginListener(new LoginListener());
 	}
 	
@@ -39,6 +37,6 @@ public class Login_Controller {
 		}
 		
 	}
-	
+
 	
 }
