@@ -12,6 +12,9 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
+
+import sonstiges.MD5;
+
 import java.awt.Font;
 
 @SuppressWarnings("serial")
@@ -72,7 +75,7 @@ public class Login_View extends JFrame {
 
 	public String getTxt_passwort() {
 		
-		return MD5(String.valueOf(txt_passwort.getPassword()));
+		return MD5.MD5(String.valueOf(txt_passwort.getPassword()));
 	}
 
 	public void addLoginListener(ActionListener listenForLoginButton){
@@ -82,18 +85,5 @@ public class Login_View extends JFrame {
 	public void displayErrorMessage(String errorMessage){
 		JOptionPane.showMessageDialog(this, errorMessage);
 	}
-	public String MD5(String md5) {
-		   try {
-		        java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-		        byte[] array = md.digest(md5.getBytes());
-		        StringBuffer sb = new StringBuffer();
-		        for (int i = 0; i < array.length; ++i) {
-		          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-		       }
-		        return sb.toString();
-		    } catch (java.security.NoSuchAlgorithmException e) {
-		    	JOptionPane.showInputDialog(null, "MD5 Fehler");
-		    }
-		    return null;
-		}
+	
 }

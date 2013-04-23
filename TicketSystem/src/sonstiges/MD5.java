@@ -1,5 +1,7 @@
 package sonstiges;
 
+import javax.swing.JOptionPane;
+
 public class MD5 {
 	//Static Methode um eine MD5 verschlüsselung zu ermöglichen.
 	
