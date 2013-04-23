@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class Login_View extends JFrame {
@@ -33,31 +34,33 @@ public class Login_View extends JFrame {
 		setBackground(Color.LIGHT_GRAY);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 200, 132);
+		setBounds(100, 100, 383, 129);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		
-		txt_username.setBounds(89, 11, 95, 20);
+		txt_username.setBounds(89, 11, 95, 25);
 		contentPane.add(txt_username);
 		txt_username.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblUsername.setBounds(9, 14, 70, 14);
 		contentPane.add(lblUsername);
 		
 		JLabel lblPasswort = new JLabel("Passwort");
-		lblPasswort.setBounds(9, 45, 69, 14);
+		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblPasswort.setBounds(194, 14, 69, 14);
 		contentPane.add(lblPasswort);
 		
 		
-		btn_Login.setBounds(9, 70, 174, 23);
+		btn_Login.setBounds(9, 47, 357, 40);
 		contentPane.add(btn_Login);
 		
 		
-		txt_passwort.setBounds(89, 42, 95, 20);
+		txt_passwort.setBounds(268, 11, 95, 25);
 		contentPane.add(txt_passwort);
 		
 		this.setLocationRelativeTo(null);
@@ -67,9 +70,9 @@ public class Login_View extends JFrame {
 		return txt_username.getText().toString();
 	}
 
-	@SuppressWarnings("deprecation")
 	public String getTxt_passwort() {
-		return txt_passwort.getText().toString();
+		
+		return MD5(String.valueOf(txt_passwort.getPassword()));
 	}
 
 	public void addLoginListener(ActionListener listenForLoginButton){
@@ -79,4 +82,18 @@ public class Login_View extends JFrame {
 	public void displayErrorMessage(String errorMessage){
 		JOptionPane.showMessageDialog(this, errorMessage);
 	}
+	public String MD5(String md5) {
+		   try {
+		        java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+		        byte[] array = md.digest(md5.getBytes());
+		        StringBuffer sb = new StringBuffer();
+		        for (int i = 0; i < array.length; ++i) {
+		          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+		       }
+		        return sb.toString();
+		    } catch (java.security.NoSuchAlgorithmException e) {
+		    	JOptionPane.showInputDialog(null, "MD5 Fehler");
+		    }
+		    return null;
+		}
 }
