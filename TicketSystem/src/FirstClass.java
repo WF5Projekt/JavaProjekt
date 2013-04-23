@@ -19,5 +19,9 @@ public class FirstClass {
 		System.out.println("test3");
 
 	}
+	
+	public void ausgabe5(){
+		
+	}
 }
 
