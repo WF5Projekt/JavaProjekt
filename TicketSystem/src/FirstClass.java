@@ -9,8 +9,15 @@ public class FirstClass {
 		System.out.println("Test2");
 	}
 	
+
 	public void ausgabe3(){
 		System.out.println("Test3");
+	
+	}
+	public void ausgabe2(){
+		
+		System.out.println("test3");
+
 	}
 }
 
