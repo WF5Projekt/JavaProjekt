@@ -5,8 +5,8 @@ import javax.swing.*;
 
 public class Login_Model extends Database_Model {
 
-	public String username;
-	public String passwort;
+	private String username;
+	private String passwort;
 	private String username_eingabe;
 	private String passwort_eingabe;
 	private String vorname;
@@ -14,6 +14,7 @@ public class Login_Model extends Database_Model {
 	//Userdaten werden an die SQL Datenbank geschickt und mit den in der View eingegebenen Daten verglichen.
 	//wenn Userdaten korrekt sind liefert Login() "FALSE" 	-> Login_View wird ausgeblendet
 	//wenn Userdaten falsch sind liefert login() "TRUE" 	-> Login_View bleibt sichtbar. (siehe Login_Controller)
+	
 	public boolean login() {
 		boolean login = false;
 		try {

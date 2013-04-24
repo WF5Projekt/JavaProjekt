@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import models.Customer_Table;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 

@@ -1,5 +1,7 @@
 package controller;
 
+import javax.swing.JOptionPane;
+
 import views.Tab_View;
 import models.Customer_Table;
 
@@ -11,13 +13,18 @@ public class Customer_Controller {
 	
 	
 	public Customer_Controller(){
+		
 		CustomerTable = new Customer_Table();
 		CustomerTab = new Tab_View("Kunden");
 		
 		CustomerTab.setModel(CustomerTable);
 		
-		CustomerTable.refreshData();
-		
+		try{
+			CustomerTable.refreshData();
+			
+		} catch(Exception e){
+			JOptionPane.showInputDialog("Fehler bei erstem Laden der Kunden-Daten");
+		}
     }
 	public Tab_View getTab(){
 		return this.CustomerTab;

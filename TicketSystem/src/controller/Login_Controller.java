@@ -15,9 +15,8 @@ public class Login_Controller{
 
 	private Login_View loginView;
 	private Login_Model loginModel;
-
-	public Login_Controller(){
-
+	
+	public Login_Controller() {
 		this.loginView = new Login_View();
 		this.loginModel = new Login_Model();
 		
@@ -25,7 +24,10 @@ public class Login_Controller{
 		this.loginView.addKeyListener(new LoginKeyListener());
 		this.loginView.addLoginListener(new LoginListener());
 		this.loginView.setVisible(true);
+	}
 	
+	public void kill(){
+		this.loginView.dispose();
 	}
 	
 	class LoginListener implements ActionListener {
@@ -37,10 +39,10 @@ public class Login_Controller{
 				loginModel.setUsername(loginView.getTxt_username());
 				loginModel.setPasswort(loginView.getTxt_passwort());
 				
-				boolean login = loginModel.login();
-				if(login){
+				
+				if(loginModel.login()){
+					loginView.setVisible(false);
 					Main.setMain();
-					loginView.dispose();
 				}
 				
 			} catch (Exception e) {
@@ -60,15 +62,15 @@ public class Login_Controller{
 					loginModel.setUsername(loginView.getTxt_username());
 					loginModel.setPasswort(loginView.getTxt_passwort());
 
-					boolean login = loginModel.login();
-					if(login){
-						Main.setMain();
-						loginView.dispose();
-					}
 					
+					if(loginModel.login()){
+
+						loginView.setVisible(false);
+						Main.setMain();
+					}
 
 				} catch (Exception e) {
-					JOptionPane.showInputDialog(this, e);
+					JOptionPane.showMessageDialog(loginView, this, "hier", 0);
 				}
 			}
 		}
@@ -86,6 +88,8 @@ public class Login_Controller{
 		}
 
 	}
+
+	
 
 	
 }

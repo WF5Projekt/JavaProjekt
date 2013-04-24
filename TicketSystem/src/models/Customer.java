@@ -5,22 +5,24 @@ package models;
 import java.sql.*;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Customer extends Database_Model {
 
     public String idKunde;
-    public String name;
+    public String nachname;
     public String vorname;
 
 
 
-    public Customer(String idKunde, String name, String vorname) {
+    public Customer(String idKunde, String nachname, String vorname) {
 		this.idKunde = idKunde;
-		this.name = name;
+		this.nachname = nachname;
 		this.vorname = vorname;
 	}
     
-	public Customer(String name, String vorname) {
-		this.name = name;
+	public Customer(String nachname, String vorname) {
+		this.nachname = nachname;
 		this.vorname = vorname;
 	}
 
@@ -28,13 +30,13 @@ public class Customer extends Database_Model {
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
     public static ArrayList<Customer> all() {
         
+        Connection con = getConnection();
         ArrayList<Customer> customers = new ArrayList<Customer>();
         
-        Connection con = getConnection();
         Statement query;
         try {
             query = con.createStatement();
-            String sql = "SELECT * FROM kunde ORDER BY idKunde";
+            String sql = "select * FROM `kunde` ORDER BY idKunde";
 
             ResultSet result = query.executeQuery(sql);
             //Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter mit Methode...
@@ -44,28 +46,35 @@ public class Customer extends Database_Model {
             query.close();
             con.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+        	JOptionPane.showInputDialog("Fehler bei Kunden-all()");
         }
         return customers;
     }
     
     //Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Kunde
     private static Customer getCustomersWithResultSet(ResultSet result) {
+    	
         Customer newCustomer = null;
+        
         try { 
             String idKunde = result.getString("idKunde");
-            String name = result.getString("name");
+        
+            String nachname = result.getString("nachname");
             String vorname = result.getString("vorname");
-            newCustomer = new Customer(idKunde, name, vorname);
+            System.out.println(vorname);
+            
+            newCustomer = new Customer(idKunde, nachname, vorname);
+            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	JOptionPane.showInputDialog("Fehler in Kunden_getCustomerWithResultSet");
         }
+        
         return newCustomer;
 
     }
     // 
     public Object[] toJTableArray() {
-        Object[] customerAttributeArray = {this.idKunde, this.name, this.vorname};
+        Object[] customerAttributeArray = {this.idKunde, this.nachname, this.vorname};
         return customerAttributeArray;
     }
     
@@ -77,7 +86,7 @@ public class Customer extends Database_Model {
             Statement stmt = con.createStatement();
             String query = "UPDATE kunde SET "
                     + "idKunde = '" + this.idKunde + "', "
-                    + "name = '" + this.name + "', "
+                    + "name = '" + this.nachname + "', "
                     + "surname = '" + this.vorname
                     + "WHERE idKunde = '" + this.idKunde +"';";
             
@@ -103,4 +112,10 @@ public class Customer extends Database_Model {
             ex.printStackTrace();
         }
     }
+    @Override
+    public String toString() {
+    return this.nachname + " " + this.vorname;
+    }
 }
+
+

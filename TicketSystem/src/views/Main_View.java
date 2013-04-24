@@ -17,7 +17,7 @@ public class Main_View extends JFrame {
 	 * Create the frame.
 	 */
 	public Main_View() {
-		setTitle("Troublero");
+		setTitle("Trouble Ticket System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1529, 598);
 		contentPane = new JPanel();

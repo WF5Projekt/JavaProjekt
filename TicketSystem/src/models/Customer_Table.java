@@ -2,18 +2,21 @@ package models;
 
 
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 
 @SuppressWarnings("serial")
 public class Customer_Table extends AbstractTableModel {
 
-    private String[] columnNames = {"idKunde", "Name", "Vorname"};
+    private String[] columnNames = {"idKunde", "Nachname", "Vorname"};
     private Object[][] data      = {};
     private ArrayList<Customer> customers;
 
     // Refresh der Daten für die Tabelle
     public void refreshData() {
+    	try{
         customers = Customer.all();
         data = new Object[customers.size()][];
         for (int i = 0; i < customers.size(); i++) {
@@ -21,6 +24,9 @@ public class Customer_Table extends AbstractTableModel {
             data[i] = c.toJTableArray();
         }
         this.fireTableDataChanged();
+    	} catch (Exception e){
+    		JOptionPane.showInputDialog("Fehler in Kunden_Table");
+    	}
     }
     
     //AbstractTable bietet automatisch folgende Funktionen
