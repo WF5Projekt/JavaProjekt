@@ -36,8 +36,8 @@ public class Login_Model extends Database_Model {
 			if (this.username_eingabe.equals(this.username)
 					&& this.passwort_eingabe.equals(this.passwort)) {
 				//--> Hier das Programm starten
-				JOptionPane.showMessageDialog(null, "Hallo " + this.vorname
-						+ ", du bist jetzt eingeloggt!");
+				//JOptionPane.showMessageDialog(null, "Hallo " + this.vorname
+				//		+ ", du bist jetzt eingeloggt!");
 				login = true;
 			} else {
 

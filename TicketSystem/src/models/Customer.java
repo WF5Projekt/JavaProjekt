@@ -58,11 +58,8 @@ public class Customer extends Database_Model {
         
         try { 
             String idKunde = result.getString("idKunde");
-        
             String nachname = result.getString("nachname");
             String vorname = result.getString("vorname");
-            System.out.println(vorname);
-            
             newCustomer = new Customer(idKunde, nachname, vorname);
             
         } catch (SQLException e) {

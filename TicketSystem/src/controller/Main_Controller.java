@@ -12,6 +12,8 @@ public class Main_Controller {
 	public Main_Controller(){
 		try{
 			this.MainView  = new Main_View();
+
+			this.MainView.setTab(new Ticket_Controller().getTab());
 			this.MainView.setTab(new Customer_Controller().getTab());
 			
 			
