@@ -1,5 +1,8 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JOptionPane;
 
 import views.Tab_View;
@@ -17,6 +20,11 @@ public class Customer_Controller {
 		CustomerTable = new Customer_Table();
 		CustomerTab = new Tab_View("Kunden");
 		
+
+
+		this.CustomerTab.addListenerButton_Add(new addButtonListener());
+		this.CustomerTab.addListenerButton_Refresh(new refreshButtonListener());
+		
 		CustomerTab.setModel(CustomerTable);
 		
 		try{
@@ -30,5 +38,22 @@ public class Customer_Controller {
 		return this.CustomerTab;
 	}
 	
+	class refreshButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			CustomerTable.refreshData();
+		}
+		
+	}
 	
+	class addButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+
+			JOptionPane.showMessageDialog(null, "Kunde anlegen", "Hinweis", JOptionPane.OK_CANCEL_OPTION);
+		}
+
+	}
 }

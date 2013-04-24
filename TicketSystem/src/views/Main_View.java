@@ -6,22 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class Main_View extends JFrame {
 
 	private JPanel contentPane;
 	private JTabbedPane tabs;
-	private JPanel panel_left;
 	private JPanel panel_top;
-	private JButton btnNew;
 	
 	/**
 	 * Create the frame.
@@ -43,13 +37,6 @@ public class Main_View extends JFrame {
 		JPanel page_end = new JPanel();
 		contentPane.add(page_end, BorderLayout.SOUTH);
 		page_end.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		panel_left = new JPanel();
-		contentPane.add(panel_left, BorderLayout.WEST);
-		
-		btnNew = new JButton("New button");
-		btnNew.setBorder(null);
-		panel_left.add(btnNew);
 		
 		panel_top = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_top.getLayout();
