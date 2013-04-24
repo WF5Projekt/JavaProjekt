@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-    private String[] columnNames = {"idTicket", "Beschreibung", "Erster Lösungsvorschlag"};
+    private String[] columnNames = {"ID", "Beschreibung", "Erster Lösungsvorschlag"};
     private Object[][] data      = {};
     private ArrayList<Ticket> tickets;
 

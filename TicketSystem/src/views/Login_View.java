@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import sonstiges.MD5;
 
@@ -29,20 +31,31 @@ public class Login_View extends JFrame {
 	
 	/**
 	 * Create the frame.
+
 	 */
 	public Login_View() {
+		
+		 try {
+			UIManager.setLookAndFeel(
+				        UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
 		setResizable(false);
 		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 190, 238);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.GRAY);
+		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		txt_username.setBackground(Color.LIGHT_GRAY);
-		txt_username.setFont(new Font("Dialog", Font.BOLD, 12));
+		txt_username.setFont(new Font("Tahoma", Font.BOLD, 15));
 		
 		
 		txt_username.setBounds(79, 39, 95, 25);
@@ -60,7 +73,7 @@ public class Login_View extends JFrame {
 		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblPasswort.setBounds(11, 83, 68, 14);
 		contentPane.add(lblPasswort);
-		txt_passwort.setFont(new Font("Dialog", Font.BOLD, 12));
+		txt_passwort.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txt_passwort.setBackground(Color.LIGHT_GRAY);
 
 		

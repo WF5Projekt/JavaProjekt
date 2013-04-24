@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Customer_Table extends AbstractTableModel {
 
-    private String[] columnNames = {"idKunde", "Nachname", "Vorname"};
+    private String[] columnNames = {"ID", "Nachname", "Vorname"};
     private Object[][] data      = {};
     private ArrayList<Customer> customers;
 
