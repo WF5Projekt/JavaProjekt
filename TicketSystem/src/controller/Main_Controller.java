@@ -1,5 +1,6 @@
 package controller;
 
+
 import views.Main_View;
 
 public class Main_Controller {
@@ -10,6 +11,7 @@ public class Main_Controller {
 		this.MainView  = new Main_View();
 		
 		this.MainView.setVisible(true);
+		this.MainView.setTab(new Customer_Controller().getTab());
 	}
 	
 	

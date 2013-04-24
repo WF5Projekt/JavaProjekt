@@ -9,7 +9,7 @@ public class Main {
 		
 	}
 	public static void setMain(){
-		new Main_Controller();
+		Main_Controller MainController = new Main_Controller();
 	}
 
 }
