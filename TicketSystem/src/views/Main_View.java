@@ -48,6 +48,7 @@ public class Main_View extends JFrame {
 		tabs.setOpaque(true);
 		contentPane.add(tabs, BorderLayout.CENTER);
 		
+		
 		JPanel page_end = new JPanel();
 		page_end.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(page_end, BorderLayout.SOUTH);

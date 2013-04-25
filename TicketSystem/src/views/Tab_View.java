@@ -13,8 +13,6 @@ import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
 import java.awt.Font;
 
 

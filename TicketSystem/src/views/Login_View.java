@@ -34,7 +34,7 @@ public class Login_View extends JFrame {
 
 	 */
 	public Login_View() {
-		
+
 		 try {
 			UIManager.setLookAndFeel(
 				        UIManager.getSystemLookAndFeelClassName());
@@ -43,7 +43,7 @@ public class Login_View extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
+		setUndecorated(true);
 		setResizable(false);
 		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
@@ -84,7 +84,7 @@ public class Login_View extends JFrame {
 		
 		btn_Login.setBounds(10, 144, 164, 56);
 		contentPane.add(btn_Login);
-		
+
 		this.setLocationRelativeTo(null);
 	}
 
