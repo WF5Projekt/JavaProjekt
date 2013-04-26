@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import views.Tab_View;
 import models.Customer_Table;
 
-//HalloJulian
 
 public class Customer_Controller {
 
