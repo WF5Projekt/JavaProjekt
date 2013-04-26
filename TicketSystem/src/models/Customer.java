@@ -13,7 +13,7 @@ public class Customer extends Database_Model {
     public String nachname;
     public String vorname;
 
-
+    
 
     public Customer(String idKunde, String nachname, String vorname) {
 		this.idKunde = idKunde;

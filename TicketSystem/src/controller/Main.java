@@ -1,5 +1,7 @@
 package controller;
 
+import views.Main_View;
+
 
 public class Main {
 	
@@ -8,7 +10,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		new Login_Controller();
+		//new Login_Controller();
+		Main_Controller controller = new Main_Controller();
+
 		
 	}
 	public static void setMain () {

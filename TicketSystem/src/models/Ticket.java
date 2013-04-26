@@ -9,24 +9,54 @@ import javax.swing.JOptionPane;
 
 public class Ticket extends Database_Model {
 
-    public String idTicket;
+  
+
+	public String idTicket;
+    public String erstellzeitpunkt;
     public String beschreibung;
     public String tmploesung;
+    public String status;
+    public String kategorie;
+    public String prioritaet;
+    public String level;
+    public String idKunde;
+    public String vorname;
+    public String nachname;
 
 
-
-    public Ticket(String idTicket, String beschreibung, String tmploesung) {
+	public Ticket(String idTicket, String erstellzeitpunkt,
+			String beschreibung, String tmploesung, String status,
+			String kategorie, String prioritaet, String level, String idKunde,
+			String vorname, String nachname) {
 		this.idTicket = idTicket;
+		this.erstellzeitpunkt = erstellzeitpunkt;
 		this.beschreibung = beschreibung;
 		this.tmploesung = tmploesung;
+		this.status = status;
+		this.kategorie = kategorie;
+		this.prioritaet = prioritaet;
+		this.level = level;
+		this.idKunde = idKunde;
+		this.vorname = vorname;
+		this.nachname = nachname;
 	}
     
-	public Ticket(String beschreibung, String tmploesung) {
+	public Ticket(String erstellzeitpunkt,
+			String beschreibung, String tmploesung, String status,
+			String kategorie, String prioritaet, String level, String idKunde,
+			String vorname, String nachname) {
+		this.erstellzeitpunkt = erstellzeitpunkt;
 		this.beschreibung = beschreibung;
 		this.tmploesung = tmploesung;
+		this.status = status;
+		this.kategorie = kategorie;
+		this.prioritaet = prioritaet;
+		this.level = level;
+		this.idKunde = idKunde;
+		this.vorname = vorname;
+		this.nachname = nachname;
 	}
-
-
+    
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array tickets
     public static ArrayList<Ticket> all() {
         
@@ -36,7 +66,7 @@ public class Ticket extends Database_Model {
         Statement query;
         try {
             query = con.createStatement();
-            String sql = "select * FROM `ticket` ORDER BY idTicket";
+            String sql = "select * FROM `allTickets` ORDER BY idTicket";
 
             ResultSet result = query.executeQuery(sql);
             //Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter mit Methode...
@@ -57,11 +87,22 @@ public class Ticket extends Database_Model {
         Ticket newTicket = null;
         
         try { 
-            String idTicket = result.getString("idTicket");
+           	String idTicket = result.getString("idTicket");
+            String erstellzeitpunkt = result.getString("erstellzeitpunkt");
             String beschreibung = result.getString("beschreibung");
             String tmploesung = result.getString("tmploesung");
+            String status = result.getString("status");
+            String kategorie = result.getString("kategorie");
+            String prioritaet = result.getString("prioritaet");
+            String level = result.getString("level");
+            String idKunde = result.getString("idKunde");
+            String vorname = result.getString("vorname");
+            String nachname = result.getString("nachname");
             
-            newTicket = new Ticket(idTicket, beschreibung, tmploesung);
+            newTicket = new Ticket( idTicket,  erstellzeitpunkt,
+        			 beschreibung,  tmploesung,  status,
+        			 kategorie,  prioritaet,  level,  idKunde,
+        			 vorname,  nachname);
             
         } catch (SQLException e) {
         	JOptionPane.showInputDialog("Fehler in Ticket_GetTicketWithResultSet");
@@ -72,7 +113,18 @@ public class Ticket extends Database_Model {
     }
     // 
     public Object[] toJTableArray() {
-        Object[] ticketAttributeArray = {this.idTicket, this.beschreibung, this.tmploesung};
+        Object[] ticketAttributeArray = {		
+        		this.idTicket,
+				this.erstellzeitpunkt,
+				this.beschreibung,
+				this.tmploesung,
+				this.status,
+				this.kategorie,
+				this.prioritaet,
+				this.level,
+				this.idKunde,
+				this.vorname,
+				this.nachname};
         return ticketAttributeArray;
     }
     
@@ -94,6 +146,20 @@ public class Ticket extends Database_Model {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public void newTicket(){
+    	 Connection con = getConnection();
+         try {
+             Statement stmt = con.createStatement();
+             String query = "";
+             
+             stmt.execute(query);
+             stmt.close();
+             con.close();
+         } catch (SQLException ex) {
+             ex.printStackTrace();
+         }
     }
     
     //Lösche Kunde
