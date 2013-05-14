@@ -5,33 +5,50 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class Customer extends Database_Model {
+public class Kunde extends Database_Model {
+
+
 
 	public String idKunde;
 	public String nachname;
 	public String vorname;
-
-	public Customer(String idKunde, String nachname, String vorname) {
+	public String strasse;
+	public String stadt;
+	public String geburt;
+	public String email;
+	public String telefon;
+	public String username;
+	
+	public Kunde(String idKunde, String nachname, String vorname,
+			String strasse, String stadt, String geburt, String email,
+			String telefon, String username) {
+		this.idKunde = idKunde;
+		this.nachname = nachname;
+		this.vorname = vorname;
+		this.strasse = strasse;
+		this.stadt = stadt;
+		this.geburt = geburt;
+		this.email = email;
+		this.telefon = telefon;
+		this.username = username;
+	}
+	public Kunde(String idKunde, String nachname, String vorname){
 		this.idKunde = idKunde;
 		this.nachname = nachname;
 		this.vorname = vorname;
 	}
-
-	public Customer(String nachname, String vorname) {
-		this.nachname = nachname;
-		this.vorname = vorname;
-	}
+	
 
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
-	public static ArrayList<Customer> all() {
+	public static ArrayList<Kunde> all() {
 
 		Connection con = getConnection();
-		ArrayList<Customer> customers = new ArrayList<Customer>();
+		ArrayList<Kunde> customers = new ArrayList<Kunde>();
 
 		Statement query;
 		try {
 			query = con.createStatement();
-			String sql = "select * FROM `kunde` ORDER BY idKunde";
+			String sql = "select * FROM `allkunden` ORDER BY idKunde";
 
 			ResultSet result = query.executeQuery(sql);
 			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
@@ -48,15 +65,22 @@ public class Customer extends Database_Model {
 	}
 
 	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Kunde
-	private static Customer getCustomersWithResultSet(ResultSet result) {
+	private static Kunde getCustomersWithResultSet(ResultSet result) {
 
-		Customer newCustomer = null;
+		Kunde newCustomer = null;
 
 		try {
 			String idKunde = result.getString("idKunde");
 			String nachname = result.getString("nachname");
 			String vorname = result.getString("vorname");
-			newCustomer = new Customer(idKunde, nachname, vorname);
+			String strasse = result.getString("strasse");
+			String stadt = result.getString("stadt");
+			String geburt = result.getString("Geb.Datum");
+			String email = result.getString("E-Mail");
+			String telefon = result.getString("Telefonnr.");
+			String username = result.getString("Username");
+			
+			newCustomer = new Kunde(idKunde, nachname, vorname, strasse, stadt, geburt, email, telefon, username);
 
 		} catch (SQLException e) {
 			JOptionPane
@@ -73,6 +97,8 @@ public class Customer extends Database_Model {
 				this.vorname };
 		return customerAttributeArray;
 	}
+	
+	
 
 	// Speichern der Tabelle
 

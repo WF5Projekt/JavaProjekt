@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 
-import models.Customer_Table;
+import models.Kunde_Table;
 import models.Ticket_Table;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
@@ -104,10 +104,12 @@ public class Main_View extends JFrame{
 		panelTickets.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		tabs_ticket = new JTabbedPane(JTabbedPane.LEFT);
+		tabs_ticket.setFont(new Font("Tahoma", Font.BOLD, 11));
+		tabs_ticket.setBackground(Color.GRAY);
 		panelTickets.add(tabs_ticket);
 		
 		ticketdetails = new JPanel();
-		tabs_ticket.addTab("Tickets", null, ticketdetails, null);
+		tabs_ticket.addTab("Alle Tickets", null, ticketdetails, null);
 		ticketdetails.setLayout(new BorderLayout(0, 0));
 		
 		TicketscrollPane = new JScrollPane();
@@ -388,7 +390,7 @@ public class Main_View extends JFrame{
 		tickets.setModel(t);
 	}
 	
-	public void setModel(Customer_Table t){
+	public void setModel(Kunde_Table t){
 	//	customer.setModel(t);
 	}
 	

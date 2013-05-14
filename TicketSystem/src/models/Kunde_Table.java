@@ -6,19 +6,19 @@ import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
-public class Customer_Table extends AbstractTableModel {
+public class Kunde_Table extends AbstractTableModel {
 
 	private String[] columnNames = { "ID", "Nachname", "Vorname" };
 	private Object[][] data = {};
-	private ArrayList<Customer> customers;
+	private ArrayList<Kunde> customers;
 
 	// Refresh der Daten für die Tabelle
 	public void refreshData() {
 		try {
-			customers = Customer.all();
+			customers = Kunde.all();
 			data = new Object[customers.size()][];
 			for (int i = 0; i < customers.size(); i++) {
-				Customer c = customers.get(i);
+				Kunde c = customers.get(i);
 				data[i] = c.toJTableArray();
 			}
 			this.fireTableDataChanged();
@@ -29,11 +29,11 @@ public class Customer_Table extends AbstractTableModel {
 
 	// AbstractTable bietet automatisch folgende Funktionen
 
-	public Customer getCustomerAtRow(int row) {
+	public Kunde getCustomerAtRow(int row) {
 		return customers.get(row);
 	}
 
-	public int getRowOfCustomer(Customer c) {
+	public int getRowOfCustomer(Kunde c) {
 		return customers.indexOf(c);
 	}
 
