@@ -16,6 +16,8 @@ import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
+
+import models.Customer_Table;
 import models.Ticket_Table;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
@@ -386,13 +388,16 @@ public class Main_View extends JFrame{
 		tickets.setModel(t);
 	}
 	
+	public void setModel(Customer_Table t){
+	//	customer.setModel(t);
+	}
 	
 	//ActionListener für die Buttons
-	public void addListenerButton_ticketRefresh(ActionListener listenForButton_ticketRefresh) {
-		btn_ticketRefresh.addActionListener(listenForButton_ticketRefresh);
+	public void addListenerButton_ticketRefresh(ActionListener a) {
+		btn_ticketRefresh.addActionListener(a);
 	}
-	public void addListenerButton_ticketNew(ActionListener listenForButton_ticketNew){
-		btn_ticketNew.addActionListener(listenForButton_ticketNew);
+	public void addListenerButton_ticketNew(ActionListener a){
+		btn_ticketNew.addActionListener(a);
 	}
 	
 	public int getSelectedTicket(){

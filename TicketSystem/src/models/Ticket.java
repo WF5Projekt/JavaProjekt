@@ -61,6 +61,13 @@ public class Ticket extends Database_Model {
 		this.tmploesung = tmploesung;
 		this.erstellzeitpunkt = erstellzeitpunkt;
 	}
+	// Konstruktur zum Erstellen eines Tickets für die neu-Anlage eines Tickets
+	public Ticket(String beschr, String prio, String kat, String idK) {
+		this.beschreibung = beschr;
+		this.prioritaet = prio;
+		this.idKunde = idK;
+		this.kategorie = kat;
+	}
 
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array tickets
 	public static ArrayList<Ticket> all() {
@@ -87,9 +94,10 @@ public class Ticket extends Database_Model {
 		return tickets;
 	}
 
+	
 	 public static ArrayList<Ticket> allWithFilter(String wo, String was) {
 	        Connection con = getConnection();
-	        ArrayList<Ticket> movies = new ArrayList<Ticket>();
+	        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 	        Statement query;
 	        try {
 	            query = con.createStatement();
@@ -97,7 +105,7 @@ public class Ticket extends Database_Model {
 
 	            ResultSet result = query.executeQuery(sql);
 	            while (result.next()) {
-	                movies.add(getTicketsWithResultSet(result));
+	                tickets.add(getTicketsWithResultSet(result));
 	            }
 	            query.close();
 	            con.close();
@@ -105,79 +113,10 @@ public class Ticket extends Database_Model {
 	            e.printStackTrace();
 	        }
 	        
-	        return movies;
+	        return tickets;
 	    }
 	
-	// Rufe Tickets mit Status idStatus von Datenbank ab
-	public static ArrayList<Ticket> getStatus(String idStatus) {
-			Connection con = getConnection();
-			ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-			Statement query;
-			try {
-				query = con.createStatement();
-				String sql = "call getStatus(" + idStatus + ")";
-
-				ResultSet result = query.executeQuery(sql);
-				// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
-				// mit Methode...
-				while (result.next()) {
-					tickets.add(getTicketsWithResultSet(result));
-				}
-				query.close();
-				con.close();
-			} catch (SQLException e) {
-				JOptionPane.showInputDialog("Fehler bei Ticket nach Status-Abfrage)");
-			}
-			return tickets;
-		}
 	
-	// Rufe Tickets mit Kunden ID oder Nachname von Datenbank ab
-	public static ArrayList<Ticket> getKunde(String idKunde, String nachname_k) {
-				Connection con = getConnection();
-				ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-				Statement query;
-				try {
-					query = con.createStatement();
-					String sql = "call getKunde(" + idKunde + ", " + nachname_k + ")";
-
-					ResultSet result = query.executeQuery(sql);
-					// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
-					// mit Methode...
-					while (result.next()) {
-						tickets.add(getTicketsWithResultSet(result));
-					}
-					query.close();
-					con.close();
-				} catch (SQLException e) {
-					JOptionPane.showInputDialog("Fehler bei Ticket nach Kunde-Abfrage)");
-				}
-				return tickets;
-			}
-	// Rufe Tickets mit Priorität ID oder Bezeichnung von Datenbank ab
-		public static ArrayList<Ticket> getPrioritaet(String idPrioritaet, String bezeichnung) {
-					Connection con = getConnection();
-					ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-					Statement query;
-					try {
-						query = con.createStatement();
-						String sql = "call getPrioritaet(" + idPrioritaet + ", "+ bezeichnung +")";
-
-						ResultSet result = query.executeQuery(sql);
-						// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
-						// mit Methode...
-						while (result.next()) {
-							tickets.add(getTicketsWithResultSet(result));
-						}
-						query.close();
-						con.close();
-					} catch (SQLException e) {
-						JOptionPane.showInputDialog("Fehler bei Ticket nach Kunde-Abfrage)");
-					}
-					return tickets;
-				}
 			
 	
 	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Ticket
@@ -261,11 +200,11 @@ public class Ticket extends Database_Model {
 		}
 	}
 
-	public void newTicket() {
+	public void newTicket(String beschr, String idK, String prio, String kat) {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "";
+			String query = "call newTicket("+ beschr +", "+ idK +", "+ prio + ", "+ kat +")";
 
 			stmt.execute(query);
 			stmt.close();

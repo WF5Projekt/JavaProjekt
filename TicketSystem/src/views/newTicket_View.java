@@ -1,33 +1,47 @@
 package views;
 
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.BorderLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
-import java.awt.Window.Type;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+
+import models.Ticket;
+
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JList;
 
 public class newTicket_View extends JFrame {
-	private JTextField _Beschreibung;
+	
+	private JButton btn_Abbruch;
+	private JButton btn_Eröffnen;
+	
+	public JTextArea _beschreibung;
+	public JComboBox<String> kat;
+	public JComboBox<String> prio;
+	public JComboBox<String> kunde;
+	
+	private JPanel panel_1;
 
-	/**
-	 * Create the panel.
-	 */
 	public newTicket_View() {
-		setBounds(new Rectangle(0, 0, 400, 200));
+		setBounds(new Rectangle(0, 0, 515, 315));
 		setResizable(false);
 		setAutoRequestFocus(false);
 		setAlwaysOnTop(true);
@@ -40,74 +54,81 @@ public class newTicket_View extends JFrame {
         
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
+		panel_1 = new JPanel();
+		getContentPane().add(panel_1, BorderLayout.NORTH);
+		
+		JLabel lblNewLabel_1 = new JLabel("Kunde:");
+		
+		
+		kunde = new JComboBox<String>();
+		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 5));
+		panel_1.add(lblNewLabel_1);
+		panel_1.add(kunde);
+		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(panel, BorderLayout.CENTER);
 		
 		JLabel lblBeschreibung = new JLabel("Beschreibung:");
 		
-		_Beschreibung = new JTextField();
-		_Beschreibung.setHorizontalAlignment(SwingConstants.LEFT);
-		_Beschreibung.setAlignmentY(Component.TOP_ALIGNMENT);
-		_Beschreibung.setColumns(10);
-		
 		JLabel lblNewLabel = new JLabel("Kategorie");
 		
-		JComboBox comboKategorie = new JComboBox();
-		comboKategorie.setToolTipText("Kategorie");
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setToolTipText("Kategorie");
+		kat = new JComboBox<String>();
+		kat.setToolTipText("Kategorie");
+		
+		prio = new JComboBox<String>();
+		prio.setToolTipText("Kategorie");
 		
 		JLabel lblPrioritt = new JLabel("Priorit\u00E4t");
+		
+		_beschreibung = new JTextArea();
+		_beschreibung.setRows(11);
+		
+		
+		_beschreibung.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		_beschreibung.setRows(11);
+		_beschreibung.setLineWrap(true);
+		_beschreibung.setWrapStyleWord(true);
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setAutoCreateGaps(true);
-		gl_panel.setHonorsVisibility(false);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(5)
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel)
-						.addComponent(lblBeschreibung))
+					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblBeschreibung)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(5)
-							.addComponent(_Beschreibung, GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(comboKategorie, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+							.addComponent(kat, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addGap(62)
 							.addComponent(lblPrioritt)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addGap(84))))
+							.addComponent(prio, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addGap(97))))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(88)
+					.addComponent(_beschreibung)
+					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(8)
-							.addComponent(lblBeschreibung))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(5)
-							.addComponent(_Beschreibung, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel)
-								.addComponent(comboKategorie, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(50))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPrioritt))
-							.addContainerGap())))
+					.addGap(8)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblBeschreibung)
+						.addComponent(_beschreibung, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(kat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(prio, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPrioritt))
+					.addGap(190))
 		);
+		gl_panel.setAutoCreateGaps(true);
+		gl_panel.setHonorsVisibility(false);
 		panel.setLayout(gl_panel);
 		
 		JPanel panel_4 = new JPanel();
@@ -115,11 +136,21 @@ public class newTicket_View extends JFrame {
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(panel_4, BorderLayout.SOUTH);
 		
-		JButton btn_Eröffnen = new JButton("Ticket er\u00F6ffnen");
+		btn_Eröffnen = new JButton("Ticket er\u00F6ffnen");
+	
 		panel_4.add(btn_Eröffnen);
 		
-		JButton btn_Abbruch = new JButton("Abbrechen");
+		btn_Abbruch = new JButton("Abbrechen");
+		btn_Abbruch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		panel_4.add(btn_Abbruch);
 
+	}
+	
+	public void addListenerButton(ActionListener a){
+		btn_Eröffnen.addActionListener(a);
 	}
 }

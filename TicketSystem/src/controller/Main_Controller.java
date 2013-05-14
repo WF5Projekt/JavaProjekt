@@ -2,27 +2,45 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import models.*;
-
 import views.Main_View;
 import views.newTicket_View;
+
+
 
 public class Main_Controller implements ListSelectionListener {
 
 	private Main_View MainView;
-	private Ticket_Table tickets;
+	public newTicket_View TicketNeu;
 	
-
+	private Ticket_Table tickets;
+	private Customer_Table customer;
+	
+	//Komboboxen
+	public ComboBoxModelKategorie ComboBoxKategorie;
+	public ComboBoxModelPriorität ComboBoxPriorität;
+	private ArrayList<Kategorie> kategorien;
+	private ArrayList<Priorität> prioritäten;
+	
+	
 	public Main_Controller() {
 		
-		this.MainView = new Main_View();
+		this.MainView 	= new Main_View();
+		this.tickets 	= new Ticket_Table();
+		this.customer 	= new Customer_Table();
 		
-		this.tickets = new Ticket_Table();
+		
+		//Initialisierung der Komboboxen
+		this.ComboBoxKategorie     	= new ComboBoxModelKategorie();
+		this.ComboBoxPriorität 		= new ComboBoxModelPriorität();
+	    this.kategorien     		= Kategorie.all();
+		this.prioritäten 			= Priorität.all();
+		
 		
 		try {
 			init();
@@ -36,22 +54,24 @@ public class Main_Controller implements ListSelectionListener {
 		this.MainView.setVisible(true);
 	}
 	
-	
-	
-	
 	public void start(){
 		tickets.refreshData();
+		customer.refreshData();
 	}
+	
 	
 	//Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init(){
 		this.MainView.setModel(tickets);
+		//this.MainView.setModel(customer);
 	}
 	
 	//Button-Listener werden festgelegt
 	private void addListener(){
+		//Buttons im Ticket-Tab
 		MainView.addListenerButton_ticketRefresh(new ticketRefreshButtonListener());
 		MainView.addListenerButton_ticketNew(new ticketNewButtonListener());
+		
 		
 		
 		//Tabellen-Listener
@@ -59,6 +79,20 @@ public class Main_Controller implements ListSelectionListener {
 	}
 
 	
+	//
+	public void valueChanged(ListSelectionEvent e) {
+		Object source = e.getSource();
+        if (source == MainView.tickets.getSelectionModel()) {
+            showTicketInfo();
+        } /*else if (source == TableSales.getSelectionModel()) {
+            int selectedRow = TableSales.getSelectedRow();
+            if (selectedRow != -1) {
+                Sale sale = saleTableModel.getSaleAtRow(selectedRow);
+                saleItemTableModel.refreshData(sale);
+            } else {
+                saleItemTableModel.clearData();
+            }*/
+	}
 
 	
 	//Sub-Klassen für die Button-Listener
@@ -74,11 +108,33 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			TicketNeu = new newTicket_View();
+			//Button für neues Ticket anlegen
+			TicketNeu.addListenerButton(new neuesTicketButton());
+			TicketNeu.kat.setModel(ComboBoxKategorie);
+			TicketNeu.prio.setModel(ComboBoxPriorität);
 			
-			new newTicket_View().setVisible(true);
+			
+			TicketNeu.setVisible(true);
 		}
 		
 	}
+	class neuesTicketButton implements ActionListener{
+
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int selIndexKat = TicketNeu.kat.getSelectedIndex();
+			int selIndexPrio = TicketNeu.prio.getSelectedIndex();
+			
+			Kategorie selectedKategorie = kategorien.get(selIndexKat);
+	        Priorität selectedPriorität = prioritäten.get(selIndexPrio);
+	        
+	        Ticket tmpTicket = new Ticket(null, null, null, null);
+	        
+		}
+	}
+	
 	
 	//Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der Tabelle
 	private void showTicketInfo() {
@@ -116,18 +172,39 @@ public class Main_Controller implements ListSelectionListener {
         }
 
 	}
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		Object source = e.getSource();
-        if (source == MainView.tickets.getSelectionModel()) {
-            showTicketInfo();
-        } /*else if (source == TableSales.getSelectionModel()) {
-            int selectedRow = TableSales.getSelectedRow();
-            if (selectedRow != -1) {
-                Sale sale = saleTableModel.getSaleAtRow(selectedRow);
-                saleItemTableModel.refreshData(sale);
-            } else {
-                saleItemTableModel.clearData();
-            }*/
-	}
+
+
+	
+	//Kombobox modelle
+	@SuppressWarnings("serial")
+	class ComboBoxModelKategorie extends DefaultComboBoxModel {
+
+        @Override
+        public int getSize() {
+            return kategorien.size();
+        }
+
+        @Override
+        public Kategorie getElementAt(int index) {
+            return kategorien.get(index);
+        }
+    }
+	@SuppressWarnings("serial")
+	class ComboBoxModelPriorität extends DefaultComboBoxModel {
+
+        @Override
+        public int getSize() {
+            return prioritäten.size();
+        }
+
+        @Override
+        public Priorität getElementAt(int index) {
+            return prioritäten.get(index);
+        }
+    }
+
+	
 }
+
+
+

@@ -110,6 +110,6 @@ public class Customer extends Database_Model {
 
 	@Override
 	public String toString() {
-		return this.nachname + " " + this.vorname;
+		return this.nachname + ", " + this.vorname;
 	}
 }
