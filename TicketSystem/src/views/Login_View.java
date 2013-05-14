@@ -28,22 +28,20 @@ public class Login_View extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	
+
 	/**
 	 * Create the frame.
-
 	 */
 	public Login_View() {
 
-		 try {
-			UIManager.setLookAndFeel(
-				        UIManager.getSystemLookAndFeelClassName());
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setUndecorated(true);
+		//setUndecorated(true);
 		setResizable(false);
 		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
@@ -56,18 +54,17 @@ public class Login_View extends JFrame {
 		contentPane.setLayout(null);
 		txt_username.setBackground(Color.LIGHT_GRAY);
 		txt_username.setFont(new Font("Tahoma", Font.BOLD, 15));
-		
-		
+
 		txt_username.setBounds(79, 39, 95, 25);
 		contentPane.add(txt_username);
 		txt_username.setColumns(10);
-		
+
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setForeground(Color.LIGHT_GRAY);
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblUsername.setBounds(11, 43, 68, 14);
 		contentPane.add(lblUsername);
-		
+
 		JLabel lblPasswort = new JLabel("Passwort");
 		lblPasswort.setForeground(Color.LIGHT_GRAY);
 		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -76,12 +73,11 @@ public class Login_View extends JFrame {
 		txt_passwort.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txt_passwort.setBackground(Color.LIGHT_GRAY);
 
-		
 		txt_passwort.setBounds(79, 79, 95, 25);
 		contentPane.add(txt_passwort);
 		btn_Login.setBackground(Color.LIGHT_GRAY);
 		btn_Login.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		btn_Login.setBounds(10, 144, 164, 56);
 		contentPane.add(btn_Login);
 
@@ -93,20 +89,21 @@ public class Login_View extends JFrame {
 	}
 
 	public String getTxt_passwort() {
-		
+
 		return MD5.MD5(String.valueOf(txt_passwort.getPassword()));
 	}
 
-	public void addLoginListener(ActionListener listenForLoginButton){
+	public void addLoginListener(ActionListener listenForLoginButton) {
 		btn_Login.addActionListener(listenForLoginButton);
 	}
-	public void addKeyListener(KeyListener listenForLoginEnter){
+
+	public void addKeyListener(KeyListener listenForLoginEnter) {
 		txt_passwort.addKeyListener(listenForLoginEnter);
 		txt_username.addKeyListener(listenForLoginEnter);
 	}
-	
-	public void displayErrorMessage(String errorMessage){
+
+	public void displayErrorMessage(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage);
 	}
-	
+
 }

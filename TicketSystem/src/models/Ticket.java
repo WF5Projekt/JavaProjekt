@@ -1,7 +1,5 @@
 package models;
 
-
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -9,177 +7,287 @@ import javax.swing.JOptionPane;
 
 public class Ticket extends Database_Model {
 
-  
-
+	//Ticketdaten Kunde
+	public String idKunde;
+	public String vorname_k;
+	public String nachname_k;
+	public String email_k;
+	public String telefon_k;
+	
+	//Ticketdaten Mitarbeiter
+	public String idMitarbeiter;
+	public String vorname_m;
+	public String nachname_m;
+	public String abteilung;
+	public String email_m;
+	public String telefon_m;
+	
+	//Daten Ticket
 	public String idTicket;
-    public String erstellzeitpunkt;
-    public String beschreibung;
-    public String tmploesung;
-    public String status;
-    public String kategorie;
-    public String prioritaet;
-    public String level;
-    public String idKunde;
-    public String vorname;
-    public String nachname;
+	public String level;
+	public String kategorie;
+	public String prioritaet;
+	public String status;
+	public String beschreibung;
+	public String tmploesung;
+	public String erstellzeitpunkt;
 
 
-	public Ticket(String idTicket, String erstellzeitpunkt,
-			String beschreibung, String tmploesung, String status,
-			String kategorie, String prioritaet, String level, String idKunde,
-			String vorname, String nachname) {
+
+	public Ticket(String idKunde, String vorname_k, String nachname_k,
+			String email_k, String telefon_k, String idMitarbeiter,
+			String vorname_m, String nachname_m, String abteilung,
+			String email_m, String telefon_m, String idTicket, String level,
+			String kategorie, String prioritaet, String status,
+			String beschreibung, String tmploesung, String erstellzeitpunkt) {
+		
+		this.idKunde = idKunde;
+		this.vorname_k = vorname_k;
+		this.nachname_k = nachname_k;
+		this.email_k = email_k;
+		this.telefon_k = telefon_k;
+		this.idMitarbeiter = idMitarbeiter;
+		this.vorname_m = vorname_m;
+		this.nachname_m = nachname_m;
+		this.abteilung = abteilung;
+		this.email_m = email_m;
+		this.telefon_m = telefon_m;
 		this.idTicket = idTicket;
-		this.erstellzeitpunkt = erstellzeitpunkt;
-		this.beschreibung = beschreibung;
-		this.tmploesung = tmploesung;
-		this.status = status;
+		this.level = level;
 		this.kategorie = kategorie;
 		this.prioritaet = prioritaet;
-		this.level = level;
-		this.idKunde = idKunde;
-		this.vorname = vorname;
-		this.nachname = nachname;
-	}
-    
-	public Ticket(String erstellzeitpunkt,
-			String beschreibung, String tmploesung, String status,
-			String kategorie, String prioritaet, String level, String idKunde,
-			String vorname, String nachname) {
-		this.erstellzeitpunkt = erstellzeitpunkt;
+		this.status = status;
 		this.beschreibung = beschreibung;
 		this.tmploesung = tmploesung;
-		this.status = status;
-		this.kategorie = kategorie;
-		this.prioritaet = prioritaet;
-		this.level = level;
-		this.idKunde = idKunde;
-		this.vorname = vorname;
-		this.nachname = nachname;
+		this.erstellzeitpunkt = erstellzeitpunkt;
 	}
-    
+
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array tickets
-    public static ArrayList<Ticket> all() {
-        
-        Connection con = getConnection();
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-        
-        Statement query;
-        try {
-            query = con.createStatement();
-            String sql = "select * FROM `allTickets` ORDER BY idTicket";
+	public static ArrayList<Ticket> all() {
 
-            ResultSet result = query.executeQuery(sql);
-            //Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter mit Methode...
-            while (result.next()) {
-                tickets.add(getTicketsWithResultSet(result));
-            }
-            query.close();
-            con.close();
-        } catch (SQLException e) {
-        	JOptionPane.showInputDialog("Fehler bei Ticket-all()");
-        }
-        return tickets;
-    }
-    
-    //Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Ticket
-    private static Ticket getTicketsWithResultSet(ResultSet result) {
-    	
-        Ticket newTicket = null;
-        
-        try { 
-           	String idTicket = result.getString("idTicket");
-            String erstellzeitpunkt = result.getString("erstellzeitpunkt");
-            String beschreibung = result.getString("beschreibung");
-            String tmploesung = result.getString("tmploesung");
-            String status = result.getString("status");
-            String kategorie = result.getString("kategorie");
-            String prioritaet = result.getString("prioritaet");
-            String level = result.getString("level");
-            String idKunde = result.getString("idKunde");
-            String vorname = result.getString("vorname");
-            String nachname = result.getString("nachname");
-            
-            newTicket = new Ticket( idTicket,  erstellzeitpunkt,
-        			 beschreibung,  tmploesung,  status,
-        			 kategorie,  prioritaet,  level,  idKunde,
-        			 vorname,  nachname);
-            
-        } catch (SQLException e) {
-        	JOptionPane.showInputDialog("Fehler in Ticket_GetTicketWithResultSet");
-        }
-        
-        return newTicket;
+		Connection con = getConnection();
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
-    }
-    // 
-    public Object[] toJTableArray() {
-        Object[] ticketAttributeArray = {		
-        		this.idTicket,
-				this.erstellzeitpunkt,
-				this.beschreibung,
-				this.tmploesung,
+		Statement query;
+		try {
+			query = con.createStatement();
+			String sql = "select * FROM `allTickets`";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getTicketsWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Ticket-Abfrage)");
+		}
+		return tickets;
+	}
+
+	 public static ArrayList<Ticket> allWithFilter(String wo, String was) {
+	        Connection con = getConnection();
+	        ArrayList<Ticket> movies = new ArrayList<Ticket>();
+	        Statement query;
+	        try {
+	            query = con.createStatement();
+	            String sql = "CALL searchTicket('"+wo+"', '"+was+"')";
+
+	            ResultSet result = query.executeQuery(sql);
+	            while (result.next()) {
+	                movies.add(getTicketsWithResultSet(result));
+	            }
+	            query.close();
+	            con.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        return movies;
+	    }
+	
+	// Rufe Tickets mit Status idStatus von Datenbank ab
+	public static ArrayList<Ticket> getStatus(String idStatus) {
+			Connection con = getConnection();
+			ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+			Statement query;
+			try {
+				query = con.createStatement();
+				String sql = "call getStatus(" + idStatus + ")";
+
+				ResultSet result = query.executeQuery(sql);
+				// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+				// mit Methode...
+				while (result.next()) {
+					tickets.add(getTicketsWithResultSet(result));
+				}
+				query.close();
+				con.close();
+			} catch (SQLException e) {
+				JOptionPane.showInputDialog("Fehler bei Ticket nach Status-Abfrage)");
+			}
+			return tickets;
+		}
+	
+	// Rufe Tickets mit Kunden ID oder Nachname von Datenbank ab
+	public static ArrayList<Ticket> getKunde(String idKunde, String nachname_k) {
+				Connection con = getConnection();
+				ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+				Statement query;
+				try {
+					query = con.createStatement();
+					String sql = "call getKunde(" + idKunde + ", " + nachname_k + ")";
+
+					ResultSet result = query.executeQuery(sql);
+					// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+					// mit Methode...
+					while (result.next()) {
+						tickets.add(getTicketsWithResultSet(result));
+					}
+					query.close();
+					con.close();
+				} catch (SQLException e) {
+					JOptionPane.showInputDialog("Fehler bei Ticket nach Kunde-Abfrage)");
+				}
+				return tickets;
+			}
+	// Rufe Tickets mit Priorität ID oder Bezeichnung von Datenbank ab
+		public static ArrayList<Ticket> getPrioritaet(String idPrioritaet, String bezeichnung) {
+					Connection con = getConnection();
+					ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+					Statement query;
+					try {
+						query = con.createStatement();
+						String sql = "call getPrioritaet(" + idPrioritaet + ", "+ bezeichnung +")";
+
+						ResultSet result = query.executeQuery(sql);
+						// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+						// mit Methode...
+						while (result.next()) {
+							tickets.add(getTicketsWithResultSet(result));
+						}
+						query.close();
+						con.close();
+					} catch (SQLException e) {
+						JOptionPane.showInputDialog("Fehler bei Ticket nach Kunde-Abfrage)");
+					}
+					return tickets;
+				}
+			
+	
+	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Ticket
+	private static Ticket getTicketsWithResultSet(ResultSet result) {
+
+		Ticket newTicket = null;
+
+		try {
+			
+			//Ticketdaten Kunde
+			String idKunde = result.getString("idKunde");
+			String vorname_k = result.getString("vorname_k");
+			String nachname_k = result.getString("nachname_k");
+			String email_k = result.getString("email_k");
+			String telefon_k = result.getString("telefon_k");
+			
+			//Ticketdaten Mitarbeiter
+			String idMitarbeiter = result.getString("idMitarbeiter");
+			String vorname_m = result.getString("vorname_m");
+			String nachname_m = result.getString("nachname_m");
+			String abteilung = result.getString("abteilung");
+			String email_m = result.getString("email_m");
+			String telefon_m = result.getString("telefon_m");
+			
+			//Daten Ticket
+			String idTicket = result.getString("idTicket");
+			String level = result.getString("level");
+			String kategorie = result.getString("kategorie");
+			String prioritaet = result.getString("prioritaet");
+			String status = result.getString("status");
+			String beschreibung = result.getString("beschreibung");
+			String tmploesung = result.getString("tmploesung");
+			String erstellzeitpunkt = result.getString("erstellzeitpunkt");
+			
+			newTicket = new Ticket( idKunde,  vorname_k,  nachname_k,
+					 email_k,  telefon_k,  idMitarbeiter,
+					 vorname_m,  nachname_m,  abteilung,
+					 email_m,  telefon_m,  idTicket,  level,
+					 kategorie,  prioritaet,  status,
+					 beschreibung,  tmploesung,  erstellzeitpunkt);
+
+		} catch (SQLException e) {
+			JOptionPane
+					.showInputDialog("Fehler in Ticket_GetTicketWithResultSet");
+		}
+
+		return newTicket;
+
+	}
+
+	// Zur Darstellung in Tabelle , nicht alle Daten -> restliche Daten werden in Detail_Fenster angezeigt.
+	public Object[] toJTableArray() {
+		Object[] ticketAttributeArray = { 
+				//Ticketdaten
 				this.status,
+				this.level,
 				this.kategorie,
 				this.prioritaet,
-				this.level,
-				this.idKunde,
-				this.vorname,
-				this.nachname};
-        return ticketAttributeArray;
-    }
-    
-    // Speichern der Tabelle
-    
-    public void save() {
-        Connection con = getConnection();
-        try {
-            Statement stmt = con.createStatement();
-            String query = "UPDATE ticket SET "
-                    + "idTicket = '" + this.idTicket + "', "
-                    + "beschreibung = '" + this.beschreibung + "', "
-                    + "tmploesung = '" + this.tmploesung
-                    + "WHERE idTicket = '" + this.idTicket +"';";
-            
-            stmt.execute(query);
-            stmt.close();
-            con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public void newTicket(){
-    	 Connection con = getConnection();
-         try {
-             Statement stmt = con.createStatement();
-             String query = "";
-             
-             stmt.execute(query);
-             stmt.close();
-             con.close();
-         } catch (SQLException ex) {
-             ex.printStackTrace();
-         }
-    }
-    
-    //Lösche Kunde
-    public void delete(){
-        Connection con = getConnection();
-        try {
-            Statement stmt = con.createStatement();
-            String query = "DELETE FROM ticket "
-                    + "WHERE idTicket = '" + this.idTicket +"';";
-            stmt.execute(query);
-            stmt.close();
-            con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-    @Override
-    public String toString() {
-    return this.beschreibung + " " + this.tmploesung;
-    }
+				this.beschreibung,
+		};
+		return ticketAttributeArray;
+	}
+
+	// Speichern der Tabelle
+
+	public void save() {
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "UPDATE ticket SET " + "idTicket = '"
+					+ this.idTicket + "', " + "beschreibung = '"
+					+ this.beschreibung + "', " + "tmploesung = '"
+					+ this.tmploesung + "WHERE idTicket = '" + this.idTicket
+					+ "';";
+
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void newTicket() {
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "";
+
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	// Lösche Kunde
+	public void delete() {
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM ticket " + "WHERE idTicket = '"
+					+ this.idTicket + "';";
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+
 }
-
-
