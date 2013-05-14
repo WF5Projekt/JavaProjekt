@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -33,13 +35,10 @@ public class Main_Controller implements ListSelectionListener {
 		this.tickets = new Ticket_Table();
 		this.kunden = new Kunde_Table();
 
-		// Initialisierung der Komboboxen
-		this.ComboBoxKategorie = new ComboBoxModelKategorie();
-		this.ComboBoxPriorität = new ComboBoxModelPriorität();
-		this.ComboBoxKunde = new ComboBoxModelKunde();
-		this.combo_kategorien = Kategorie.all();
-		this.combo_prioritäten = Priorität.all();
-		this.combo_kunden = Kunde.all();
+		// Initialisierung der Arrays für Comboboxen
+		combo_kategorien = Kategorie.all();
+		combo_prioritäten = Priorität.all();
+		combo_kunden = Kunde.all();
 
 		try {
 			init();
@@ -69,7 +68,9 @@ public class Main_Controller implements ListSelectionListener {
 		// Buttons im Ticket-Tab
 		MainView.addListenerButton_ticketRefresh(new ticketRefreshButtonListener());
 		MainView.addListenerButton_ticketNew(new ticketNewButtonListener());
-
+		MainView.addListenerSuche(new ticketSuchButtonListener());
+		MainView.addKeyListener(new ticketSucheKeyListener());
+		
 		// Tabellen-Listener
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
@@ -105,6 +106,12 @@ public class Main_Controller implements ListSelectionListener {
 			TicketNeu = new newTicket_View();
 			// Button für neues Ticket anlegen
 			TicketNeu.addListenerButton(new neuesTicketButton());
+			
+			//ComboBoxen füllen
+			ComboBoxKategorie = new ComboBoxModelKategorie();
+			ComboBoxPriorität = new ComboBoxModelPriorität();
+			ComboBoxKunde = new ComboBoxModelKunde();
+		
 			TicketNeu.kat.setModel(ComboBoxKategorie);
 			TicketNeu.prio.setModel(ComboBoxPriorität);
 			TicketNeu.kunde.setModel(ComboBoxKunde);
@@ -118,18 +125,66 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		
 			int selIndexKat = TicketNeu.kat.getSelectedIndex();
 			int selIndexPrio = TicketNeu.prio.getSelectedIndex();
 			int selIndexKunde = TicketNeu.kunde.getSelectedIndex();
 
 			Kategorie selectedKategorie = combo_kategorien.get(selIndexKat);
 			Priorität selectedPriorität = combo_prioritäten.get(selIndexPrio);
-			Kunde selectedKunde = combo_kunden.get(selIndexKunde);
+			System.out.println("Priorität: "+ selectedPriorität.id);
+			
+			//Kunde selectedKunde = combo_kunden.get(selIndexKunde);
+			//String beschreibung = TicketNeu._beschreibung.getText();
 
-			Ticket tmpTicket = new Ticket(null, null, null, null);
+			//Ticket tmpTicket = new Ticket(beschreibung, , , null);
 
 		}
 	}
+	
+	
+	private void ticketSuche(){
+		String suche = MainView.getSuche();
+		String spalte = MainView.getSuchSpalte();
+		
+		if(!( suche.equals("") || spalte.equals("") )){
+			tickets.searchData(spalte, suche);
+		}
+		else{
+			tickets.refreshData();
+		}
+	}
+	class ticketSucheKeyListener implements KeyListener{
+	
+		@Override
+		public void keyPressed(KeyEvent key) {
+			if (key.getKeyCode() == KeyEvent.VK_ENTER)
+			ticketSuche();
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}		
+	}
+	
+	class ticketSuchButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ticketSuche();			
+		}
+		
+	}
+	
 
 	// Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der
 	// Tabelle

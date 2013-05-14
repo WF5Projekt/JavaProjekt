@@ -27,6 +27,9 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import java.awt.Color;
+import java.awt.SystemColor;
+import javax.swing.border.BevelBorder;
 
 public class newTicket_View extends JFrame {
 	
@@ -83,6 +86,8 @@ public class newTicket_View extends JFrame {
 		JLabel lblPrioritt = new JLabel("Priorit\u00E4t");
 		
 		_beschreibung = new JTextArea();
+		_beschreibung.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		_beschreibung.setBackground(SystemColor.menu);
 		_beschreibung.setRows(11);
 		
 		
@@ -149,6 +154,7 @@ public class newTicket_View extends JFrame {
 		panel_4.add(btn_Abbruch);
 
 	}
+	
 	
 	public void addListenerButton(ActionListener a){
 		btn_Eröffnen.addActionListener(a);

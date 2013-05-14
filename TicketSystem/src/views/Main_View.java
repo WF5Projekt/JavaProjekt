@@ -21,6 +21,7 @@ import models.Kunde_Table;
 import models.Ticket_Table;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -28,6 +29,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Button;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.BoxLayout;
 
 @SuppressWarnings("serial")
 public class Main_View extends JFrame{
@@ -67,6 +72,10 @@ public class Main_View extends JFrame{
 	
 	
 	private JButton btn_ticketNew;
+	private JComboBox combo_sucheTicket;
+	private JTextField txt_suche;
+	private JButton btn_suche;
+	private JPanel panel;
 	
 	
 	
@@ -120,7 +129,7 @@ public class Main_View extends JFrame{
 		
 		JPanel panel_buttons = new JPanel();
 		ticketdetails.add(panel_buttons, BorderLayout.NORTH);
-		panel_buttons.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 1));
+		panel_buttons.setLayout(new BoxLayout(panel_buttons, BoxLayout.X_AXIS));
 		
 		btn_ticketRefresh = new JButton("Aktualisieren");
 		
@@ -128,6 +137,22 @@ public class Main_View extends JFrame{
 		
 		btn_ticketNew = new JButton("Ticket er\u00F6ffnen");
 		panel_buttons.add(btn_ticketNew);
+		
+		panel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel_buttons.add(panel);
+		
+		txt_suche = new JTextField();
+		panel.add(txt_suche);
+		txt_suche.setColumns(10);
+		
+		combo_sucheTicket = new JComboBox();
+		panel.add(combo_sucheTicket);
+		combo_sucheTicket.setModel(new DefaultComboBoxModel(new String[] {"Status", "Priorit\u00E4t", "Kategorie", "Level", "Kundenname", "Mitarbeiter", "Ticket Beschreibung"}));
+		
+		btn_suche = new JButton("Suche");
+		panel.add(btn_suche);
 		
 		panel_ticketdetails = new JPanel();
 		ticketdetails.add(panel_ticketdetails, BorderLayout.SOUTH);
@@ -400,6 +425,20 @@ public class Main_View extends JFrame{
 	}
 	public void addListenerButton_ticketNew(ActionListener a){
 		btn_ticketNew.addActionListener(a);
+	}
+	public void addKeyListener(KeyListener a) {
+		txt_suche.addKeyListener(a);
+	}
+	public void addListenerSuche(ActionListener a){
+		btn_suche.addActionListener(a);
+	}
+	
+	//Für das Suchfeld wird der Such-Text und die Spalte zurückgegeben.
+	public String getSuche(){
+		return this.txt_suche.getText();
+	}
+	public String getSuchSpalte(){
+		return this.combo_sucheTicket.getSelectedItem().toString();
 	}
 	
 	public int getSelectedTicket(){

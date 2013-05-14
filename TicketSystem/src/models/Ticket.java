@@ -93,7 +93,30 @@ public class Ticket extends Database_Model {
 		}
 		return tickets;
 	}
+	public static ArrayList<Ticket> search(String spalte, String suche){
+		Connection con = getConnection();
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
+		Statement query;
+		try {
+			query = con.createStatement();
+
+			String sql = "call search( 'tickets', '" + spalte + "', '"+ suche +"')";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getTicketsWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Ticket-Suche)");
+		}
+		return tickets;
+			
+	}
 	
 	 public static ArrayList<Ticket> allWithFilter(String wo, String was) {
 	        Connection con = getConnection();

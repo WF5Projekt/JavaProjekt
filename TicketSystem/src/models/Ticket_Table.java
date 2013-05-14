@@ -33,6 +33,20 @@ public class Ticket_Table extends AbstractTableModel {
 			JOptionPane.showInputDialog("Fehler in Ticket_Table");
 		}
 	}
+	
+	public void searchData(String spalte, String suche){
+		try{
+			tickets = Ticket.search(spalte, suche);
+			data = new Object[tickets.size()][];
+			for (int i = 0; i < tickets.size(); i++) {
+				Ticket ticket = tickets.get(i);
+				data[i] = ticket.toJTableArray();
+			}
+			this.fireTableDataChanged();	
+		}catch( Exception e){
+			JOptionPane.showInputDialog("Fehler bei Ticket Suche");
+		}
+	}
 
 	// AbstractTable bietet automatisch folgende Funktionen
 

@@ -46,39 +46,39 @@ public class Login_View extends JFrame {
 		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 190, 238);
+		setBounds(100, 100, 371, 127);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.DARK_GRAY);
+		contentPane.setBackground(UIManager.getColor("Button.light"));
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		txt_username.setBackground(Color.LIGHT_GRAY);
+		txt_username.setBackground(UIManager.getColor("TextField.background"));
 		txt_username.setFont(new Font("Tahoma", Font.BOLD, 15));
 
-		txt_username.setBounds(79, 39, 95, 25);
+		txt_username.setBounds(78, 11, 95, 25);
 		contentPane.add(txt_username);
 		txt_username.setColumns(10);
 
 		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setForeground(Color.LIGHT_GRAY);
+		lblUsername.setForeground(Color.BLACK);
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblUsername.setBounds(11, 43, 68, 14);
+		lblUsername.setBounds(10, 15, 68, 14);
 		contentPane.add(lblUsername);
 
 		JLabel lblPasswort = new JLabel("Passwort");
-		lblPasswort.setForeground(Color.LIGHT_GRAY);
+		lblPasswort.setForeground(Color.BLACK);
 		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblPasswort.setBounds(11, 83, 68, 14);
+		lblPasswort.setBounds(183, 15, 68, 14);
 		contentPane.add(lblPasswort);
 		txt_passwort.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txt_passwort.setBackground(Color.LIGHT_GRAY);
+		txt_passwort.setBackground(UIManager.getColor("TextField.background"));
 
-		txt_passwort.setBounds(79, 79, 95, 25);
+		txt_passwort.setBounds(251, 11, 104, 25);
 		contentPane.add(txt_passwort);
-		btn_Login.setBackground(Color.LIGHT_GRAY);
+		btn_Login.setBackground(UIManager.getColor("Button.background"));
 		btn_Login.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		btn_Login.setBounds(10, 144, 164, 56);
+		btn_Login.setBounds(10, 47, 345, 42);
 		contentPane.add(btn_Login);
 
 		this.setLocationRelativeTo(null);
