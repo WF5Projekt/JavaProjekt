@@ -37,6 +37,7 @@ import javax.swing.BoxLayout;
 @SuppressWarnings("serial")
 public class Main_View extends JFrame {
 
+
 	private JPanel contentPane;
 	private JTabbedPane tabs;
 	private JPanel panelKunden;
@@ -81,7 +82,8 @@ public class Main_View extends JFrame {
 	private JComboBox<String> combo_sucheKunde;
 	private JButton btn_sucheKunde;
 	private JButton btn_kundeNew;
-	private JTable kunden;
+	public JTable kunden;
+	public JTable tickets;
 
 	public Main_View() {
 
@@ -125,6 +127,9 @@ public class Main_View extends JFrame {
 
 		TicketscrollPane = new JScrollPane();
 		ticketdetails.add(TicketscrollPane, BorderLayout.CENTER);
+		
+		tickets = new JTable();
+		TicketscrollPane.setViewportView(tickets);
 
 
 		JPanel panel_buttons = new JPanel();
