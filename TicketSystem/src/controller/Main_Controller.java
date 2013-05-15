@@ -23,6 +23,7 @@ public class Main_Controller implements ListSelectionListener {
 
 	private Ticket_Table tickets;
 	private Kunde_Table kunden;
+	private Mitarbeiter_Table mitarbeiter;
 
 	// Komboboxen bei Ticket
 	public ComboBoxModelKategorie ComboBoxKategorie;
@@ -40,13 +41,14 @@ public class Main_Controller implements ListSelectionListener {
 		this.MainView = new Main_View();
 		
 		//Tabellen erstellen
-		this.tickets = new Ticket_Table();
+		this.tickets 		= 	new Ticket_Table();
 		this.kunden 		= 	new Kunde_Table();
-		
+		this.mitarbeiter	= 	new Mitarbeiter_Table();
 		
 		//Erstesmal Tabellendaten Abfragen
 		tickets.refreshData();
 		kunden.refreshData();
+		mitarbeiter.refreshData();
 
 		//Aktuell eingeloggter Mitarbeiter ist hier gespeichert (kommt aus der Login_Model())
 		this.user 			= 	user;
@@ -72,25 +74,112 @@ public class Main_Controller implements ListSelectionListener {
 	private void init() {
 		this.MainView.setModel(tickets);
 		this.MainView.setModel(kunden);
+		this.MainView.setModel(mitarbeiter);
 	}
 
 	// Button-Listener werden festgelegt
 	private void addListener() {
 		// Buttons im Ticket-Tab
-		MainView.addListenerButton_ticketRefresh(new ticketRefreshButtonListener());
-		MainView.addListenerButton_ticketNew(new ticketNewButtonListener());
-		MainView.addListenerTicketSuche(new ticketSuchButtonListener());
+		MainView.addListenerTicketRefresh(new ticketRefreshListener());
+		MainView.addListenerTicketNew(new ticketNewListener());
+		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 
 		//Buttons im Kunden-Tab
-		MainView.addListenerButton_kundenRefresh(new kundeRefreshButtonListener());
-		MainView.addListenerSuchButton(new kundeSuchButtonListener());
-		MainView.addKeyListenerKundenSuche(new kundeSucheKeyListener());
+		MainView.addListenerKundeRefresh(new kundeRefreshListener());
+		MainView.addListenerKundeSuche(new kundeSucheListener());
+		MainView.addKeyListenerKundeSuche(new kundeSucheKeyListener());
+		
+		//Buttons im Mitarbeiter-Tab
+		MainView.addListenerMitarbeiterRefresh(new mitarbeiterRefreshListener());
+		MainView.addListenerMitarbeiterSuche(new mitarbeiterSucheListener());
+		MainView.addKeyListenerMitarbeiterSuche(new mitarbeiterSucheKeyListener());
 		
 		// Tabellen-Listener
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
 
+	
+	/*
+	 * ################################################
+	 * ################################################
+	 * ################################################ 
+	 * ############ 						###########
+	 * ############		Mitarbeiter			########### 
+	 * ############ 						###########
+	 * ################################################
+	 * ################################################
+	 */
+	
+	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
+		private void mitarbeiterSuche() {
+			String suche = MainView.getTextSucheMitarbeiter();
+			String spalte = MainView.getSpalteSucheMitarbeiter();
+
+			if (!(suche.equals("") || spalte.equals(""))) {
+				mitarbeiter.searchData(spalte, suche);
+			} else {
+				mitarbeiter.refreshData();
+			}
+		}
+		
+		//############### ActionListener
+		
+		// Refresh-Button
+		class mitarbeiterRefreshListener implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				mitarbeiter.refreshData();
+			}
+
+		}
+		
+		// Neuer Kunde-Button
+		
+		class mitarbeiterNewListener implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		}
+		
+		// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
+		class mitarbeiterSucheListener implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mitarbeiterSuche();
+			}
+
+		}
+		// Suchbutton ruft KundenSuche() auf bei Enter-Taste
+		class mitarbeiterSucheKeyListener implements KeyListener {
+
+			@Override
+			public void keyPressed(KeyEvent key) {
+				if (key.getKeyCode() == KeyEvent.VK_ENTER)
+					mitarbeiterSuche();
+
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		}
+		
+		
+	
+	
+	
 	
 	/*
 	 * ################################################
@@ -104,21 +193,21 @@ public class Main_Controller implements ListSelectionListener {
 	 */
 	
 	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
-			private void kundenSuche() {
-				String suche = MainView.getSucheKunde();
-				String spalte = MainView.getSuchSpalteKunde();
+	private void kundenSuche() {
+		String suche = MainView.getTextSucheKunde();
+		String spalte = MainView.getSpalteSucheKunde();
 
-				if (!(suche.equals("") || spalte.equals(""))) {
-					kunden.searchData(spalte, suche);
-				} else {
-					kunden.refreshData();
-				}
-			}
+		if (!(suche.equals("") || spalte.equals(""))) {
+				kunden.searchData(spalte, suche);
+		} else {
+				kunden.refreshData();
+		}
+	}
 	
 	//############### ActionListener
 	
 	// Refresh-Button
-	class kundeRefreshButtonListener implements ActionListener {
+	class kundeRefreshListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -127,8 +216,19 @@ public class Main_Controller implements ListSelectionListener {
 
 	}
 	
+	// Neuer Kunde-Button
+	
+	class kundeNewListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
 	// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
-	class kundeSuchButtonListener implements ActionListener {
+	class kundeSucheListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -173,7 +273,7 @@ public class Main_Controller implements ListSelectionListener {
 	// ########### ActionListener
 
 	// Refresh-Button
-	class ticketRefreshButtonListener implements ActionListener {
+	class ticketRefreshListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -184,13 +284,13 @@ public class Main_Controller implements ListSelectionListener {
 	
 	
 	//Neues Ticket eröffnen --> Fenster wird geöffnet und Comboboxen gefüllt!
-	class ticketNewButtonListener implements ActionListener {
+	class ticketNewListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			TicketNeu = new newTicket_View();
 			// Button für neues Ticket anlegen
-			TicketNeu.addListenerButton(new neuesTicketButton());
+			TicketNeu.addListenerButton(new neuesTicket());
 
 			// ComboBoxen füllen
 			ComboBoxKategorie = new ComboBoxModelKategorie();
@@ -207,7 +307,7 @@ public class Main_Controller implements ListSelectionListener {
 	}
 	
 	// Button um neues Ticket zu speichern
-	class neuesTicketButton implements ActionListener {
+	class neuesTicket implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -250,8 +350,8 @@ public class Main_Controller implements ListSelectionListener {
 
 	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
 	private void ticketSuche() {
-		String suche = MainView.getSucheTicket();
-		String spalte = MainView.getSuchSpalteTicket();
+		String suche = MainView.getTextSucheTicket();
+		String spalte = MainView.getSpalteSucheTicket();
 
 		if (!(suche.equals("") || spalte.equals(""))) {
 			tickets.searchData(spalte, suche);
@@ -262,7 +362,7 @@ public class Main_Controller implements ListSelectionListener {
 
 	
 	// Suchbutton ruft die TicketSuche() auf mit Klick auf Button
-	class ticketSuchButtonListener implements ActionListener {
+	class ticketSucheListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

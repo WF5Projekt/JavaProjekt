@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 
 import models.Kunde_Table;
+import models.Mitarbeiter_Table;
 import models.Ticket_Table;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
@@ -44,12 +45,12 @@ public class Main_View extends JFrame {
 	private JPanel panelMitarbeiter;
 	private JPanel ticketdetails;
 
-	private JButton btn_ticketRefresh;
-
+	//Ticket-Tab
 	private JScrollPane TicketscrollPane;
+	private JTabbedPane tabs_ticket;
+	
 	private JPanel panel_ticketdetails;
 	private JPanel panelTickets;
-	private JTabbedPane tabs_ticket;
 
 	private JLabel _email_m;
 	private JLabel _email_k;
@@ -68,23 +69,41 @@ public class Main_View extends JFrame {
 	private JLabel _beschreibung;
 	private JLabel _telefon_k;
 
+	private JButton btn_ticketRefresh;
+	private JButton btn_sucheTicket;
 	private JButton btn_ticketNew;
+	
 	private JComboBox<String> combo_sucheTicket;
 	private JTextField txt_sucheTicket;
-	private JButton btn_sucheTicket;
 	
+	public JTable tickets;
+	
+	//Kunden-Tab
 	private JPanel panel;
-	private JScrollPane KundenScrollPane;
 	private JPanel panel_KundenButtons;
 	private JPanel panel_1;
-	private JButton btn_kundeRefresh;
-	private JTextField txt_sucheKunde;
+	
+	private JScrollPane KundenScrollPane;
 	private JComboBox<String> combo_sucheKunde;
+
+	private JTextField txt_sucheKunde;
+	
 	private JButton btn_sucheKunde;
 	private JButton btn_kundeNew;
+	private JButton btn_kundeRefresh;
+	
 	public JTable kunden;
-	public JTable tickets;
+	
+	//Mitarbeiter-Tab
 	private JPanel panel_MitarbeiterButtons;
+	private JPanel panel_2;
+	private JButton btn_mitarbeiterRefresh;
+	private JButton btn_mitarbeiterNew;
+	private JButton btn_sucheMitarbeiter;
+	private JTextField txt_sucheMitarbeiter;
+	private JComboBox<String> combo_sucheMitarbeiter;
+	private JScrollPane MitarbeiterScrollPane;
+	public JTable mitarbeiter;
 
 	public Main_View() {
 
@@ -624,7 +643,7 @@ public class Main_View extends JFrame {
 				"Name", "Adresse", "Kontakt", "Username" }));
 		panel_1.add(combo_sucheKunde);
 
-		btn_sucheKunde = new JButton("Suche");
+		btn_sucheKunde = new JButton("Suchen");
 		panel_1.add(btn_sucheKunde);
 
 		panelMitarbeiter = new JPanel();
@@ -632,21 +651,91 @@ public class Main_View extends JFrame {
 		panelMitarbeiter.setLayout(new BorderLayout(0, 0));
 		
 		panel_MitarbeiterButtons = new JPanel();
+		panel_MitarbeiterButtons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelMitarbeiter.add(panel_MitarbeiterButtons, BorderLayout.NORTH);
+		panel_MitarbeiterButtons.setLayout(new BoxLayout(panel_MitarbeiterButtons, BoxLayout.X_AXIS));
+		
+		btn_mitarbeiterRefresh = new JButton("Aktualisieren");
+		panel_MitarbeiterButtons.add(btn_mitarbeiterRefresh);
+		
+		btn_mitarbeiterNew = new JButton("Neuer Mitarbeiter");
+		panel_MitarbeiterButtons.add(btn_mitarbeiterNew);
+		
+		panel_2 = new JPanel();
+		panel_MitarbeiterButtons.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		txt_sucheMitarbeiter = new JTextField();
+		panel_2.add(txt_sucheMitarbeiter);
+		txt_sucheMitarbeiter.setColumns(10);
+		
+		combo_sucheMitarbeiter = new JComboBox<String>();
+		combo_sucheMitarbeiter.setModel(new DefaultComboBoxModel<String>(new String[] {"Name", "Abteilung", "Kontakt", "Standort", "Username"}));
+		panel_2.add(combo_sucheMitarbeiter);
+		
+		btn_sucheMitarbeiter = new JButton("Suchen");
+		panel_2.add(btn_sucheMitarbeiter);
+		
+		MitarbeiterScrollPane = new JScrollPane();
+		panelMitarbeiter.add(MitarbeiterScrollPane, BorderLayout.CENTER);
+		
+		mitarbeiter = new JTable();
+		MitarbeiterScrollPane.setViewportView(mitarbeiter);
 
 		this.setLocationRelativeTo(null);
 	}
 
 
+	/*
+	 * ###################################
+	 * MITARBEITER TAB
+	 * ################################## 
+	 * # Button-Listener 
+	 * # Tabellen-Modell setter 
+	 * # Suchfeld
+	 * ###################################
+	 */
 	
+	//############ Modell der Tabelle Mitarbeiter wird gesetzt
+	public void setModel(Mitarbeiter_Table t){
+		mitarbeiter.setModel(t);
+	}
+	
+	//############ ActionListener für Mitarbeiter-Buttons
 
+		public void addListenerMitarbeiterRefresh(ActionListener a){
+			btn_mitarbeiterRefresh.addActionListener(a);
+		}
+		public void addListenerMitarbeiterNew(ActionListener a){
+			btn_mitarbeiterNew.addActionListener(a);
+		}
+		public void addKeyListenerMitarbeiterSuche(KeyListener a){
+			txt_sucheMitarbeiter.addKeyListener(a);
+		}
+		public void addListenerMitarbeiterSuche(ActionListener a){
+			btn_sucheMitarbeiter.addActionListener(a);
+		}
+		
+		
+		//########### Suchfeld: Such-Text und die Such-Spalte wird an den Controller gegeben.
+			public String getTextSucheMitarbeiter() {
+				return this.txt_sucheMitarbeiter.getText();
+			}
+			public String getSpalteSucheMitarbeiter() {
+				return this.combo_sucheMitarbeiter.getSelectedItem().toString();
+			}
+			public int getSelectedMitarbeiter() {
+				return mitarbeiter.getSelectedRow();
+			}
+		
+
+	
 	/*
 	 * ###################################
 	 * KUNDEN TAB
 	 * ################################## 
 	 * # Button-Listener 
 	 * # Tabellen-Modell setter 
-	 * # Ticket-Info setter 
 	 * # Suchfeld
 	 * ###################################
 	 */
@@ -658,25 +747,25 @@ public class Main_View extends JFrame {
 	
 	//############ ActionListener für Kunden-Buttons
 
-	public void addListenerButton_kundenRefresh(ActionListener a){
+	public void addListenerKundeRefresh(ActionListener a){
 		btn_kundeRefresh.addActionListener(a);
 	}
-	public void addListenerButton_kundeNew(ActionListener a){
+	public void addListenerKundeNew(ActionListener a){
 		btn_kundeNew.addActionListener(a);
 	}
-	public void addKeyListenerKundenSuche(KeyListener a){
+	public void addKeyListenerKundeSuche(KeyListener a){
 		txt_sucheKunde.addKeyListener(a);
 	}
-	public void addListenerSuchButton(ActionListener a){
+	public void addListenerKundeSuche(ActionListener a){
 		btn_sucheKunde.addActionListener(a);
 	}
 	
 	
 	//########### Suchfeld: Such-Text und die Such-Spalte wird an den Controller gegeben.
-		public String getSucheKunde() {
+		public String getTextSucheKunde() {
 			return this.txt_sucheKunde.getText();
 		}
-		public String getSuchSpalteKunde() {
+		public String getSpalteSucheKunde() {
 			return this.combo_sucheKunde.getSelectedItem().toString();
 		}
 		public int getSelectedKunde() {
@@ -694,13 +783,19 @@ public class Main_View extends JFrame {
 	 * # Suchfeld
 	 * ###################################
 	 */
+		
+	//########### Methoden um das Tabellen Modell festzulegen
+	public void setModel(Ticket_Table t) {
+		tickets.setModel(t);
+	}
+
 
 	//########### ActionListener für Ticket-Buttons
-	public void addListenerButton_ticketRefresh(ActionListener a) {
+	public void addListenerTicketRefresh(ActionListener a) {
 		btn_ticketRefresh.addActionListener(a);
 	}
 
-	public void addListenerButton_ticketNew(ActionListener a) {
+	public void addListenerTicketNew(ActionListener a) {
 		btn_ticketNew.addActionListener(a);
 	}
 
@@ -711,18 +806,13 @@ public class Main_View extends JFrame {
 	public void addListenerTicketSuche(ActionListener a) {
 		btn_sucheTicket.addActionListener(a);
 	}
-
-	//########### Methoden um das Tabellen Modell festzulegen
-	public void setModel(Ticket_Table t) {
-		tickets.setModel(t);
-	}
-
+	
 
 	//########### Suchfeld: Such-Text und die Such-Spalte wird an den Controller gegeben.
-	public String getSucheTicket() {
+	public String getTextSucheTicket() {
 		return this.txt_sucheTicket.getText();
 	}
-	public String getSuchSpalteTicket() {
+	public String getSpalteSucheTicket() {
 		return this.combo_sucheTicket.getSelectedItem().toString();
 	}
 	public int getSelectedTicket() {

@@ -13,6 +13,7 @@ public class Mitarbeiter extends Database_Model {
 	public String nachname;
 	public String vorname;
 	public String standort;
+	public String idStadt; //= idStandort
 	public String geburt;
 	public String email;
 	public String telefon;
@@ -20,12 +21,13 @@ public class Mitarbeiter extends Database_Model {
 	public String abteilung;
 	
 	public Mitarbeiter(String idMitarbeiter, String nachname, String vorname,
-		String standort, String geburt, String email,
+		String standort, String idStadt, String geburt, String email,
 			String telefon, String username, String abteilung) {
 		this.idMitarbeiter = idMitarbeiter;
 		this.nachname = nachname;
 		this.vorname = vorname;
 		this.standort = standort;
+		this.idStadt = idStadt;
 		this.geburt = geburt;
 		this.email = email;
 		this.telefon = telefon;
@@ -94,16 +96,17 @@ public class Mitarbeiter extends Database_Model {
 
 		try {
 			String idMitarbeiter = result.getString("idMitarbeiter");
-			String nachname = result.getString("nachname");
-			String vorname = result.getString("vorname");
-			String standort = result.getString("Standort");
-			String geburt = result.getString("Geb.Datum");
-			String email = result.getString("Email");
-			String telefon = result.getString("Telefonnr.");
-			String username = result.getString("Username");
+			String nachname = result.getString("Nachname");
+			String vorname = result.getString("Vorname");
 			String abteilung = result.getString("Abteilung");
+			String geburt = result.getString("Geb.Datum");
+			String standort = result.getString("Standort");
+			String idStadt = result.getString("idStadt");
+			String email = result.getString("Email");
+			String telefon = result.getString("Telefonnr");
+			String username = result.getString("Username");
 			
-			newMitarbeiter = new Mitarbeiter(idMitarbeiter, nachname, vorname, standort, geburt, email, telefon, username, abteilung);
+			newMitarbeiter = new Mitarbeiter(idMitarbeiter, nachname, vorname, standort, idStadt, geburt, email, telefon, username, abteilung);
 
 		} catch (SQLException e) {
 			JOptionPane
@@ -118,8 +121,8 @@ public class Mitarbeiter extends Database_Model {
 	public Object[] toJTableArray() {
 		Object[] mitarbeiterAttributeArray = { 	
 		this.idMitarbeiter,
-		this.nachname,
 		this.vorname,
+		this.nachname,
 		this.geburt,
 		this.email,
 		this.telefon,
@@ -140,6 +143,7 @@ public class Mitarbeiter extends Database_Model {
 			Statement stmt = con.createStatement();
 			String query = "UPDATE mitarbeiter SET " + 
 			"idMitarbeiter = '" + this.idMitarbeiter + 
+			"', idStadt = '" + this.idStadt + 
 			"', nachname = '" + this.nachname + 
 			"', vorname = '" + this.vorname + 
 			"', gebdatum = '"+ this.geburt + 

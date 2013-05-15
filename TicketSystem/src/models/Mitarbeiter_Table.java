@@ -12,11 +12,11 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 			"ID", 
 			"Vorname", 
 			"Nachname", 
-			"Abteilung", 
 			"Geb.Datum", 
 			"E-Mail", 
 			"Telefonnr", 
 			"Username", 
+			"Abteilung", 
 			"Standort"
 	};
 	private Object[][] data = {};

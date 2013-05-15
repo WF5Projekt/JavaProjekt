@@ -9,6 +9,7 @@ public class Kunde extends Database_Model {
 
 
 
+
 	public String idKunde;
 	public String nachname;
 	public String vorname;
@@ -19,27 +20,39 @@ public class Kunde extends Database_Model {
 	public String email;
 	public String telefon;
 	public String username;
+	public String passwort;
 	
+	
+
 	public Kunde(String idKunde, String nachname, String vorname,
-			String strasse, String stadt, String geburt, String email,
-			String telefon, String username) {
+			String strasse, String stadt, String idStadt, String geburt,
+			String email, String telefon, String username, String passwort) {
 		this.idKunde = idKunde;
 		this.nachname = nachname;
 		this.vorname = vorname;
 		this.strasse = strasse;
 		this.stadt = stadt;
+		this.idStadt = idStadt;
 		this.geburt = geburt;
 		this.email = email;
 		this.telefon = telefon;
 		this.username = username;
+		this.passwort = passwort;
 	}
-	public Kunde(String idKunde, String nachname, String vorname){
-		this.idKunde = idKunde;
+	public Kunde(String nachname, String vorname,
+			String strasse, String stadt, String idStadt, String geburt,
+			String email, String telefon, String username, String passwort) {
 		this.nachname = nachname;
 		this.vorname = vorname;
+		this.strasse = strasse;
+		this.stadt = stadt;
+		this.idStadt = idStadt;
+		this.geburt = geburt;
+		this.email = email;
+		this.telefon = telefon;
+		this.username = username;
+		this.passwort = passwort;
 	}
-	
-
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
 	public static ArrayList<Kunde> all() {
 
@@ -101,12 +114,13 @@ public class Kunde extends Database_Model {
 			String vorname = result.getString("vorname");
 			String strasse = result.getString("strasse");
 			String stadt = result.getString("stadt");
+			String idStadt = result.getString("idStadt");
 			String geburt = result.getString("Geb.Datum");
 			String email = result.getString("Email");
 			String telefon = result.getString("Telefonnr");
 			String username = result.getString("Username");
 			
-			newCustomer = new Kunde(idKunde, nachname, vorname, strasse, stadt, geburt, email, telefon, username);
+			newCustomer = new Kunde(idKunde, nachname, vorname, idStadt, strasse, stadt, geburt, email, telefon, username);
 
 		} catch (SQLException e) {
 			JOptionPane
@@ -145,7 +159,7 @@ public class Kunde extends Database_Model {
 					+ "nachname = '" + this.nachname + "', "
 					+ "vorname = '" + this.vorname + "', "
 					+ "strasse = '" + this.strasse + "', "
-					+ "stadt = '" + this.idStadt + "', "
+					+ "idStadt = '" + this.idStadt + "', "
 					+ "geburt = '" + this.geburt + "', "
 					+ "email = '" + this.email + "', "
 					+ "telefon = '" + this.telefon + "', "
@@ -172,6 +186,43 @@ public class Kunde extends Database_Model {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	//Neuen Kunde in Datenbank anlegen
+	
+	/*
+	`newKunde`(
+	adresse VARCHAR(50),
+	nachname VARCHAR(45),
+	vorname VARCHAR(45),
+	gebdatum DATE,
+	username VARCHAR(45),
+	passwort VARCHAR(45),
+	email VARCHAR(45),
+	telefon INT(45),
+	idStadt INT(11))
+	 */
+	public void newKunde(){
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "call newKunde('" 
+					+ this.strasse + "', '" 
+					+ this.nachname + "', '"
+					+ this.vorname + "', '"
+					+ this.geburt + "', '"
+					+ this.username + "', '"
+					+ this.passwort + "', '"
+					+ this.email + "', '"
+					+ this.telefon + "', '"
+					+ this.idStadt + "')";
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
 	}
 
 	@Override
