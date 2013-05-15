@@ -84,6 +84,7 @@ public class Main_View extends JFrame {
 	private JButton btn_kundeNew;
 	public JTable kunden;
 	public JTable tickets;
+	private JPanel panel_MitarbeiterButtons;
 
 	public Main_View() {
 
@@ -133,6 +134,7 @@ public class Main_View extends JFrame {
 
 
 		JPanel panel_buttons = new JPanel();
+		panel_buttons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		ticketdetails.add(panel_buttons, BorderLayout.NORTH);
 		panel_buttons.setLayout(new BoxLayout(panel_buttons, BoxLayout.X_AXIS));
 
@@ -597,6 +599,7 @@ public class Main_View extends JFrame {
 		KundenScrollPane.setViewportView(kunden);
 
 		panel_KundenButtons = new JPanel();
+		panel_KundenButtons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelKunden.add(panel_KundenButtons, BorderLayout.NORTH);
 		panel_KundenButtons.setLayout(new BoxLayout(panel_KundenButtons,
 				BoxLayout.X_AXIS));
@@ -626,6 +629,10 @@ public class Main_View extends JFrame {
 
 		panelMitarbeiter = new JPanel();
 		tabs.addTab("Mitarbeiter", null, panelMitarbeiter, null);
+		panelMitarbeiter.setLayout(new BorderLayout(0, 0));
+		
+		panel_MitarbeiterButtons = new JPanel();
+		panelMitarbeiter.add(panel_MitarbeiterButtons, BorderLayout.NORTH);
 
 		this.setLocationRelativeTo(null);
 	}
@@ -646,7 +653,7 @@ public class Main_View extends JFrame {
 
 	//############ Modell der Tabelle Kunde wird gesetzt
 	public void setModel(Kunde_Table t) {
-		// customer.setModel(t);
+		kunden.setModel(t);
 	}
 	
 	//############ ActionListener für Kunden-Buttons
@@ -697,11 +704,11 @@ public class Main_View extends JFrame {
 		btn_ticketNew.addActionListener(a);
 	}
 
-	public void addKeyListener(KeyListener a) {
+	public void addKeyListenerTicketSuche(KeyListener a) {
 		txt_sucheTicket.addKeyListener(a);
 	}
 
-	public void addListenerSuche(ActionListener a) {
+	public void addListenerTicketSuche(ActionListener a) {
 		btn_sucheTicket.addActionListener(a);
 	}
 

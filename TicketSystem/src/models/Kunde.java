@@ -14,6 +14,7 @@ public class Kunde extends Database_Model {
 	public String vorname;
 	public String strasse;
 	public String stadt;
+	public String idStadt;
 	public String geburt;
 	public String email;
 	public String telefon;
@@ -119,9 +120,15 @@ public class Kunde extends Database_Model {
 	//
 	public Object[] toJTableArray() {
 		Object[] customerAttributeArray = { 
-				this.idKunde, 
+				this.idKunde,
 				this.nachname,
-				this.vorname };
+				this.vorname,
+				this.strasse,
+				this.stadt,
+				this.geburt,
+				this.email,
+				this.telefon,
+				this.username};
 		return customerAttributeArray;
 	}
 	
@@ -135,9 +142,15 @@ public class Kunde extends Database_Model {
 			Statement stmt = con.createStatement();
 			String query = "UPDATE kunde SET " 
 					+ "idKunde = '" + this.idKunde + "', " 
-					+ "name = '" + this.nachname + "', "
-					+ "surname = '" + this.vorname + 
-					"WHERE idKunde = '" + this.idKunde + "';";
+					+ "nachname = '" + this.nachname + "', "
+					+ "vorname = '" + this.vorname + "', "
+					+ "strasse = '" + this.strasse + "', "
+					+ "stadt = '" + this.idStadt + "', "
+					+ "geburt = '" + this.geburt + "', "
+					+ "email = '" + this.email + "', "
+					+ "telefon = '" + this.telefon + "', "
+					+ "username = '" + this.username +
+					"' WHERE idKunde = '" + this.idKunde + "';";
 			stmt.execute(query);
 			stmt.close();
 			con.close();
