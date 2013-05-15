@@ -83,19 +83,9 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
 
-	//
-	public void valueChanged(ListSelectionEvent e) {
-		Object source = e.getSource();
-		if (source == MainView.tickets.getSelectionModel()) {
-			showTicketInfo();
-		} /*
-		 * else if (source == TableSales.getSelectionModel()) { int selectedRow
-		 * = TableSales.getSelectedRow(); if (selectedRow != -1) { Sale sale =
-		 * saleTableModel.getSaleAtRow(selectedRow);
-		 * saleItemTableModel.refreshData(sale); } else {
-		 * saleItemTableModel.clearData(); }
-		 */
-	}
+	
+	
+	
 
 	// Sub-Klassen für die Button-Listener
 	class ticketRefreshButtonListener implements ActionListener {
@@ -172,8 +162,8 @@ public class Main_Controller implements ListSelectionListener {
 	
 	
 	private void ticketSuche(){
-		String suche = MainView.getSuche();
-		String spalte = MainView.getSuchSpalte();
+		String suche = MainView.getSucheTicket();
+		String spalte = MainView.getSuchSpalteTicket();
 		
 		if(!( suche.equals("") || spalte.equals("") )){
 			tickets.searchData(spalte, suche);
@@ -213,7 +203,18 @@ public class Main_Controller implements ListSelectionListener {
 		
 	}
 	
-
+	public void valueChanged(ListSelectionEvent e) {
+		Object source = e.getSource();
+		if (source == MainView.tickets.getSelectionModel()) {
+			showTicketInfo();
+		} /*
+		 * else if (source == TableSales.getSelectionModel()) { int selectedRow
+		 * = TableSales.getSelectedRow(); if (selectedRow != -1) { Sale sale =
+		 * saleTableModel.getSaleAtRow(selectedRow);
+		 * saleItemTableModel.refreshData(sale); } else {
+		 * saleItemTableModel.clearData(); }
+		 */
+	}
 	// Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der
 	// Tabelle
 	private void showTicketInfo() {
