@@ -72,7 +72,7 @@ public class Main_View extends JFrame{
 	
 	
 	private JButton btn_ticketNew;
-	private JComboBox combo_sucheTicket;
+	private JComboBox<String> combo_sucheTicket;
 	private JTextField txt_suche;
 	private JButton btn_suche;
 	private JPanel panel;
@@ -147,7 +147,7 @@ public class Main_View extends JFrame{
 		panel.add(txt_suche);
 		txt_suche.setColumns(10);
 		
-		combo_sucheTicket = new JComboBox();
+		combo_sucheTicket = new JComboBox<String>();
 		panel.add(combo_sucheTicket);
 		combo_sucheTicket.setModel(new DefaultComboBoxModel(new String[] {"Status", "Priorit\u00E4t", "Kategorie", "Level", "Kundenname", "Mitarbeiter", "Ticket Beschreibung"}));
 		

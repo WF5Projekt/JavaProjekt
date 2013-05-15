@@ -17,6 +17,11 @@ public class Main_Controller implements ListSelectionListener {
 
 	private Main_View MainView;
 	public newTicket_View TicketNeu;
+	
+	//Objekt des eingeloggten Mitarbeiters
+	private Mitarbeiter user;
+	
+	
 
 	private Ticket_Table tickets;
 	private Kunde_Table kunden;
@@ -29,10 +34,13 @@ public class Main_Controller implements ListSelectionListener {
 	private ArrayList<Priorität> combo_prioritäten;
 	private ArrayList<Kunde> combo_kunden;
 
-	public Main_Controller() {
+	public Main_Controller(Mitarbeiter user) {
 
 		this.MainView = new Main_View();
 		this.tickets = new Ticket_Table();
+		
+		this.user = user;
+		
 		this.kunden = new Kunde_Table();
 
 		// Initialisierung der Arrays für Comboboxen
@@ -129,16 +137,36 @@ public class Main_Controller implements ListSelectionListener {
 			int selIndexKat = TicketNeu.kat.getSelectedIndex();
 			int selIndexPrio = TicketNeu.prio.getSelectedIndex();
 			int selIndexKunde = TicketNeu.kunde.getSelectedIndex();
-
-			Kategorie selectedKategorie = combo_kategorien.get(selIndexKat);
-			Priorität selectedPriorität = combo_prioritäten.get(selIndexPrio);
-			System.out.println("Priorität: "+ selectedPriorität.id);
 			
-			//Kunde selectedKunde = combo_kunden.get(selIndexKunde);
-			//String beschreibung = TicketNeu._beschreibung.getText();
+			String beschreibung = TicketNeu._beschreibung.getText();
+			//Falls nicht alle Daten angegeben sind ->  Button-Aktion abbrechen!
+			//Daten vollständig: das Ticket wird erstellt mit: Beschreibung, idPriorität, idKategorie, idKunde, idMitarbeiter und in Datenbank mit NewTicket() gespeichert
+						
+			if (selIndexKat >= 0 && selIndexPrio >= 0 && selIndexKunde >= 0 && !beschreibung.trim().equals("")) 
+			{
 
-			//Ticket tmpTicket = new Ticket(beschreibung, , , null);
+				String priorität = combo_prioritäten.get(selIndexPrio).id;
+				String kategorie = combo_kategorien.get(selIndexKat).id;
+				String idKunde = combo_kunden.get(selIndexKunde).idKunde;
+				String idMitarbeiter = user.idMitarbeiter;
+				
+				
+				Ticket tmpTicket = new Ticket(beschreibung, priorität, kategorie, idKunde, idMitarbeiter);
+				tmpTicket.newTicket();
+					JOptionPane.showMessageDialog(null, "Ticket eröffnet!", "Erfolgreich", JOptionPane.PLAIN_MESSAGE);
+					tickets.refreshData();
+					TicketNeu.dispose();
+				
+			}
+			else
+			{
+	            JOptionPane.showMessageDialog(null, "Bitte alle geforderten Daten angeben!", "Warnung", JOptionPane.QUESTION_MESSAGE);
+	            return;
+	        }
 
+			
+			
+			
 		}
 	}
 	

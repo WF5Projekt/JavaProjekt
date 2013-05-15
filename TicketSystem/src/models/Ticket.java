@@ -62,11 +62,12 @@ public class Ticket extends Database_Model {
 		this.erstellzeitpunkt = erstellzeitpunkt;
 	}
 	// Konstruktur zum Erstellen eines Tickets für die neu-Anlage eines Tickets
-	public Ticket(String beschr, String prio, String kat, String idK) {
+	public Ticket(String beschr, String prio, String kat, String idK, String idM) {
 		this.beschreibung = beschr;
 		this.prioritaet = prio;
 		this.idKunde = idK;
 		this.kategorie = kat;
+		this.idMitarbeiter = idM;
 	}
 
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array tickets
@@ -223,18 +224,21 @@ public class Ticket extends Database_Model {
 		}
 	}
 
-	public void newTicket(String beschr, String idK, String prio, String kat) {
+	public Boolean newTicket() {
+		boolean erg = false;
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "call newTicket("+ beschr +", "+ idK +", "+ prio + ", "+ kat +")";
+			String query = "call newTicket( '"+ this.beschreibung +"', '"+ this.idKunde +"', '"+ this.kategorie + "', '"+ this.prioritaet +"', '" + this.idMitarbeiter + "')";
 
 			stmt.execute(query);
 			stmt.close();
 			con.close();
+			erg = true;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
+		return erg;
 	}
 
 	// Lösche Kunde
@@ -242,8 +246,7 @@ public class Ticket extends Database_Model {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "DELETE FROM ticket " + "WHERE idTicket = '"
-					+ this.idTicket + "';";
+			String query = "DELETE FROM ticket WHERE idTicket = '"+ this.idTicket + "';";
 			stmt.execute(query);
 			stmt.close();
 			con.close();

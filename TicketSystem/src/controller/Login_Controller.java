@@ -15,7 +15,8 @@ public class Login_Controller {
 
 	private Login_View loginView;
 	private Login_Model loginModel;
-
+	
+	
 	public Login_Controller() {
 		this.loginView = new Login_View();
 		this.loginModel = new Login_Model();
@@ -25,7 +26,8 @@ public class Login_Controller {
 		this.loginView.addLoginListener(new LoginListener());
 		this.loginView.setVisible(true);
 	}
-
+	
+	
 	public void kill() {
 		this.loginView.dispose();
 	}
@@ -41,7 +43,7 @@ public class Login_Controller {
 
 				if (loginModel.login()) {
 					loginView.setVisible(false);
-					Main.setMain();
+					Main.setMain(loginModel.getUser());
 				}
 
 			} catch (Exception e) {
@@ -62,9 +64,8 @@ public class Login_Controller {
 					loginModel.setPasswort(loginView.getTxt_passwort());
 
 					if (loginModel.login()) {
-
 						loginView.setVisible(false);
-						Main.setMain();
+						Main.setMain(loginModel.getUser());
 					}
 
 				} catch (Exception e) {
@@ -84,7 +85,8 @@ public class Login_Controller {
 			// TODO Auto-generated method stub
 
 		}
-
+		
+		
 	}
 
 }

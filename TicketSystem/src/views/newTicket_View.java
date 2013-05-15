@@ -47,7 +47,6 @@ public class newTicket_View extends JFrame {
 		setBounds(new Rectangle(0, 0, 515, 315));
 		setResizable(false);
 		setAutoRequestFocus(false);
-		setAlwaysOnTop(true);
 		setType(Type.POPUP);
 		setTitle("Neues Ticket");
 		

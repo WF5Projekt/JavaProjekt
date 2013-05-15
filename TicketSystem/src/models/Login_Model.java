@@ -9,7 +9,8 @@ public class Login_Model extends Database_Model {
 	private String passwort;
 	private String username_eingabe;
 	private String passwort_eingabe;
-	private String vorname;
+	private String idMitarbeiter;
+	private Mitarbeiter user;
 
 	// Userdaten werden an die SQL Datenbank geschickt und mit den in der View
 	// eingegebenen Daten verglichen.
@@ -33,16 +34,16 @@ public class Login_Model extends Database_Model {
 			while (result.next()) {
 				this.username = result.getString("username");
 				this.passwort = result.getString("passwort");
-				this.vorname = result.getString("vorname");
+				this.idMitarbeiter = result.getString("idMitarbeiter");
 
 			}
 			query.close();
 			con.close();
 			if (this.username_eingabe.equals(this.username)
 					&& this.passwort_eingabe.equals(this.passwort)) {
-				// --> Hier das Programm starten
-				// JOptionPane.showMessageDialog(null, "Hallo " + this.vorname
-				// + ", du bist jetzt eingeloggt!");
+				
+				user = new Mitarbeiter(idMitarbeiter);
+				
 				login = true;
 			} else {
 
@@ -66,5 +67,9 @@ public class Login_Model extends Database_Model {
 
 	public void setPasswort(String passwort) {
 		this.passwort_eingabe = passwort;
+	}
+	
+	public Mitarbeiter getUser(){
+		return this.user;
 	}
 }
