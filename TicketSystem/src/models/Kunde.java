@@ -51,7 +51,7 @@ public class Kunde extends Database_Model {
 			String sql = "select * FROM `allkunden` ORDER BY idKunde";
 
 			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Customer
 			// mit Methode...
 			while (result.next()) {
 				customers.add(getCustomersWithResultSet(result));
@@ -64,6 +64,31 @@ public class Kunde extends Database_Model {
 		return customers;
 	}
 
+	public static ArrayList<Kunde> search(String spalte, String suche){
+		Connection con = getConnection();
+		ArrayList<Kunde> customers = new ArrayList<Kunde>();
+
+		Statement query;
+		try {
+			query = con.createStatement();
+
+			String sql = "call search( 'kunden', '" + spalte + "', '"+ suche +"')";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Kunden
+			// mit Methode...
+			while (result.next()) {
+				customers.add(getCustomersWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Kunden-Suche)");
+		}
+		return customers;
+			
+	}
+	
 	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Kunde
 	private static Kunde getCustomersWithResultSet(ResultSet result) {
 
@@ -76,8 +101,8 @@ public class Kunde extends Database_Model {
 			String strasse = result.getString("strasse");
 			String stadt = result.getString("stadt");
 			String geburt = result.getString("Geb.Datum");
-			String email = result.getString("E-Mail");
-			String telefon = result.getString("Telefonnr.");
+			String email = result.getString("Email");
+			String telefon = result.getString("Telefonnr");
 			String username = result.getString("Username");
 			
 			newCustomer = new Kunde(idKunde, nachname, vorname, strasse, stadt, geburt, email, telefon, username);
@@ -93,7 +118,9 @@ public class Kunde extends Database_Model {
 
 	//
 	public Object[] toJTableArray() {
-		Object[] customerAttributeArray = { this.idKunde, this.nachname,
+		Object[] customerAttributeArray = { 
+				this.idKunde, 
+				this.nachname,
 				this.vorname };
 		return customerAttributeArray;
 	}
@@ -106,11 +133,11 @@ public class Kunde extends Database_Model {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "UPDATE kunde SET " + "idKunde = '" + this.idKunde
-					+ "', " + "name = '" + this.nachname + "', "
-					+ "surname = '" + this.vorname + "WHERE idKunde = '"
-					+ this.idKunde + "';";
-
+			String query = "UPDATE kunde SET " 
+					+ "idKunde = '" + this.idKunde + "', " 
+					+ "name = '" + this.nachname + "', "
+					+ "surname = '" + this.vorname + 
+					"WHERE idKunde = '" + this.idKunde + "';";
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -125,7 +152,7 @@ public class Kunde extends Database_Model {
 		try {
 			Statement stmt = con.createStatement();
 			String query = "DELETE FROM kunde " + "WHERE idKunde = '"
-					+ this.idKunde + "';";
+							+ this.idKunde + "';";
 			stmt.execute(query);
 			stmt.close();
 			con.close();

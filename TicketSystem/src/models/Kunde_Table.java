@@ -8,7 +8,17 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Kunde_Table extends AbstractTableModel {
 
-	private String[] columnNames = { "ID", "Nachname", "Vorname" };
+	private String[] columnNames = { 
+			"ID", 
+			"Vorname", 
+			"Nachname", 
+			"Strasse", 
+			"Stadt", 
+			"Geb.Datum", 
+			"E-Mail",
+			"Telefonnr.", 
+			"Username"
+	};
 	private Object[][] data = {};
 	private ArrayList<Kunde> customers;
 
@@ -24,6 +34,20 @@ public class Kunde_Table extends AbstractTableModel {
 			this.fireTableDataChanged();
 		} catch (Exception e) {
 			JOptionPane.showInputDialog("Fehler in Kunden_Table");
+		}
+	}
+	
+	public void searchData(String spalte, String suche){
+		try{
+			customers = Kunde.search(spalte, suche);
+			data = new Object[customers.size()][];
+			for (int i = 0; i < customers.size(); i++) {
+				Kunde kunde = customers.get(i);
+				data[i] = kunde.toJTableArray();
+			}
+			this.fireTableDataChanged();	
+		}catch( Exception e){
+			JOptionPane.showInputDialog("Fehler bei Ticket Suche");
 		}
 	}
 

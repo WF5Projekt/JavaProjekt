@@ -70,7 +70,7 @@ public class Ticket extends Database_Model {
 		this.idMitarbeiter = idM;
 	}
 
-	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array tickets
+	// Rufe Kundentabelle von Datenbank ab und bilde Ticket-Array tickets
 	public static ArrayList<Ticket> all() {
 
 		Connection con = getConnection();
@@ -82,7 +82,7 @@ public class Ticket extends Database_Model {
 			String sql = "select * FROM `allTickets`";
 
 			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
 			// mit Methode...
 			while (result.next()) {
 				tickets.add(getTicketsWithResultSet(result));
@@ -105,7 +105,7 @@ public class Ticket extends Database_Model {
 			String sql = "call search( 'tickets', '" + spalte + "', '"+ suche +"')";
 
 			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
 			// mit Methode...
 			while (result.next()) {
 				tickets.add(getTicketsWithResultSet(result));
@@ -117,31 +117,7 @@ public class Ticket extends Database_Model {
 		}
 		return tickets;
 			
-	}
-	
-	 public static ArrayList<Ticket> allWithFilter(String wo, String was) {
-	        Connection con = getConnection();
-	        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-	        Statement query;
-	        try {
-	            query = con.createStatement();
-	            String sql = "CALL searchTicket('"+wo+"', '"+was+"')";
-
-	            ResultSet result = query.executeQuery(sql);
-	            while (result.next()) {
-	                tickets.add(getTicketsWithResultSet(result));
-	            }
-	            query.close();
-	            con.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	        
-	        return tickets;
-	    }
-	
-	
-			
+	}	
 	
 	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Ticket
 	private static Ticket getTicketsWithResultSet(ResultSet result) {
@@ -224,21 +200,25 @@ public class Ticket extends Database_Model {
 		}
 	}
 
-	public Boolean newTicket() {
-		boolean erg = false;
+	public void newTicket() {
+	
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "call newTicket( '"+ this.beschreibung +"', '"+ this.idKunde +"', '"+ this.kategorie + "', '"+ this.prioritaet +"', '" + this.idMitarbeiter + "')";
+			String query = "call newTicket( '"
+							+ this.beschreibung +"', '"
+							+ this.idKunde +"', '"
+							+ this.kategorie + "', '"
+							+ this.prioritaet +"', '" 
+							+ this.idMitarbeiter + "')";
 
 			stmt.execute(query);
 			stmt.close();
 			con.close();
-			erg = true;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		return erg;
+		
 	}
 
 	// Lösche Kunde

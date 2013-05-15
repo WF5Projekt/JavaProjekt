@@ -37,7 +37,7 @@ public class Mitarbeiter extends Database_Model {
 	}
 	
 
-	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
+	// Rufe Mitarbeitertabelle von Datenbank ab und bilde Mitarbeiter-Array mitarbeiter
 	public static ArrayList<Mitarbeiter> all() {
 
 		Connection con = getConnection();
@@ -49,7 +49,7 @@ public class Mitarbeiter extends Database_Model {
 			String sql = "select * FROM `allmitarbeiter` ORDER BY idMitarbeiter";
 
 			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Cusomter
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Mitarbeiter
 			// mit Methode...
 			while (result.next()) {
 				mitarbeiter.add(getMitarbeiterWithResultSet(result));
@@ -61,8 +61,33 @@ public class Mitarbeiter extends Database_Model {
 		}
 		return mitarbeiter;
 	}
+	
+	public static ArrayList<Mitarbeiter> search(String spalte, String suche){
+		Connection con = getConnection();
+		ArrayList<Mitarbeiter> mitarbeiter = new ArrayList<Mitarbeiter>();
 
-	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Kunde
+		Statement query;
+		try {
+			query = con.createStatement();
+
+			String sql = "call search( 'mitarbeiter', '" + spalte + "', '"+ suche +"')";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Mitarbeiter
+			// mit Methode...
+			while (result.next()) {
+				mitarbeiter.add(getMitarbeiterWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Mitarbeiter-Suche)");
+		}
+		return mitarbeiter;
+			
+	}
+
+	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Mitarbeiter
 	private static Mitarbeiter getMitarbeiterWithResultSet(ResultSet result) {
 
 		Mitarbeiter newMitarbeiter = null;
@@ -73,7 +98,7 @@ public class Mitarbeiter extends Database_Model {
 			String vorname = result.getString("vorname");
 			String standort = result.getString("Standort");
 			String geburt = result.getString("Geb.Datum");
-			String email = result.getString("E-Mail");
+			String email = result.getString("Email");
 			String telefon = result.getString("Telefonnr.");
 			String username = result.getString("Username");
 			String abteilung = result.getString("Abteilung");
@@ -82,7 +107,7 @@ public class Mitarbeiter extends Database_Model {
 
 		} catch (SQLException e) {
 			JOptionPane
-					.showInputDialog("Fehler in Mitarbeitern_getMitarbeiterWithResultSet");
+					.showInputDialog("Fehler in Mitarbeiter_getMitarbeiterWithResultSet");
 		}
 
 		return newMitarbeiter;
@@ -139,7 +164,7 @@ public class Mitarbeiter extends Database_Model {
 		try {
 			Statement stmt = con.createStatement();
 			String query = "DELETE FROM mitarbeiter " + "WHERE idMitarbeiter = '"
-					+ this.idMitarbeiter + "';";
+							+ this.idMitarbeiter + "';";
 			stmt.execute(query);
 			stmt.close();
 			con.close();
