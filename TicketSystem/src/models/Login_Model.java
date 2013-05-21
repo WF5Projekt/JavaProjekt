@@ -5,11 +5,8 @@ import javax.swing.*;
 
 public class Login_Model extends Database_Model {
 
-	private String username;
-	private String passwort;
 	private String username_eingabe;
 	private String passwort_eingabe;
-	private String idMitarbeiter;
 	private Mitarbeiter user;
 
 	// Userdaten werden an die SQL Datenbank geschickt und mit den in der View
@@ -21,35 +18,39 @@ public class Login_Model extends Database_Model {
 
 	public boolean login() {
 		boolean login = false;
+		String ergebnis = "";
 		try {
 			Connection con = getConnection();
 
 			Statement query = con.createStatement();
-			String sql = "SELECT * FROM `mitarbeiter` WHERE `username` = '"
-					+ this.username_eingabe + "' AND `passwort` = '"
-					+ this.passwort_eingabe + "'";
+			String sql = "SELECT login_ma('"
+					+ this.username_eingabe + "','"
+					+ this.passwort_eingabe + "')";
 
 			ResultSet result = query.executeQuery(sql);
 
 			while (result.next()) {
-				this.username = result.getString("username");
-				this.passwort = result.getString("passwort");
-				this.idMitarbeiter = result.getString("idMitarbeiter");
-
+				ergebnis = result.getString(1);
 			}
 			query.close();
 			con.close();
-			if (this.username_eingabe.equals(this.username)
-					&& this.passwort_eingabe.equals(this.passwort)) {
-				
-				user = new Mitarbeiter(idMitarbeiter);
+			
+			if (ergebnis.equals("Fehler"))
+			{
+				JOptionPane.showMessageDialog(null,
+						"User nicht vorhanden!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} 
+			else if(ergebnis.equals("Falsch"))
+			{
+				JOptionPane.showMessageDialog(null,
+						"Passwort falsch!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			else{
+				user = new Mitarbeiter(ergebnis);
 				
 				login = true;
-			} else {
-
-				JOptionPane.showMessageDialog(null,
-						"Username oder Passwort falsch!", "Error",
-						JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (Exception e) {
 

@@ -9,35 +9,101 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class Mitarbeiter extends Database_Model {
+	
 	public String idMitarbeiter;
-	public String nachname;
-	public String vorname;
-	public String standort;
-	public String idStadt; //= idStandort
+	public String name;
 	public String geburt;
+	
+	public String strasse;
+	public String hausnummer;
+	public String plz;
+	public String ort;
+	public String land;
+
+	public String abteilung;
+	public String idAbteilung;
+	public String level;
+	public String idLevel;
+	
 	public String email;
 	public String telefon;
-	public String username;
-	public String abteilung;
+	public String account;
+	public String idAccount;
 	
-	public Mitarbeiter(String idMitarbeiter, String nachname, String vorname,
-		String standort, String idStadt, String geburt, String email,
-			String telefon, String username, String abteilung) {
+	
+
+	public Mitarbeiter(String idMitarbeiter, String name, String geburt,
+			String strasse, String hausnummer, String plz, String ort,
+			String land, String abteilung, String idAbteilung, String level,
+			String idLevel, String email, String telefon, String account,
+			String idAccount) {
 		this.idMitarbeiter = idMitarbeiter;
-		this.nachname = nachname;
-		this.vorname = vorname;
-		this.standort = standort;
-		this.idStadt = idStadt;
+		this.name = name;
 		this.geburt = geburt;
+		this.strasse = strasse;
+		this.hausnummer = hausnummer;
+		this.plz = plz;
+		this.ort = ort;
+		this.land = land;
+		this.abteilung = abteilung;
+		this.idAbteilung = idAbteilung;
+		this.level = level;
+		this.idLevel = idLevel;
 		this.email = email;
 		this.telefon = telefon;
-		this.username = username;
-		this.abteilung = abteilung;
+		this.account = account;
+		this.idAccount = idAccount;
 	}
-	public Mitarbeiter(String idMitarbeiter){
-		this.idMitarbeiter = idMitarbeiter;
-	}
+
 	
+	public Mitarbeiter(String idAcc) {
+		Connection con = getConnection();
+		Statement query;
+		try {
+			query = con.createStatement();
+
+			String sql = "select * FROM `allmitarbeiter` WHERE idAccount = '"+ idAcc + "' LIMIT 1";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Mitarbeiter
+			// mit Methode...
+			while (result.next()) {
+				
+				try {
+					
+					this.idMitarbeiter= result.getString(1);
+					this.name= result.getString(2);
+					this.geburt= result.getString(3);
+					
+					this.strasse= result.getString(4);
+					this.hausnummer= result.getString(5);
+					this.plz= result.getString(6);
+					this.ort= result.getString(7);
+					this.land= result.getString(8);
+
+					this.abteilung= result.getString(10);
+					this.idAbteilung= result.getString(9);
+					this.level= result.getString(16);
+					this.idLevel= result.getString(15);
+					
+					this.email= result.getString(13);
+					this.telefon= result.getString(14);
+					this.account= result.getString(12);
+					this.idAccount= result.getString(11);
+					
+
+				} catch (SQLException e) {
+					JOptionPane
+							.showInputDialog("Fehler bei Mitarbeiter By Account - ResultSet");
+				}				
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Mitarbeiter By Account)");
+		}
+	}
+
 
 	// Rufe Mitarbeitertabelle von Datenbank ab und bilde Mitarbeiter-Array mitarbeiter
 	public static ArrayList<Mitarbeiter> all() {
@@ -89,24 +155,39 @@ public class Mitarbeiter extends Database_Model {
 			
 	}
 
+
 	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Mitarbeiter
 	private static Mitarbeiter getMitarbeiterWithResultSet(ResultSet result) {
 
 		Mitarbeiter newMitarbeiter = null;
 
 		try {
-			String idMitarbeiter = result.getString("idMitarbeiter");
-			String nachname = result.getString("Nachname");
-			String vorname = result.getString("Vorname");
-			String abteilung = result.getString("Abteilung");
-			String geburt = result.getString("Geb.Datum");
-			String standort = result.getString("Standort");
-			String idStadt = result.getString("idStadt");
-			String email = result.getString("Email");
-			String telefon = result.getString("Telefonnr");
-			String username = result.getString("Username");
 			
-			newMitarbeiter = new Mitarbeiter(idMitarbeiter, nachname, vorname, standort, idStadt, geburt, email, telefon, username, abteilung);
+			String idMitarbeiter= result.getString(1);
+			String name= result.getString(2);
+			String geburt= result.getString(3);
+			
+			String strasse= result.getString(4);
+			String hausnummer= result.getString(5);
+			String plz= result.getString(6);
+			String ort= result.getString(7);
+			String land= result.getString(8);
+
+			String abteilung= result.getString(10);
+			String idAbteilung= result.getString(9);
+			String level= result.getString(16);
+			String idLevel= result.getString(15);
+			
+			String email= result.getString(13);
+			String telefon= result.getString(14);
+			String account= result.getString(12);
+			String idAccount= result.getString(11);
+			
+			newMitarbeiter = new Mitarbeiter( idMitarbeiter,  name,  geburt,
+					 strasse,  hausnummer,  plz,  ort,
+					 land,  abteilung,  idAbteilung,  level,
+					 idLevel,  email,  telefon,  account,
+					 idAccount);
 
 		} catch (SQLException e) {
 			JOptionPane
@@ -120,15 +201,18 @@ public class Mitarbeiter extends Database_Model {
 	//
 	public Object[] toJTableArray() {
 		Object[] mitarbeiterAttributeArray = { 	
-		this.idMitarbeiter,
-		this.vorname,
-		this.nachname,
-		this.geburt,
-		this.email,
-		this.telefon,
-		this.username,
-		this.abteilung,
-		this.standort
+				this.idMitarbeiter,
+				this.name,
+				this.geburt,
+				this.strasse,
+				this.hausnummer,
+				this.plz,
+				this.ort,
+				this.land,
+				this.abteilung,
+				this.level,
+				this.email,
+				this.telefon
 		};
 		return mitarbeiterAttributeArray;
 	}
@@ -141,18 +225,8 @@ public class Mitarbeiter extends Database_Model {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "UPDATE mitarbeiter SET " + 
-			"idMitarbeiter = '" + this.idMitarbeiter + 
-			"', idStadt = '" + this.idStadt + 
-			"', nachname = '" + this.nachname + 
-			"', vorname = '" + this.vorname + 
-			"', gebdatum = '"+ this.geburt + 
-			"', email = '"+ this.email + 
-			"', telefon = '"+ this.telefon + 
-			"', username = '"+ this.username 
+			String query = ""; 
 			
-			+"' WHERE idMitarbeiter = '"
-			+ this.idMitarbeiter + "';";
 
 			stmt.execute(query);
 			stmt.close();
@@ -179,6 +253,6 @@ public class Mitarbeiter extends Database_Model {
 
 	@Override
 	public String toString() {
-		return this.nachname + ", " + this.vorname;
+		return this.name;
 	}
 }

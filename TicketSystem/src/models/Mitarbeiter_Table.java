@@ -10,15 +10,35 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 	
 	private String[] columnNames = { 
 			"ID", 
-			"Vorname", 
-			"Nachname", 
-			"Geb.Datum", 
-			"E-Mail", 
-			"Telefonnr", 
-			"Username", 
+			"Name", 
+			"Geburtstag", 
+			"Straﬂe",
+			"Hausnummer", 
+			"PLZ", 
+			"Ort",
+			"Land",
 			"Abteilung", 
-			"Standort"
+			"Level",
+			"E-Mail",
+			"Telefon"
 	};
+	
+	/*	this.idMitarbeiter,
+	this.name,
+	this.geburt,
+	this.strasse,
+	this.hausnummer,
+	this.plz,
+	this.ort,
+	this.land,
+	this.abteilung,
+	this.level,
+	this.email,
+	this.telefon
+	
+	*/
+	
+	
 	private Object[][] data = {};
 	private ArrayList<Mitarbeiter> employees;
 

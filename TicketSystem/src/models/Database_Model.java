@@ -9,9 +9,9 @@ public abstract class Database_Model {
 
 		String dbHost = "i-intra-02.informatik.hs-ulm.de";
 		String dbPort = "3306";
-		String database = "wfprj_wf5_10";
-		String dbUser = "wfprj_wf5_10";
-		String dbPassword = "wfprj_wf5_10";
+		String database = "wfprj_wf5_15";
+		String dbUser = "wfprj_wf5_15";
+		String dbPassword = "wfprj_wf5_15";
 
 		Connection conn = null;
 		try {

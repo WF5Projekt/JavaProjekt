@@ -41,22 +41,22 @@ public class Main_Controller implements ListSelectionListener {
 		this.MainView = new Main_View();
 		
 		//Tabellen erstellen
-		this.tickets 		= 	new Ticket_Table();
-		this.kunden 		= 	new Kunde_Table();
+		//this.tickets 		= 	new Ticket_Table();
+		//this.kunden 		= 	new Kunde_Table();
 		this.mitarbeiter	= 	new Mitarbeiter_Table();
 		
 		//Erstesmal Tabellendaten Abfragen
-		tickets.refreshData();
-		kunden.refreshData();
+		//tickets.refreshData();
+		//kunden.refreshData();
 		mitarbeiter.refreshData();
 
 		//Aktuell eingeloggter Mitarbeiter ist hier gespeichert (kommt aus der Login_Model())
 		this.user 			= 	user;
 
 		// Initialisierung der Arrays für Comboboxen
-		combo_kategorien 	= 	Kategorie.all();
-		combo_prioritäten 	= 	Priorität.all();
-		combo_kunden 		= 	Kunde.all();
+		//combo_kategorien 	= 	Kategorie.all();
+		//combo_prioritäten 	= 	Priorität.all();
+		//combo_kunden 		= 	Kunde.all();
 
 		try {
 			init();
@@ -72,8 +72,8 @@ public class Main_Controller implements ListSelectionListener {
 
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
-		this.MainView.setModel(tickets);
-		this.MainView.setModel(kunden);
+		//this.MainView.setModel(tickets);
+		//this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
 	}
 
