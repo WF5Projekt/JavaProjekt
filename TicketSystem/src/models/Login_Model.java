@@ -35,22 +35,28 @@ public class Login_Model extends Database_Model {
 			query.close();
 			con.close();
 			
-			if (ergebnis.equals("Fehler"))
+			if (ergebnis.equals("fehler"))
 			{
 				JOptionPane.showMessageDialog(null,
 						"User nicht vorhanden!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			} 
-			else if(ergebnis.equals("Falsch"))
+			else if(ergebnis.equals("falsch"))
 			{
 				JOptionPane.showMessageDialog(null,
 						"Passwort falsch!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			else{
+			else if(!ergebnis.equals("")){
 				user = new Mitarbeiter(ergebnis);
-				
 				login = true;
+				JOptionPane.showMessageDialog(null, "Willkommen zurück "+ user.name +"!",
+						"Willkommen", JOptionPane.PLAIN_MESSAGE);
+			}
+			else{
+				JOptionPane.showMessageDialog(null,
+						"Fehler beim Login!", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (Exception e) {
 

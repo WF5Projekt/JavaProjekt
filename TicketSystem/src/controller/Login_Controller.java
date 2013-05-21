@@ -61,7 +61,7 @@ public class Login_Controller {
 				}
 
 			} catch (Exception e) {
-				JOptionPane.showInputDialog(this, e);
+				JOptionPane.showMessageDialog(null, "Fehler bei Login - Daten einlesen/login() aufruf");
 			}
 
 		}
@@ -83,7 +83,7 @@ public class Login_Controller {
 					}
 
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(loginView, this, "hier", 0);
+					JOptionPane.showMessageDialog(null, "Fehler bei Login - Daten einlesen/login() aufruf");
 				}
 			}
 		}

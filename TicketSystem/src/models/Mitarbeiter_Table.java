@@ -38,7 +38,7 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 				}
 				this.fireTableDataChanged();
 			} catch (Exception e) {
-				JOptionPane.showInputDialog("Fehler in Mitarbeiter_Table");
+				JOptionPane.showInputDialog("Fehler in Refresh_Data Mitarbeiter");
 			}
 		}
 		
