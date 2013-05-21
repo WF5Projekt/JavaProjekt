@@ -109,8 +109,8 @@ public class Kunde extends Database_Model {
 		Kunde newCustomer = null;
 
 		try {
-			String idKunde = result.getString("idKunde");
-			String nachname = result.getString("nachname");
+			String idKunde = result.getString(0); // getString(1)
+			String nachname = result.getString("nachname"); //getString(2)
 			String vorname = result.getString("vorname");
 			String strasse = result.getString("strasse");
 			String stadt = result.getString("stadt");
