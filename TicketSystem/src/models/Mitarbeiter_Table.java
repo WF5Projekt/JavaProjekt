@@ -22,22 +22,7 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 			"E-Mail",
 			"Telefon"
 	};
-	
-	/*	this.idMitarbeiter,
-	this.name,
-	this.geburt,
-	this.strasse,
-	this.hausnummer,
-	this.plz,
-	this.ort,
-	this.land,
-	this.abteilung,
-	this.level,
-	this.email,
-	this.telefon
-	
-	*/
-	
+
 	
 	private Object[][] data = {};
 	private ArrayList<Mitarbeiter> employees;

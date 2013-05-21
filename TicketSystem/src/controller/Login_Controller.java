@@ -32,18 +32,32 @@ public class Login_Controller {
 		this.loginView.dispose();
 	}
 
+	public boolean einlesen(){
+		boolean erg = false;
+		//Wenn felder leer sind -> True -> Fehler
+		if(loginView.leereFelder()){
+			JOptionPane.showMessageDialog(null, "Bitte Passwort und Username eingeben!",
+					"Fehler", JOptionPane.PLAIN_MESSAGE);
+		}
+		else{
+			loginModel.setUsername(loginView.getTxt_username());
+			loginModel.setPasswort(loginView.getTxt_passwort());
+			erg = true;
+		}
+		return erg;
+	}
+	
 	class LoginListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
-			try {
-				loginModel.setUsername(loginView.getTxt_username());
-				loginModel.setPasswort(loginView.getTxt_passwort());
-
-				if (loginModel.login()) {
-					loginView.setVisible(false);
-					Main.setMain(loginModel.getUser());
+			
+			try {		
+				if(einlesen()){
+					if (loginModel.login()) {
+						loginView.setVisible(false);
+						Main.setMain(loginModel.getUser());
+					}
 				}
 
 			} catch (Exception e) {
@@ -60,12 +74,12 @@ public class Login_Controller {
 		public void keyPressed(KeyEvent key) {
 			if (key.getKeyCode() == KeyEvent.VK_ENTER) {
 				try {
-					loginModel.setUsername(loginView.getTxt_username());
-					loginModel.setPasswort(loginView.getTxt_passwort());
-
-					if (loginModel.login()) {
-						loginView.setVisible(false);
-						Main.setMain(loginModel.getUser());
+				
+					if(einlesen()){
+						if (loginModel.login()) {
+							loginView.setVisible(false);
+							Main.setMain(loginModel.getUser());
+						}
 					}
 
 				} catch (Exception e) {

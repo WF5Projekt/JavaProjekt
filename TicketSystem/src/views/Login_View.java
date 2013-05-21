@@ -92,6 +92,17 @@ public class Login_View extends JFrame {
 
 		return MD5.MD5(String.valueOf(txt_passwort.getPassword()));
 	}
+	
+	public boolean leereFelder(){
+		boolean erg = false;
+		
+		if(this.txt_passwort.getText().isEmpty() ||	this.txt_username.getText().isEmpty()){
+			erg = true;
+		}
+		
+		return erg;
+		
+	}
 
 	public void addLoginListener(ActionListener listenForLoginButton) {
 		btn_Login.addActionListener(listenForLoginButton);

@@ -55,7 +55,7 @@ public class Mitarbeiter extends Database_Model {
 		this.idAccount = idAccount;
 	}
 
-	
+	//Mitarbeiter wird beim Login durch den Account erstellt.
 	public Mitarbeiter(String idAcc) {
 		Connection con = getConnection();
 		Statement query;
