@@ -41,12 +41,12 @@ public class Main_Controller implements ListSelectionListener {
 		this.MainView = new Main_View();
 		
 		//Tabellen erstellen
-		//this.tickets 		= 	new Ticket_Table();
+		this.tickets 		= 	new Ticket_Table();
 		//this.kunden 		= 	new Kunde_Table();
 		this.mitarbeiter	= 	new Mitarbeiter_Table();
 		
 		//Erstesmal Tabellendaten Abfragen
-		//tickets.refreshData();
+		tickets.refreshData();
 		//kunden.refreshData();
 		mitarbeiter.refreshData();
 
@@ -72,7 +72,7 @@ public class Main_Controller implements ListSelectionListener {
 
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
-		//this.MainView.setModel(tickets);
+		this.MainView.setModel(tickets);
 		//this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
 	}
@@ -405,7 +405,12 @@ public class Main_Controller implements ListSelectionListener {
 	private void showTicketInfo() {
 		int selectedRow = MainView.getSelectedTicket();
 		if (selectedRow != -1) {
+			
+
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
+			Mitarbeiter tmpMitarbeiter = mitarbeiter.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
+			Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
+			
 			// Set additional Info for selected Disc
 			// if no info exists label is set to '-'
 			try {
@@ -423,28 +428,33 @@ public class Main_Controller implements ListSelectionListener {
 				MainView.setInfoErstellzeitpunkt(!(tmpTicket.erstellzeitpunkt
 						.trim().equals("")) ? tmpTicket.erstellzeitpunkt : "-");
 
-				MainView.setInfoEmail_K(!(tmpTicket.email_k.equals("")) ? tmpTicket.email_k
-						: "-");
-				MainView.setInfoNachname_K(!(tmpTicket.nachname_k.equals("")) ? tmpTicket.nachname_k
-						: "-");
-				MainView.setInfoVorname_K(!(tmpTicket.vorname_k.trim()
-						.equals("")) ? tmpTicket.vorname_k : "-");
-				MainView.setInfoTelefon_K(!(tmpTicket.telefon_k.equals("")) ? tmpTicket.telefon_k
-						: "-");
-
-				MainView.setInfoAbteilung(!(tmpTicket.abteilung.equals("")) ? tmpTicket.abteilung
-						: "-");
-				MainView.setInfoEmail_M(!(tmpTicket.email_m.equals("")) ? tmpTicket.email_m
-						: "-");
-				MainView.setInfoNachname_M(!(tmpTicket.nachname_m.trim()
-						.equals("")) ? tmpTicket.nachname_m : "-");
-				MainView.setInfoVorname_M(!(tmpTicket.vorname_m.trim()
-						.equals("")) ? tmpTicket.vorname_m : "-");
-				MainView.setInfoTelefon_M(!(tmpTicket.telefon_m.equals("")) ? tmpTicket.telefon_m
-						: "-");
-
+				
+				/*
+				 * 	public String idMitarbeiter;
+					public String name;
+					public String geburt;
+					
+					public String strasse;
+					public String hausnummer;
+					public String plz;
+					public String ort;
+					public String land;
+				
+					public String abteilung;
+					public String idAbteilung;
+					public String level;
+					public String idLevel;
+					
+					public String email;
+					public String telefon;
+					public String account;
+					public String idAccount;
+					
+				 */
+				
 			} catch (Exception e) {
-				JOptionPane.showInputDialog(tmpTicket.telefon_k);
+				JOptionPane.showMessageDialog(null, "Fehler bei der Ticket-Info",
+						"Fehler", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		}

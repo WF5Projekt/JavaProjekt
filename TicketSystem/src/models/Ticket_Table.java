@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 public class Ticket_Table extends AbstractTableModel {
 
 	private String[] columnNames = {
+			"ID",
 			"Status",
 			"Ticketlevel",
 			"Kategorie",
@@ -47,6 +48,8 @@ public class Ticket_Table extends AbstractTableModel {
 			JOptionPane.showInputDialog("Fehler bei Ticket Suche");
 		}
 	}
+	
+
 
 	// AbstractTable bietet automatisch folgende Funktionen
 

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
@@ -25,16 +26,16 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 
 	
 	private Object[][] data = {};
-	private ArrayList<Mitarbeiter> employees;
+	private ArrayList<Mitarbeiter> mitarbeiter;
 
 	// Refresh der Daten für die Tabelle
 		public void refreshData() {
 			try {
-				employees = Mitarbeiter.all();
-				data = new Object[employees.size()][];
-				for (int i = 0; i < employees.size(); i++) {
-					Mitarbeiter c = employees.get(i);
-					data[i] = c.toJTableArray();
+				mitarbeiter = Mitarbeiter.all();
+				data = new Object[mitarbeiter.size()][];
+				for (int i = 0; i < mitarbeiter.size(); i++) {
+					Mitarbeiter tmp = mitarbeiter.get(i);
+					data[i] = tmp.toJTableArray();
 				}
 				this.fireTableDataChanged();
 			} catch (Exception e) {
@@ -44,25 +45,47 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 		
 		public void searchData(String spalte, String suche){
 			try{
-				employees = Mitarbeiter.search(spalte, suche);
-				data = new Object[employees.size()][];
-				for (int i = 0; i < employees.size(); i++) {
-					Mitarbeiter mitarbeiter = employees.get(i);
-					data[i] = mitarbeiter.toJTableArray();
+				mitarbeiter = Mitarbeiter.search(spalte, suche);
+				data = new Object[mitarbeiter.size()][];
+				for (int i = 0; i < mitarbeiter.size(); i++) {
+					Mitarbeiter tmp = mitarbeiter.get(i);
+					data[i] = tmp.toJTableArray();
 				}
 				this.fireTableDataChanged();	
 			}catch( Exception e){
 				JOptionPane.showInputDialog("Fehler bei Ticket Suche");
 			}
 		}
+		
+		public Mitarbeiter getMitarbeiterWithID(String idMitarbeiter){
+			
+			
+			int index = -1;
+
+		    for (int i = 0; (i < mitarbeiter.size()) && (index == -1); i++) {
+		        if (mitarbeiter.get(i).idMitarbeiter.equals(idMitarbeiter)) {
+		            index = i;
+		        }
+		    }
+		    
+		    if(index == -1){
+		    	return null;
+		    }
+		    else{
+		    	return mitarbeiter.get(index);
+		    }
+			
+			
+		}
+		
 		// AbstractTable bietet automatisch folgende Funktionen
 
 		public Mitarbeiter getEmployeeAtRow(int row) {
-			return employees.get(row);
+			return mitarbeiter.get(row);
 		}
 
 		public int getRowOfEmployee(Mitarbeiter c) {
-			return employees.indexOf(c);
+			return mitarbeiter.indexOf(c);
 		}
 
 		public int getColumnCount() {

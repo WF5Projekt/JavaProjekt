@@ -20,16 +20,16 @@ public class Kunde_Table extends AbstractTableModel {
 			"Username"
 	};
 	private Object[][] data = {};
-	private ArrayList<Kunde> customers;
+	private ArrayList<Kunde> kunden;
 
 	// Refresh der Daten für die Tabelle
 	public void refreshData() {
 		try {
-			customers = Kunde.all();
-			data = new Object[customers.size()][];
-			for (int i = 0; i < customers.size(); i++) {
-				Kunde c = customers.get(i);
-				data[i] = c.toJTableArray();
+			kunden = Kunde.all();
+			data = new Object[kunden.size()][];
+			for (int i = 0; i < kunden.size(); i++) {
+				Kunde tmp = kunden.get(i);
+				data[i] = tmp.toJTableArray();
 			}
 			this.fireTableDataChanged();
 		} catch (Exception e) {
@@ -39,11 +39,11 @@ public class Kunde_Table extends AbstractTableModel {
 	
 	public void searchData(String spalte, String suche){
 		try{
-			customers = Kunde.search(spalte, suche);
-			data = new Object[customers.size()][];
-			for (int i = 0; i < customers.size(); i++) {
-				Kunde kunde = customers.get(i);
-				data[i] = kunde.toJTableArray();
+			kunden = Kunde.search(spalte, suche);
+			data = new Object[kunden.size()][];
+			for (int i = 0; i < kunden.size(); i++) {
+				Kunde tmp = kunden.get(i);
+				data[i] = tmp.toJTableArray();
 			}
 			this.fireTableDataChanged();	
 		}catch( Exception e){
@@ -53,12 +53,12 @@ public class Kunde_Table extends AbstractTableModel {
 
 	// AbstractTable bietet automatisch folgende Funktionen
 
-	public Kunde getCustomerAtRow(int row) {
-		return customers.get(row);
+	public Kunde getKundeAtRow(int row) {
+		return kunden.get(row);
 	}
 
-	public int getRowOfCustomer(Kunde c) {
-		return customers.indexOf(c);
+	public int getRowOfKunde(Kunde c) {
+		return kunden.indexOf(c);
 	}
 
 	public int getColumnCount() {
@@ -75,6 +75,24 @@ public class Kunde_Table extends AbstractTableModel {
 
 	public Object getValueAt(int row, int col) {
 		return data[row][col];
+	}
+
+	public Kunde getKundeWithID(String idKunde) {
+		int index = -1;
+
+	    for (int i = 0; (i < kunden.size()) && (index == -1); i++) {
+	        if (kunden.get(i).idKunde.equals(idKunde)) {
+	            index = i;
+	        }
+	    }
+	    
+	    if(index == -1){
+	    	return null;
+	    }
+	    else{
+	    	return kunden.get(index);
+	    }
+		
 	}
 
 }
