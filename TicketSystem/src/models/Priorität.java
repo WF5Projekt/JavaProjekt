@@ -9,12 +9,21 @@ public class Priorität extends Database_Model {
 
 	public String id;
 	public String bezeichnung;
+	
+	public ArrayList<Priorität> inhalt;
 
 	public Priorität(String id, String bezeichnung) {
 		this.id = id;
 		this.bezeichnung = bezeichnung;
 	}
-
+	
+	public Priorität(){
+		this.inhalt = all();
+	}
+	
+	public ArrayList<Priorität> getArray(){
+		return this.inhalt;
+	}
 	public static ArrayList<Priorität> all() {
 		Connection con = getConnection();
 		ArrayList<Priorität> attribute = new ArrayList<Priorität>();
@@ -53,10 +62,13 @@ public class Priorität extends Database_Model {
 		return priorität;
 
 	}
+	
+	
 
 	@Override
 	public String toString() {
 		return this.bezeichnung;
 	}
+	
 
 }

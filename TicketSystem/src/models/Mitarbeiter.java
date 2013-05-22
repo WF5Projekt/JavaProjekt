@@ -203,9 +203,6 @@ public class Mitarbeiter extends Database_Model {
 		Object[] mitarbeiterAttributeArray = { 	
 				this.idMitarbeiter,
 				this.name,
-				this.geburt,
-				this.strasse,
-				this.hausnummer,
 				this.plz,
 				this.ort,
 				this.land,
@@ -215,6 +212,22 @@ public class Mitarbeiter extends Database_Model {
 				this.telefon
 		};
 		return mitarbeiterAttributeArray;
+	}
+	
+	public static String[] getColumnNames(){
+		String[] columnNames = { 
+				"ID", 
+				"Name",  
+				"PLZ", 
+				"Ort",
+				"Land",
+				"Abteilung", 
+				"Level",
+				"E-Mail",
+				"Telefon"
+		};
+		return columnNames;
+
 	}
 	
 	

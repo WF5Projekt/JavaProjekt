@@ -8,21 +8,15 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-	private String[] columnNames = {
-			"ID",
-			"Status",
-			"Ticketlevel",
-			"Kategorie",
-			"Priorität",
-			"Beschreibung"
-			
-	};
+	private String[] columnNames;
 	private Object[][] data = {};
 	private ArrayList<Ticket> tickets;
 
+	
 	// Refresh der Daten für die Tabelle
 	public void refreshData() {
 		try {
+			columnNames = Ticket.getColumnNames();
 			tickets = Ticket.all();
 			data = new Object[tickets.size()][];
 			for (int i = 0; i < tickets.size(); i++) {

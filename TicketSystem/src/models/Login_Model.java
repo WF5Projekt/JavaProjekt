@@ -50,8 +50,7 @@ public class Login_Model extends Database_Model {
 			else if(!ergebnis.equals("")){
 				user = new Mitarbeiter(ergebnis);
 				login = true;
-				JOptionPane.showMessageDialog(null, "Willkommen zurück "+ user.name +"!",
-						"Willkommen", JOptionPane.PLAIN_MESSAGE);
+				
 			}
 			else{
 				JOptionPane.showMessageDialog(null,

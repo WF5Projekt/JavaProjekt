@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +14,7 @@ import javax.swing.event.ListSelectionListener;
 import models.*;
 import views.Main_View;
 import views.newTicket_View;
+
 
 public class Main_Controller implements ListSelectionListener {
 
@@ -21,60 +24,66 @@ public class Main_Controller implements ListSelectionListener {
 	// Objekt des eingeloggten Mitarbeiters
 	private Mitarbeiter user;
 
-	private Ticket_Table tickets;
-	private Kunde_Table kunden;
-	private Mitarbeiter_Table mitarbeiter;
+	public Ticket_Table tickets;
+	public Kunde_Table kunden;
+	public Mitarbeiter_Table mitarbeiter;
+	
+	public Priorität priorität;
+	public Kategorie kategorie;
+	
 
 	// Komboboxen bei Ticket
 	public ComboBoxModelKategorie ComboBoxKategorie;
 	public ComboBoxModelPriorität ComboBoxPriorität;
 	public ComboBoxModelKunde ComboBoxKunde;
-	private ArrayList<Kategorie> combo_kategorien;
-	private ArrayList<Priorität> combo_prioritäten;
-	private ArrayList<Kunde> combo_kunden;
+	public ComboBoxModelMitarbeiter ComboBoxMitarbeiter;
 	
 
 
 	public Main_Controller(Mitarbeiter user) {
 		
-		
-		this.MainView = new Main_View();
-		
-		//Tabellen erstellen
-		this.tickets 		= 	new Ticket_Table();
-		//this.kunden 		= 	new Kunde_Table();
-		this.mitarbeiter	= 	new Mitarbeiter_Table();
-		
-		//Erstesmal Tabellendaten Abfragen
-		tickets.refreshData();
-		//kunden.refreshData();
-		mitarbeiter.refreshData();
-
 		//Aktuell eingeloggter Mitarbeiter ist hier gespeichert (kommt aus der Login_Model())
 		this.user 			= 	user;
-
-		// Initialisierung der Arrays für Comboboxen
-		//combo_kategorien 	= 	Kategorie.all();
-		//combo_prioritäten 	= 	Priorität.all();
-		//combo_kunden 		= 	Kunde.all();
-
+	
 		try {
 			init();
 			addListener();
+			
 
 		} catch (Exception e) {
 			JOptionPane.showInputDialog("Listener/Models können nicht Initialisiert werden");
 		}
-
+		
+		JOptionPane.showMessageDialog(null, "Willkommen zurück "+ user.name +"!",
+				"Willkommen", JOptionPane.PLAIN_MESSAGE);
 		this.MainView.setVisible(true);
 	}
 
 
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
+		//Fenster erstellen - aber nicht Sichtbar!
+		this.MainView = new Main_View();
+		
+		//Tabellen erstellen und Daten laden
+		this.tickets 		= 	new Ticket_Table();
+		this.kunden 		= 	new Kunde_Table();
+		this.mitarbeiter	= 	new Mitarbeiter_Table();
+		tickets.refreshData();
+		kunden.refreshData();
+		mitarbeiter.refreshData();
+		
+		//Zusatzdaten erstellen (werden beim Erstellen geladen)
+		this.priorität		= 	new Priorität();
+		this.kategorie		= 	new Kategorie();
+		
+		
 		this.MainView.setModel(tickets);
-		//this.MainView.setModel(kunden);
+		this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
+		
+		
+		
 	}
 
 	// Button-Listener werden festgelegt
@@ -288,6 +297,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+
 			TicketNeu = new newTicket_View();
 			// Button für neues Ticket anlegen
 			TicketNeu.addListenerButton(new neuesTicket());
@@ -296,7 +306,7 @@ public class Main_Controller implements ListSelectionListener {
 			ComboBoxKategorie = new ComboBoxModelKategorie();
 			ComboBoxPriorität = new ComboBoxModelPriorität();
 			ComboBoxKunde = new ComboBoxModelKunde();
-
+			
 			TicketNeu.kat.setModel(ComboBoxKategorie);
 			TicketNeu.prio.setModel(ComboBoxPriorität);
 			TicketNeu.kunde.setModel(ComboBoxKunde);
@@ -325,13 +335,13 @@ public class Main_Controller implements ListSelectionListener {
 			if (selIndexKat >= 0 && selIndexPrio >= 0 && selIndexKunde >= 0
 					&& !beschreibung.trim().equals("")) {
 
-				String priorität = combo_prioritäten.get(selIndexPrio).id;
-				String kategorie = combo_kategorien.get(selIndexKat).id;
-				String idKunde = combo_kunden.get(selIndexKunde).idKunde;
+				String tmpPrio = priorität.getArray().get(selIndexPrio).id;
+				String tmpKat =  kategorie.getArray().get(selIndexKat).id;
+				String idKunde = kunden.getArray().get(selIndexKunde).idKunde;
 				String idMitarbeiter = user.idMitarbeiter;
 
-				Ticket tmpTicket = new Ticket(beschreibung, priorität,
-						kategorie, idKunde, idMitarbeiter);
+				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio,
+						tmpKat, idKunde, idMitarbeiter);
 				tmpTicket.newTicket();
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
 						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
@@ -405,8 +415,7 @@ public class Main_Controller implements ListSelectionListener {
 	private void showTicketInfo() {
 		int selectedRow = MainView.getSelectedTicket();
 		if (selectedRow != -1) {
-			
-
+	
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
 			Mitarbeiter tmpMitarbeiter = mitarbeiter.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
 			Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
@@ -427,30 +436,30 @@ public class Main_Controller implements ListSelectionListener {
 						.equals("")) ? tmpTicket.prioritaet : "-");
 				MainView.setInfoErstellzeitpunkt(!(tmpTicket.erstellzeitpunkt
 						.trim().equals("")) ? tmpTicket.erstellzeitpunkt : "-");
+				
+				MainView.setInfoAccount_M(!(tmpMitarbeiter.account.trim()
+						.equals("")) ? tmpMitarbeiter.account : "-");
+				MainView.setInfoHelpdesk(!(tmpMitarbeiter.level.trim()
+						.equals("")) ? tmpMitarbeiter.level : "-");
+				MainView.setInfoName_M(!(tmpMitarbeiter.name.trim()
+						.equals("")) ? tmpMitarbeiter.name : "-");
+				MainView.setInfoEmail_M(!(tmpMitarbeiter.email.trim()
+						.equals("")) ? tmpMitarbeiter.email : "-");
+				MainView.setInfoTelefon_M(!(tmpMitarbeiter.telefon.trim()
+						.equals("")) ? tmpMitarbeiter.telefon : "-");
+				MainView.setInfoAbteilung(!(tmpMitarbeiter.abteilung.trim()
+						.equals("")) ? tmpMitarbeiter.abteilung : "-");
+				
+				
+				MainView.setInfoEmail_K(!(tmpKunde.email.trim()
+						.equals("")) ? tmpKunde.email : "-");
+				MainView.setInfoName_K(!(tmpKunde.name.trim()
+						.equals("")) ? tmpKunde.name : "-");
+				MainView.setInfoErreichbarkeit(!(tmpKunde.erreichbar.trim()
+						.equals("")) ? tmpKunde.erreichbar : "-");
+				MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim()
+						.equals("")) ? tmpKunde.telefon : "-");
 
-				
-				/*
-				 * 	public String idMitarbeiter;
-					public String name;
-					public String geburt;
-					
-					public String strasse;
-					public String hausnummer;
-					public String plz;
-					public String ort;
-					public String land;
-				
-					public String abteilung;
-					public String idAbteilung;
-					public String level;
-					public String idLevel;
-					
-					public String email;
-					public String telefon;
-					public String account;
-					public String idAccount;
-					
-				 */
 				
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Fehler bei der Ticket-Info",
@@ -470,12 +479,12 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public int getSize() {
-			return combo_kategorien.size();
+			return kategorie.getArray().size();
 		}
 
 		@Override
 		public Kategorie getElementAt(int index) {
-			return combo_kategorien.get(index);
+			return kategorie.getArray().get(index);
 		}
 	}
 
@@ -484,12 +493,12 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public int getSize() {
-			return combo_prioritäten.size();
+			return priorität.getArray().size();
 		}
 
 		@Override
 		public Priorität getElementAt(int index) {
-			return combo_prioritäten.get(index);
+			return priorität.getArray().get(index);
 		}
 	}
 
@@ -498,13 +507,26 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public int getSize() {
-			return combo_kunden.size();
+			return kunden.getArray().size();
 		}
 
 		@Override
 		public Kunde getElementAt(int index) {
-			return combo_kunden.get(index);
+			return kunden.getArray().get(index);
 		}
 	}
 
+	@SuppressWarnings("serial")
+	class ComboBoxModelMitarbeiter extends DefaultComboBoxModel {
+
+		@Override
+		public int getSize() {
+			return mitarbeiter.getArray().size();
+		}
+
+		@Override
+		public Mitarbeiter getElementAt(int index) {
+			return mitarbeiter.getArray().get(index);
+		}
+	}
 }

@@ -9,32 +9,24 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Mitarbeiter_Table extends AbstractTableModel{
 	
-	private String[] columnNames = { 
-			"ID", 
-			"Name", 
-			"Geburtstag", 
-			"Straße",
-			"Hausnummer", 
-			"PLZ", 
-			"Ort",
-			"Land",
-			"Abteilung", 
-			"Level",
-			"E-Mail",
-			"Telefon"
-	};
+	private String[] columnNames;
 
 	
 	private Object[][] data = {};
-	private ArrayList<Mitarbeiter> mitarbeiter;
+	private ArrayList<Mitarbeiter> inhalt;
 
+	public ArrayList<Mitarbeiter> getArray(){
+		return this.inhalt;
+	}
+	
 	// Refresh der Daten für die Tabelle
 		public void refreshData() {
 			try {
-				mitarbeiter = Mitarbeiter.all();
-				data = new Object[mitarbeiter.size()][];
-				for (int i = 0; i < mitarbeiter.size(); i++) {
-					Mitarbeiter tmp = mitarbeiter.get(i);
+				columnNames = Mitarbeiter.getColumnNames();
+				inhalt = Mitarbeiter.all();
+				data = new Object[inhalt.size()][];
+				for (int i = 0; i < inhalt.size(); i++) {
+					Mitarbeiter tmp = inhalt.get(i);
 					data[i] = tmp.toJTableArray();
 				}
 				this.fireTableDataChanged();
@@ -45,10 +37,10 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 		
 		public void searchData(String spalte, String suche){
 			try{
-				mitarbeiter = Mitarbeiter.search(spalte, suche);
-				data = new Object[mitarbeiter.size()][];
-				for (int i = 0; i < mitarbeiter.size(); i++) {
-					Mitarbeiter tmp = mitarbeiter.get(i);
+				inhalt = Mitarbeiter.search(spalte, suche);
+				data = new Object[inhalt.size()][];
+				for (int i = 0; i < inhalt.size(); i++) {
+					Mitarbeiter tmp = inhalt.get(i);
 					data[i] = tmp.toJTableArray();
 				}
 				this.fireTableDataChanged();	
@@ -62,8 +54,8 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 			
 			int index = -1;
 
-		    for (int i = 0; (i < mitarbeiter.size()) && (index == -1); i++) {
-		        if (mitarbeiter.get(i).idMitarbeiter.equals(idMitarbeiter)) {
+		    for (int i = 0; (i < inhalt.size()) && (index == -1); i++) {
+		        if (inhalt.get(i).idMitarbeiter.equals(idMitarbeiter)) {
 		            index = i;
 		        }
 		    }
@@ -72,7 +64,7 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 		    	return null;
 		    }
 		    else{
-		    	return mitarbeiter.get(index);
+		    	return inhalt.get(index);
 		    }
 			
 			
@@ -81,11 +73,11 @@ public class Mitarbeiter_Table extends AbstractTableModel{
 		// AbstractTable bietet automatisch folgende Funktionen
 
 		public Mitarbeiter getEmployeeAtRow(int row) {
-			return mitarbeiter.get(row);
+			return inhalt.get(row);
 		}
 
 		public int getRowOfEmployee(Mitarbeiter c) {
-			return mitarbeiter.indexOf(c);
+			return inhalt.indexOf(c);
 		}
 
 		public int getColumnCount() {

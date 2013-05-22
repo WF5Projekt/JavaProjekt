@@ -10,9 +10,19 @@ public class Kategorie extends Database_Model{
 	public String id;
 	public String bezeichnung;
 	
+	public ArrayList<Kategorie> inhalt;
+	
+	public Kategorie(){
+		this.inhalt = all();
+	}
+	
 	public Kategorie(String id, String bezeichnung){
 		this.id = id;
 		this.bezeichnung = bezeichnung;
+	}
+	
+	public ArrayList<Kategorie> getArray(){
+		return this.inhalt;
 	}
 	
 	 public static ArrayList<Kategorie> all() {
@@ -54,6 +64,7 @@ public class Kategorie extends Database_Model{
 			return kategorie;
 
 		}
+	 
 	 @Override
 	    public String toString() {
 	        return this.bezeichnung;

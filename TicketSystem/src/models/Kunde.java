@@ -7,77 +7,65 @@ import javax.swing.JOptionPane;
 
 public class Kunde extends Database_Model {
 
-
-
-
 	public String idKunde;
-	public String nachname;
-	public String vorname;
+	public String name;
+	public String geburtstag;
 	public String strasse;
-	public String stadt;
-	public String idStadt;
-	public String geburt;
+	public String hausnummer;
+	public String plz;
+	public String ort;
+	public String land;
+	
+	public String erreichbar;
+	public String idAccount;
+	public String account;
 	public String email;
 	public String telefon;
-	public String username;
-	public String passwort;
-	
-	
 
-	public Kunde(String idKunde, String nachname, String vorname,
-			String strasse, String stadt, String idStadt, String geburt,
-			String email, String telefon, String username, String passwort) {
+	public Kunde(String idKunde, String name, String geburtstag, String strasse,
+			String hausnummer, String plz, String ort, String land,
+			String erreichbar, String idAccount, String account, String email,
+			String telefon) {
 		this.idKunde = idKunde;
-		this.nachname = nachname;
-		this.vorname = vorname;
+		this.geburtstag = geburtstag;
+		this.name = name;
 		this.strasse = strasse;
-		this.stadt = stadt;
-		this.idStadt = idStadt;
-		this.geburt = geburt;
+		this.hausnummer = hausnummer;
+		this.plz = plz;
+		this.ort = ort;
+		this.land = land;
+		this.erreichbar = erreichbar;
+		this.idAccount = idAccount;
+		this.account = account;
 		this.email = email;
 		this.telefon = telefon;
-		this.username = username;
-		this.passwort = passwort;
 	}
-	public Kunde(String nachname, String vorname,
-			String strasse, String stadt, String idStadt, String geburt,
-			String email, String telefon, String username, String passwort) {
-		this.nachname = nachname;
-		this.vorname = vorname;
-		this.strasse = strasse;
-		this.stadt = stadt;
-		this.idStadt = idStadt;
-		this.geburt = geburt;
-		this.email = email;
-		this.telefon = telefon;
-		this.username = username;
-		this.passwort = passwort;
-	}
+
 	// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
 	public static ArrayList<Kunde> all() {
 
 		Connection con = getConnection();
 		ArrayList<Kunde> customers = new ArrayList<Kunde>();
 
-		Statement query;
+		Statement sta;
 		try {
-			query = con.createStatement();
-			String sql = "select * FROM `allkunden` ORDER BY idKunde";
-
-			ResultSet result = query.executeQuery(sql);
+			sta = con.createStatement();
+			String sql = "select * FROM `allkunden`";
+			
+			ResultSet result = sta.executeQuery(sql);
+	
 			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Customer
 			// mit Methode...
 			while (result.next()) {
 				customers.add(getCustomersWithResultSet(result));
 			}
-			query.close();
+			sta.close();
 			con.close();
 		} catch (SQLException e) {
 			JOptionPane.showInputDialog("Fehler bei Kunden-all()");
 		}
 		return customers;
 	}
-
 	public static ArrayList<Kunde> search(String spalte, String suche){
 		Connection con = getConnection();
 		ArrayList<Kunde> customers = new ArrayList<Kunde>();
@@ -109,18 +97,26 @@ public class Kunde extends Database_Model {
 		Kunde newCustomer = null;
 
 		try {
-			String idKunde = result.getString(0); // getString(1)
-			String nachname = result.getString("nachname"); //getString(2)
-			String vorname = result.getString("vorname");
-			String strasse = result.getString("strasse");
-			String stadt = result.getString("stadt");
-			String idStadt = result.getString("idStadt");
-			String geburt = result.getString("Geb.Datum");
-			String email = result.getString("Email");
-			String telefon = result.getString("Telefonnr");
-			String username = result.getString("Username");
+			String idKunde = result.getString(1); // getString(1)
+			String name = result.getString(2);
+			String geburtstag  = result.getString(3);
+			String strasse = result.getString(4);
+			String hausnummer = result.getString(5);
+			String plz = result.getString(6);
+			String ort = result.getString(7);
+			String land = result.getString(8);
 			
-			newCustomer = new Kunde(idKunde, nachname, vorname, idStadt, strasse, stadt, geburt, email, telefon, username);
+			String erreichbar = result.getString(9);
+			String idAccount = result.getString(10);
+			String account = result.getString(11);
+			String email = result.getString(12);
+			String telefon = result.getString(13);
+			
+			
+			newCustomer = new Kunde ( idKunde,  name,  geburtstag,  strasse,
+					 hausnummer,  plz,  ort,  land,
+					 erreichbar,  idAccount,  account,  email,
+					 telefon);
 
 		} catch (SQLException e) {
 			JOptionPane
@@ -135,17 +131,33 @@ public class Kunde extends Database_Model {
 	public Object[] toJTableArray() {
 		Object[] customerAttributeArray = { 
 				this.idKunde,
-				this.nachname,
-				this.vorname,
-				this.strasse,
-				this.stadt,
-				this.geburt,
+				this.name,
+				this.ort,
+				this.land,
+				this.erreichbar,
 				this.email,
 				this.telefon,
-				this.username};
+				this.account	
+		};
 		return customerAttributeArray;
 	}
 	
+	
+	public static String[] getColumnNames(){
+		String[] columnNames ={
+			"ID",
+			"Name",
+			"Ort",
+			"Land",
+			"Erreichbarkeit",
+			"E-Mail",
+			"Telefon",
+			"Username"
+		};
+		
+		
+		return columnNames;
+	}
 	
 
 	// Speichern der Tabelle
@@ -154,17 +166,7 @@ public class Kunde extends Database_Model {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "UPDATE kunde SET " 
-					+ "idKunde = '" + this.idKunde + "', " 
-					+ "nachname = '" + this.nachname + "', "
-					+ "vorname = '" + this.vorname + "', "
-					+ "strasse = '" + this.strasse + "', "
-					+ "idStadt = '" + this.idStadt + "', "
-					+ "geburt = '" + this.geburt + "', "
-					+ "email = '" + this.email + "', "
-					+ "telefon = '" + this.telefon + "', "
-					+ "username = '" + this.username +
-					"' WHERE idKunde = '" + this.idKunde + "';";
+			String query = "";
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -206,16 +208,7 @@ public class Kunde extends Database_Model {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "call newKunde('" 
-					+ this.strasse + "', '" 
-					+ this.nachname + "', '"
-					+ this.vorname + "', '"
-					+ this.geburt + "', '"
-					+ this.username + "', '"
-					+ this.passwort + "', '"
-					+ this.email + "', '"
-					+ this.telefon + "', '"
-					+ this.idStadt + "')";
+			String query = "";
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -227,6 +220,6 @@ public class Kunde extends Database_Model {
 
 	@Override
 	public String toString() {
-		return this.nachname + ", " + this.vorname;
+		return this.name;
 	}
 }

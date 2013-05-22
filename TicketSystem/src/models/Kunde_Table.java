@@ -8,27 +8,25 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Kunde_Table extends AbstractTableModel {
 
-	private String[] columnNames = { 
-			"ID", 
-			"Vorname", 
-			"Nachname", 
-			"Strasse", 
-			"Stadt", 
-			"Geb.Datum", 
-			"E-Mail",
-			"Telefonnr.", 
-			"Username"
-	};
+	
+	
+	
+	private String[] columnNames;
 	private Object[][] data = {};
-	private ArrayList<Kunde> kunden;
-
+	private ArrayList<Kunde> inhalt;
+	
+	public ArrayList<Kunde> getArray(){
+		return this.inhalt;
+	}
+	
 	// Refresh der Daten für die Tabelle
 	public void refreshData() {
 		try {
-			kunden = Kunde.all();
-			data = new Object[kunden.size()][];
-			for (int i = 0; i < kunden.size(); i++) {
-				Kunde tmp = kunden.get(i);
+			columnNames = Kunde.getColumnNames();
+			inhalt = Kunde.all();
+			data = new Object[inhalt.size()][];
+			for (int i = 0; i < inhalt.size(); i++) {
+				Kunde tmp = inhalt.get(i);
 				data[i] = tmp.toJTableArray();
 			}
 			this.fireTableDataChanged();
@@ -39,10 +37,10 @@ public class Kunde_Table extends AbstractTableModel {
 	
 	public void searchData(String spalte, String suche){
 		try{
-			kunden = Kunde.search(spalte, suche);
-			data = new Object[kunden.size()][];
-			for (int i = 0; i < kunden.size(); i++) {
-				Kunde tmp = kunden.get(i);
+			inhalt = Kunde.search(spalte, suche);
+			data = new Object[inhalt.size()][];
+			for (int i = 0; i < inhalt.size(); i++) {
+				Kunde tmp = inhalt.get(i);
 				data[i] = tmp.toJTableArray();
 			}
 			this.fireTableDataChanged();	
@@ -54,11 +52,11 @@ public class Kunde_Table extends AbstractTableModel {
 	// AbstractTable bietet automatisch folgende Funktionen
 
 	public Kunde getKundeAtRow(int row) {
-		return kunden.get(row);
+		return inhalt.get(row);
 	}
 
 	public int getRowOfKunde(Kunde c) {
-		return kunden.indexOf(c);
+		return inhalt.indexOf(c);
 	}
 
 	public int getColumnCount() {
@@ -80,8 +78,8 @@ public class Kunde_Table extends AbstractTableModel {
 	public Kunde getKundeWithID(String idKunde) {
 		int index = -1;
 
-	    for (int i = 0; (i < kunden.size()) && (index == -1); i++) {
-	        if (kunden.get(i).idKunde.equals(idKunde)) {
+	    for (int i = 0; (i < inhalt.size()) && (index == -1); i++) {
+	        if (inhalt.get(i).idKunde.equals(idKunde)) {
 	            index = i;
 	        }
 	    }
@@ -90,7 +88,7 @@ public class Kunde_Table extends AbstractTableModel {
 	    	return null;
 	    }
 	    else{
-	    	return kunden.get(index);
+	    	return inhalt.get(index);
 	    }
 		
 	}

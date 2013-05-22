@@ -47,9 +47,9 @@ public class Ticket extends Database_Model {
 	// Konstruktur zum Erstellen eines Tickets für die neu-Anlage eines Tickets
 	public Ticket(String beschr, String prio, String kat, String idK, String idM) {
 		this.beschreibung = beschr;
-		this.prioritaet = prio;
+		this.idPriorität = prio;
 		this.idKunde = idK;
-		this.kategorie = kat;
+		this.idKategorie = kat;
 		this.idMitarbeiter = idM;
 	}
 
@@ -77,6 +77,7 @@ public class Ticket extends Database_Model {
 		}
 		return tickets;
 	}
+	
 	//Rufe nur Tickets von einem Kunden auf
 	public static ArrayList<Ticket> allFromKunde(String idKunde) {
 
@@ -86,7 +87,7 @@ public class Ticket extends Database_Model {
 		Statement query;
 		try {
 			query = con.createStatement();
-			String sql = "call showallTickets('"+ idKunde +"')";
+			String sql = "call showallTickets('"+ idKunde +"','0')";
 
 			ResultSet result = query.executeQuery(sql);
 			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
@@ -97,11 +98,35 @@ public class Ticket extends Database_Model {
 			query.close();
 			con.close();
 		} catch (SQLException e) {
-			JOptionPane.showInputDialog("Fehler bei Ticket-Abfrage)");
+			JOptionPane.showMessageDialog(null, "Fehler bei Ticket-Abfrage für Kunden-Tickets)");
 		}
 		return tickets;
 	}
-	//Noch für Mitarbeiter benötigt.
+	//Rufe nur Tickets von einem Mitarbeiter auf
+		public static ArrayList<Ticket> allFromMitarbeiter(String idMitarbeiter) {
+
+			Connection con = getConnection();
+			ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+			Statement query;
+			try {
+				query = con.createStatement();
+				//showAllTickets liefert für Mitarb
+				String sql = "call showallTickets('"+ idMitarbeiter +"', '1')";
+
+				ResultSet result = query.executeQuery(sql);
+				// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
+				// mit Methode...
+				while (result.next()) {
+					tickets.add(getTicketsWithResultSet(result));
+				}
+				query.close();
+				con.close();
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Fehler bei Ticket-Abfrage für Mitarbeiter-Tickets)");
+			}
+			return tickets;
+		}
 	
 	
 	
@@ -124,7 +149,7 @@ public class Ticket extends Database_Model {
 			query.close();
 			con.close();
 		} catch (SQLException e) {
-			JOptionPane.showInputDialog("Fehler bei Ticket-Suche)");
+			JOptionPane.showMessageDialog(null, "Fehler bei Ticket-Suche)");
 		}
 		return tickets;
 			
@@ -162,7 +187,7 @@ public class Ticket extends Database_Model {
 
 		} catch (SQLException e) {
 			JOptionPane
-					.showInputDialog("Fehler in Ticket_GetTicketWithResultSet");
+					.showMessageDialog(null, "Fehler in Ticket_GetTicketWithResultSet");
 		}
 
 		return newTicket;
@@ -174,14 +199,29 @@ public class Ticket extends Database_Model {
 		Object[] ticketAttributeArray = { 
 				//Ticketdaten
 				this.idTicket,
-				this.status,
+				this.beschreibung,
 				this.level,
 				this.kategorie,
 				this.prioritaet,
-				this.beschreibung
+				this.status
 		};
 		return ticketAttributeArray;
 	}
+	
+	public static String[] getColumnNames(){
+		
+		String[] columnNames = {
+				"ID",
+				"Beschreibung",
+				"Level",
+				"Kategorie",
+				"Priorität",
+				"Status"
+		};
+		
+		return columnNames;
+	}
+	
 
 	// Speichern der Tabelle
 
