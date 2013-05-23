@@ -48,8 +48,6 @@ public class Main_Controller implements ListSelectionListener {
 		try {
 			init();
 			addListener();
-			
-
 		} catch (Exception e) {
 			JOptionPane.showInputDialog("Listener/Models können nicht Initialisiert werden");
 		}
