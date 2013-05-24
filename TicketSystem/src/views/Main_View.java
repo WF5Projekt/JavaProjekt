@@ -50,6 +50,12 @@ import javax.swing.JSeparator;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
+import java.awt.Window.Type;
+import java.awt.Dimension;
 
 @SuppressWarnings("serial")
 public class Main_View extends JFrame {
@@ -125,8 +131,15 @@ public class Main_View extends JFrame {
 	private JPanel panel_5;
 	private JLabel _erreichbarkeit;
 	private JLabel lblErreichbar;
+	private JPanel panel_6;
+	private JPanel panel_7;
+	private JPanel panel_8;
+	private JPanel panel_9;
 
 	public Main_View() {
+		setType(Type.POPUP);
+		setResizable(false);
+		setBackground(new Color(245, 245, 245));
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -140,40 +153,34 @@ public class Main_View extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 800);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.LIGHT_GRAY);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(245, 245, 245));
+		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		panel_4 = new JPanel();
-		panel_4.setBackground(SystemColor.menu);
 		panel_4.setBorder(UIManager.getBorder("MenuBar.border"));
+		panel_4.setBackground(new Color(245, 245, 245));
 		contentPane.add(panel_4, BorderLayout.NORTH);
+		panel_4.setLayout(new GridLayout(0, 3, 0, 0));
+		
+		panel_6 = new JPanel();
+		panel_6.setBackground(new Color(245, 245, 245));
+		FlowLayout flowLayout_2 = (FlowLayout) panel_6.getLayout();
+		flowLayout_2.setAlignment(FlowLayout.LEFT);
+		panel_4.add(panel_6);
 		
 		showTickets = new JButton("Tickets");
-		showTickets.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ticketView.setVisible(true);
-				mitarbeiterView.setVisible(false);
-				kundenView.setVisible(false);
-				validate();
-			}
-		});
-		panel_4.setLayout(new MigLayout("", "[65px][69px][][][][19px][85px][][][][][][][][][][][][][][][][][][][][][][][][][][]", "[23px]"));
-		panel_4.add(showTickets, "cell 0 0,alignx left,aligny top");
+		showTickets.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panel_6.add(showTickets);
 		
 		btnKunden = new JButton("Kunden");
-		btnKunden.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ticketView.setVisible(false);
-				mitarbeiterView.setVisible(false);
-				kundenView.setVisible(true);
-				validate();
-			}
-		});
-		panel_4.add(btnKunden, "cell 1 0,alignx left,aligny top");
+		btnKunden.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panel_6.add(btnKunden);
 		
 		btnMitarbeiter = new JButton("Mitarbeiter");
+		btnMitarbeiter.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panel_6.add(btnMitarbeiter);
 		btnMitarbeiter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ticketView.setVisible(false);
@@ -182,30 +189,58 @@ public class Main_View extends JFrame {
 				validate();
 			}
 		});
-		panel_4.add(btnMitarbeiter, "cell 2 0,alignx left,aligny top");
+		btnKunden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ticketView.setVisible(false);
+				mitarbeiterView.setVisible(false);
+				kundenView.setVisible(true);
+				validate();
+			}
+		});
+		showTickets.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ticketView.setVisible(true);
+				mitarbeiterView.setVisible(false);
+				kundenView.setVisible(false);
+				validate();
+			}
+		});
+		
+		panel_8 = new JPanel();
+		panel_8.setBackground(new Color(245, 245, 245));
+		panel_4.add(panel_8);
+		
+		panel_7 = new JPanel();
+		panel_7.setBackground(new Color(245, 245, 245));
+		FlowLayout flowLayout_3 = (FlowLayout) panel_7.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.RIGHT);
+		panel_4.add(panel_7);
 		
 		panel_5 = new JPanel();
+		panel_5.setBackground(new Color(245, 245, 245));
 		contentPane.add(panel_5, BorderLayout.CENTER);
 		panel_5.setLayout(new CardLayout(0, 0));
 
 		ticketView = new JTabbedPane(JTabbedPane.TOP);
+		ticketView.setMinimumSize(new Dimension(10, 5));
+		ticketView.setBorder(null);
 		panel_5.add(ticketView, "name_463006202964198");
-		ticketView.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		ticketView.setForeground(new Color(0, 0, 0));
-		ticketView.setBackground(Color.LIGHT_GRAY);
+		ticketView.setBackground(new Color(245, 245, 245));
 		ticketView.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		ticketView.setOpaque(true);
 		
-				JPanel ticketdetails = new JPanel();
-				ticketdetails.setVisible(false);
-				ticketView.addTab("Alle Tickets", null, ticketdetails, null);
+				JPanel AlleTickets = new JPanel();
+				AlleTickets.setBackground(new Color(245, 245, 245));
+				AlleTickets.setVisible(false);
+				ticketView.addTab("Alle", null, AlleTickets, null);
 				ticketView.setEnabledAt(0, true);
-				ticketdetails.setLayout(new BorderLayout(0, 0));
+						AlleTickets.setLayout(new BorderLayout(2, 0));
 				
 				
 						JPanel panel_buttons = new JPanel();
-						panel_buttons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-						ticketdetails.add(panel_buttons, BorderLayout.SOUTH);
+						panel_buttons.setBorder(new EmptyBorder(4, 1, 4, 1));
+						AlleTickets.add(panel_buttons, BorderLayout.SOUTH);
 						panel_buttons.setLayout(new BoxLayout(panel_buttons, BoxLayout.X_AXIS));
 						
 								btn_ticketRefresh = new JButton("Aktualisieren");
@@ -234,19 +269,23 @@ public class Main_View extends JFrame {
 																				panel.add(btn_sucheTicket);
 																				
 																						TicketscrollPane = new JScrollPane();
-																						ticketdetails.add(TicketscrollPane, BorderLayout.NORTH);
+																						TicketscrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+																						AlleTickets.add(TicketscrollPane, BorderLayout.NORTH);
 																						
 																						tickets = new JTable();
+																						tickets.setFont(new Font("Calibri", Font.BOLD, 15));
+																						tickets.setFillsViewportHeight(true);
+																						tickets.setBackground(new Color(240, 248, 255));
 																						TicketscrollPane.setViewportView(tickets);
 																						
 																								panel_ticketdetails = new JPanel();
-																								ticketdetails.add(panel_ticketdetails, BorderLayout.CENTER);
-																								panel_ticketdetails.setBorder(new TitledBorder(UIManager
-																										.getBorder("TitledBorder.border"), "", TitledBorder.LEFT,
-																										TitledBorder.TOP, null, null));
+																								panel_ticketdetails.setBackground(new Color(245, 245, 245));
+																								AlleTickets.add(panel_ticketdetails);
+																								panel_ticketdetails.setBorder(null);
 																								panel_ticketdetails.setLayout(new GridLayout(0, 1, 0, 0));
 																								
 																										JPanel panelInfoTicket = new JPanel();
+																										panelInfoTicket.setBackground(new Color(245, 245, 245));
 																										panelInfoTicket.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Ticketdetails", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 																										
 																												JLabel lblKundendaten = new JLabel("Beschreibung:");
@@ -356,6 +395,7 @@ public class Main_View extends JFrame {
 																																																		panelInfoTicket.setLayout(gl_panelInfoTicket);
 																																																		
 																																																		panel_3 = new JPanel();
+																																																		panel_3.setBackground(new Color(245, 245, 245));
 																																																		panel_ticketdetails.add(panel_3);
 																																																		panel_3.setLayout(new GridLayout(0, 2, 0, 0));
 																																																		
@@ -542,14 +582,19 @@ public class Main_View extends JFrame {
 																																																																																					.addContainerGap(34, Short.MAX_VALUE))
 																																																																																		);
 																																																																																		panelInfoErsteller.setLayout(gl_panelInfoErsteller);
+																																																																																		
+																																																																																		panel_9 = new JPanel();
+																																																																																		FlowLayout flowLayout_4 = (FlowLayout) panel_9.getLayout();
+																																																																																		ticketView.addTab("Neue", null, panel_9, null);
 																																																																																				
 																																																																																						mitarbeiterView = new JPanel();
+																																																																																						mitarbeiterView.setBackground(new Color(245, 245, 245));
 																																																																																						panel_5.add(mitarbeiterView, "name_463006249781500");
 																																																																																						mitarbeiterView.setLayout(new BorderLayout(0, 0));
 																																																																																						
 																																																																																						panel_MitarbeiterButtons = new JPanel();
-																																																																																						panel_MitarbeiterButtons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-																																																																																						mitarbeiterView.add(panel_MitarbeiterButtons, BorderLayout.NORTH);
+																																																																																						panel_MitarbeiterButtons.setBorder(new EmptyBorder(4, 1, 4, 1));
+																																																																																						mitarbeiterView.add(panel_MitarbeiterButtons, BorderLayout.SOUTH);
 																																																																																						panel_MitarbeiterButtons.setLayout(new BoxLayout(panel_MitarbeiterButtons, BoxLayout.X_AXIS));
 																																																																																						
 																																																																																						btn_mitarbeiterRefresh = new JButton("Aktualisieren");
@@ -574,26 +619,35 @@ public class Main_View extends JFrame {
 																																																																																						panel_2.add(btn_sucheMitarbeiter);
 																																																																																						
 																																																																																						MitarbeiterScrollPane = new JScrollPane();
+																																																																																						MitarbeiterScrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 																																																																																						mitarbeiterView.add(MitarbeiterScrollPane, BorderLayout.CENTER);
 																																																																																						
 																																																																																						mitarbeiter = new JTable();
+																																																																																						mitarbeiter.setBackground(new Color(240, 248, 255));
+																																																																																						mitarbeiter.setFont(new Font("Calibri", Font.BOLD, 15));
+																																																																																						mitarbeiter.setFillsViewportHeight(true);
 																																																																																						MitarbeiterScrollPane.setViewportView(mitarbeiter);
 																																																																																		
 																																																																																				kundenView = new JPanel();
+																																																																																				kundenView.setBackground(new Color(245, 245, 245));
 																																																																																				panel_5.add(kundenView, "name_463006295653787");
 																																																																																				kundenView.setLayout(new BorderLayout(0, 0));
 																																																																																				
 																																																																																						KundenScrollPane = new JScrollPane();
+																																																																																						KundenScrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 																																																																																						KundenScrollPane.setViewportView(kunden);
 																																																																																						
 																																																																																						kundenView.add(KundenScrollPane, BorderLayout.CENTER);
 																																																																																						
 																																																																																						kunden = new JTable();
+																																																																																						kunden.setBackground(new Color(240, 248, 255));
+																																																																																						kunden.setFont(new Font("Calibri", Font.BOLD, 15));
+																																																																																						kunden.setFillsViewportHeight(true);
 																																																																																						KundenScrollPane.setViewportView(kunden);
 																																																																																						
 																																																																																								panel_KundenButtons = new JPanel();
-																																																																																								panel_KundenButtons.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-																																																																																								kundenView.add(panel_KundenButtons, BorderLayout.NORTH);
+																																																																																								panel_KundenButtons.setBorder(new EmptyBorder(4, 1, 4, 1));
+																																																																																								kundenView.add(panel_KundenButtons, BorderLayout.SOUTH);
 																																																																																								panel_KundenButtons.setLayout(new BoxLayout(panel_KundenButtons,
 																																																																																										BoxLayout.X_AXIS));
 																																																																																								

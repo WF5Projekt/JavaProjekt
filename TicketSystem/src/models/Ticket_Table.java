@@ -8,45 +8,30 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-	private String[] columnNames;
-	private Object[][] data = {};
+	private String[] columnNames = Ticket.getColumnNames();;
+
+	
 	private ArrayList<Ticket> tickets;
-
+	private ArrayList<Ticket> backup;
 	
-	// Refresh der Daten für die Tabelle
-	public void refreshData() {
-		try {
-			columnNames = Ticket.getColumnNames();
-			tickets = Ticket.all();
-			data = new Object[tickets.size()][];
-			for (int i = 0; i < tickets.size(); i++) {
-				Ticket ticket = tickets.get(i);
-				data[i] = ticket.toJTableArray();
-			}
-			this.fireTableDataChanged();
-		} catch (Exception e) {
-			JOptionPane.showInputDialog("Fehler in Ticket_Table");
-		}
+	public void setList(ArrayList<Ticket> tickets){
+		this.tickets = tickets;
+		this.backup = tickets;
+		fireTableDataChanged();
+	}
+	public void setSearch(ArrayList<Ticket> searchList){
+		this.tickets = searchList;
+		fireTableDataChanged();
+	}
+	public void Reset(){
+		this.tickets = backup;
+		fireTableDataChanged();
 	}
 	
-	public void searchData(String spalte, String suche){
-		try{
-			tickets = Ticket.search(spalte, suche);
-			data = new Object[tickets.size()][];
-			for (int i = 0; i < tickets.size(); i++) {
-				Ticket ticket = tickets.get(i);
-				data[i] = ticket.toJTableArray();
-			}
-			this.fireTableDataChanged();	
-		}catch( Exception e){
-			JOptionPane.showInputDialog("Fehler bei Ticket Suche");
-		}
+	public ArrayList<Ticket> getList(){
+		return this.backup;
 	}
 	
-
-
-	// AbstractTable bietet automatisch folgende Funktionen
-
 	public Ticket getTicketAtRow(int row) {
 		return tickets.get(row);
 	}
@@ -60,7 +45,7 @@ public class Ticket_Table extends AbstractTableModel {
 	}
 
 	public int getRowCount() {
-		return data.length;
+		return tickets.size();
 	}
 
 	public String getColumnName(int col) {
@@ -68,7 +53,7 @@ public class Ticket_Table extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int row, int col) {
-		return data[row][col];
+		return tickets.get(row).getValue(col);
 	}
 
 }

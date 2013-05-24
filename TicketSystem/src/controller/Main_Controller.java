@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -17,7 +16,9 @@ import views.newTicket_View;
 
 
 public class Main_Controller implements ListSelectionListener {
-
+	
+	public static Database_Operations db = new Database_Operations();
+	
 	private Main_View MainView;
 	public newTicket_View TicketNeu;
 
@@ -52,14 +53,14 @@ public class Main_Controller implements ListSelectionListener {
 			JOptionPane.showInputDialog("Listener/Models können nicht Initialisiert werden");
 		}
 		
-		JOptionPane.showMessageDialog(null, "Willkommen zurück "+ user.name +"!",
-				"Willkommen", JOptionPane.PLAIN_MESSAGE);
 		this.MainView.setVisible(true);
 	}
 
 
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
+		//Initalisierung der Datenbank-Befehle
+
 		//Fenster erstellen - aber nicht Sichtbar!
 		this.MainView = new Main_View();
 		
@@ -67,7 +68,9 @@ public class Main_Controller implements ListSelectionListener {
 		this.tickets 		= 	new Ticket_Table();
 		this.kunden 		= 	new Kunde_Table();
 		this.mitarbeiter	= 	new Mitarbeiter_Table();
-		tickets.refreshData();
+		
+		refreshTickets();
+		
 		kunden.refreshData();
 		mitarbeiter.refreshData();
 		
@@ -284,7 +287,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			tickets.refreshData();
+			tickets.setList(db.getTickets());
 		}
 
 	}
@@ -340,10 +343,11 @@ public class Main_Controller implements ListSelectionListener {
 
 				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio,
 						tmpKat, idKunde, idMitarbeiter);
-				tmpTicket.newTicket();
+				db.ticketNew(tmpTicket);
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
 						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-				tickets.refreshData();
+				
+				refreshTickets();
 				TicketNeu.dispose();
 
 			} else {
@@ -361,14 +365,33 @@ public class Main_Controller implements ListSelectionListener {
 		String suche = MainView.getTextSucheTicket();
 		String spalte = MainView.getSpalteSucheTicket();
 
+		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+		
 		if (!(suche.equals("") || spalte.equals(""))) {
-			tickets.searchData(spalte, suche);
-		} else {
-			tickets.refreshData();
+					for (Ticket t : tickets.getList()) {
+						switch(spalte){
+							case "Status":
+								if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
+							
+								
+							
+							default: break;
+						}
+					}
+					tickets.setSearch(searchList);
+		} 
+		else {
+			tickets.Reset();
 		}
 	}
 
 	
+	public void refreshTickets() {
+		tickets.setList(db.getTickets());
+	}
+
 	// Suchbutton ruft die TicketSuche() auf mit Klick auf Button
 	class ticketSucheListener implements ActionListener {
 

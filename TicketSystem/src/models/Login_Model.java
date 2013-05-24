@@ -1,4 +1,25 @@
-package models;
+
+		fireTableDataChanged();
+		fireTableDataChanged();
+		fireTableDataChanged();
+		fireTableDataChanged();
+		fireTableDataChanged();case "Status":
+			if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+				searchList.add(t);
+			break;
+		case "Status":
+			if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+				searchList.add(t);
+			break;
+		case "Status":
+			if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+				searchList.add(t);
+			break;
+		case "Status":
+			if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+				searchList.add(t);
+			break;
+		e models;
 
 import java.sql.*;
 import javax.swing.*;
