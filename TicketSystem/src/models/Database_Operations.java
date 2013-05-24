@@ -190,4 +190,125 @@ public class Database_Operations extends Database_Model {
 		}
 	}
 
+	
+	/*
+	 * ######################################################################
+	 * ######################################################################
+	 * ######################################################################
+	 * ######################################################################
+	 * 
+	 * KUNDEN
+	 * 
+	 * ######################################################################
+	 * ######################################################################
+	 * ######################################################################
+	 */
+	
+	// Methode wandelt ein ResultSet (eine Zeile) in ein Objekt Kunde
+		private static Kunde getCustomersWithResultSet(ResultSet result) {
+
+			Kunde newCustomer = null;
+
+			try {
+				String idKunde = result.getString(1); // getString(1)
+				String name = result.getString(2);
+				String geburtstag  = result.getString(3);
+				String strasse = result.getString(4);
+				String hausnummer = result.getString(5);
+				String plz = result.getString(6);
+				String ort = result.getString(7);
+				String land = result.getString(8);
+				
+				String erreichbar = result.getString(9);
+				String idAccount = result.getString(10);
+				String account = result.getString(11);
+				String email = result.getString(12);
+				String telefon = result.getString(13);
+				
+				
+				newCustomer = new Kunde ( idKunde,  name,  geburtstag,  strasse,
+						 hausnummer,  plz,  ort,  land,
+						 erreichbar,  idAccount,  account,  email,
+						 telefon);
+
+			} catch (SQLException e) {
+				JOptionPane
+						.showInputDialog("Fehler in Kunden_getCustomerWithResultSet");
+			}
+
+			return newCustomer;
+
+		}
+		
+		
+		// Rufe Kundentabelle von Datenbank ab und bilde Customer-Array customers
+		public ArrayList<Kunde> getKunden() {
+
+			Connection con = getConnection();
+			ArrayList<Kunde> customers = new ArrayList<Kunde>();
+
+			Statement sta;
+			try {
+				sta = con.createStatement();
+				String sql = "select * FROM `allkunden`";
+				
+				ResultSet result = sta.executeQuery(sql);
+		
+				// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile einen Customer
+				// mit Methode...
+				while (result.next()) {
+					customers.add(getCustomersWithResultSet(result));
+				}
+				sta.close();
+				con.close();
+			} catch (SQLException e) {
+				JOptionPane.showInputDialog("Fehler bei Kunden-all()");
+			}
+			return customers;
+		}
+		
+		
+		// Speichern der Tabelle
+		public void kundeSave(Kunde k) {
+			Connection con = getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				String query = "";
+				stmt.execute(query);
+				stmt.close();
+				con.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		// Lösche Kunde
+		public void kundeDelete(Kunde k) {
+			Connection con = getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				String query = "DELETE FROM kunde " + "WHERE idKunde = '"
+								+ k.idKunde + "';";
+				stmt.execute(query);
+				stmt.close();
+				con.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		//Lege neuen Kunden in Datenbank an
+		public void kundeNew(Kunde k){
+			Connection con = getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				String query = "";
+				stmt.execute(query);
+				stmt.close();
+				con.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+		}
 }

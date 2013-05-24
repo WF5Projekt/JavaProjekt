@@ -14,11 +14,10 @@ import models.*;
 import views.Main_View;
 import views.newTicket_View;
 
-
 public class Main_Controller implements ListSelectionListener {
-	
+
 	public static Database_Operations db = new Database_Operations();
-	
+
 	private Main_View MainView;
 	public newTicket_View TicketNeu;
 
@@ -28,63 +27,60 @@ public class Main_Controller implements ListSelectionListener {
 	public Ticket_Table tickets;
 	public Kunde_Table kunden;
 	public Mitarbeiter_Table mitarbeiter;
-	
+
 	public Priorität priorität;
 	public Kategorie kategorie;
-	
 
 	// Komboboxen bei Ticket
 	public ComboBoxModelKategorie ComboBoxKategorie;
 	public ComboBoxModelPriorität ComboBoxPriorität;
 	public ComboBoxModelKunde ComboBoxKunde;
 	public ComboBoxModelMitarbeiter ComboBoxMitarbeiter;
-	
-
 
 	public Main_Controller(Mitarbeiter user) {
-		
-		//Aktuell eingeloggter Mitarbeiter ist hier gespeichert (kommt aus der Login_Model())
-		this.user 			= 	user;
-	
+
+		// Aktuell eingeloggter Mitarbeiter ist hier gespeichert (kommt aus der
+		// Login_Model())
+		this.user = user;
+
 		try {
 			init();
 			addListener();
 		} catch (Exception e) {
-			JOptionPane.showInputDialog("Listener/Models können nicht Initialisiert werden");
+			JOptionPane
+					.showInputDialog("Listener/Models können nicht Initialisiert werden");
 		}
-		
+
 		this.MainView.setVisible(true);
 	}
 
-
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
-		//Initalisierung der Datenbank-Befehle
+		// Initalisierung der Datenbank-Befehle
 
-		//Fenster erstellen - aber nicht Sichtbar!
+		// Fenster erstellen - aber nicht Sichtbar!
 		this.MainView = new Main_View();
 		
-		//Tabellen erstellen und Daten laden
-		this.tickets 		= 	new Ticket_Table();
-		this.kunden 		= 	new Kunde_Table();
-		this.mitarbeiter	= 	new Mitarbeiter_Table();
-		
+		MainView.setComboTicketSuche(Ticket.getColumnNames());
+		MainView.setComboKundenSuche(Kunde.getColumnNames());
+
+		// Tabellen erstellen und Daten laden
+		this.tickets = new Ticket_Table();
+		this.kunden = new Kunde_Table();
+		this.mitarbeiter = new Mitarbeiter_Table();
+
 		refreshTickets();
-		
-		kunden.refreshData();
+		refreshKunden();
 		mitarbeiter.refreshData();
-		
-		//Zusatzdaten erstellen (werden beim Erstellen geladen)
-		this.priorität		= 	new Priorität();
-		this.kategorie		= 	new Kategorie();
-		
-		
+
+		// Zusatzdaten erstellen (werden beim Erstellen geladen)
+		this.priorität = new Priorität();
+		this.kategorie = new Kategorie();
+
 		this.MainView.setModel(tickets);
 		this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
-		
-		
-		
+
 	}
 
 	// Button-Listener werden festgelegt
@@ -95,148 +91,211 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 
-		//Buttons im Kunden-Tab
+		// Buttons im Kunden-Tab
 		MainView.addListenerKundeRefresh(new kundeRefreshListener());
 		MainView.addListenerKundeSuche(new kundeSucheListener());
 		MainView.addKeyListenerKundeSuche(new kundeSucheKeyListener());
-		
-		//Buttons im Mitarbeiter-Tab
+
+		// Buttons im Mitarbeiter-Tab
 		MainView.addListenerMitarbeiterRefresh(new mitarbeiterRefreshListener());
 		MainView.addListenerMitarbeiterSuche(new mitarbeiterSucheListener());
 		MainView.addKeyListenerMitarbeiterSuche(new mitarbeiterSucheKeyListener());
-		
+
 		// Tabellen-Listener
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
 
-	
 	/*
 	 * ################################################
 	 * ################################################
-	 * ################################################ 
-	 * ############ 						###########
-	 * ############		Mitarbeiter			########### 
-	 * ############ 						###########
+	 * ################################################ ############ ###########
+	 * ############ Mitarbeiter ########### ############ ###########
 	 * ################################################
 	 * ################################################
 	 */
-	
-	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
-		private void mitarbeiterSuche() {
-			String suche = MainView.getTextSucheMitarbeiter();
-			String spalte = MainView.getSpalteSucheMitarbeiter();
 
-			if (!(suche.equals("") || spalte.equals(""))) {
-				mitarbeiter.searchData(spalte, suche);
-			} else {
-				mitarbeiter.refreshData();
-			}
-		}
-		
-		//############### ActionListener
-		
-		// Refresh-Button
-		class mitarbeiterRefreshListener implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				mitarbeiter.refreshData();
-			}
-
-		}
-		
-		// Neuer Kunde-Button
-		
-		class mitarbeiterNewListener implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		}
-		
-		// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
-		class mitarbeiterSucheListener implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mitarbeiterSuche();
-			}
-
-		}
-		// Suchbutton ruft KundenSuche() auf bei Enter-Taste
-		class mitarbeiterSucheKeyListener implements KeyListener {
-
-			@Override
-			public void keyPressed(KeyEvent key) {
-				if (key.getKeyCode() == KeyEvent.VK_ENTER)
-					mitarbeiterSuche();
-
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		}
-		
-		
-	
-	
-	
-	
-	/*
-	 * ################################################
-	 * ################################################
-	 * ################################################ 
-	 * ############ 						###########
-	 * ############			Kunden	 		########### 
-	 * ############ 						###########
-	 * ################################################
-	 * ################################################
-	 */
-	
-	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
-	private void kundenSuche() {
-		String suche = MainView.getTextSucheKunde();
-		String spalte = MainView.getSpalteSucheKunde();
+	// Methode ruft Such-Procedure der Datenbank mit Werten aus
+	// Suchfeld+Suchspalte auf
+	private void mitarbeiterSuche() {
+		String suche = MainView.getTextSucheMitarbeiter();
+		String spalte = MainView.getSpalteSucheMitarbeiter();
 
 		if (!(suche.equals("") || spalte.equals(""))) {
-				kunden.searchData(spalte, suche);
+			mitarbeiter.searchData(spalte, suche);
 		} else {
-				kunden.refreshData();
+			mitarbeiter.refreshData();
+		}
+	}
+
+	// ############### ActionListener
+
+	// Refresh-Button
+	class mitarbeiterRefreshListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			mitarbeiter.refreshData();
+		}
+
+	}
+
+	// Neuer Kunde-Button
+
+	class mitarbeiterNewListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
+	class mitarbeiterSucheListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mitarbeiterSuche();
+		}
+
+	}
+
+	// Suchbutton ruft KundenSuche() auf bei Enter-Taste
+	class mitarbeiterSucheKeyListener implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent key) {
+			if (key.getKeyCode() == KeyEvent.VK_ENTER)
+				mitarbeiterSuche();
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	/*
+	 * ################################################
+	 * ################################################
+	 * ################################################ ############ ###########
+	 * ############ Kunden ########### ############ ###########
+	 * ################################################
+	 * ################################################
+	 */
+
+	public void refreshKunden() {
+		kunden.setList(db.getKunden());
+	}
+
+	// Methode ruft Such-Procedure der Datenbank mit Werten aus
+	// Suchfeld+Suchspalte auf
+	public void kundenSuche() {
+		String suche = MainView.getTextSucheKunde();
+		String spalte = MainView.getSpalteSucheKunde();
+		
+		suche = suche.trim().toUpperCase();
+		
+		ArrayList<Kunde> searchList = new ArrayList<Kunde>();
+		
+		if (!(suche.equals("") || spalte.equals(""))) {
+			for (Kunde k : kunden.getList()) {
+				switch (spalte) {
+					case "ID":
+						if (k.idKunde.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Name":
+						if (k.idKunde.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Geburtstag":
+						if (k.idKunde.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Adresse":
+						if (k.getAdresse().toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Land":
+						if (k.land.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Erreichbarkeit":
+						if (k.erreichbar.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "E-Mail":
+						if (k.email.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Telefon":
+						if (k.telefon.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+					case "Username":
+						if (k.account.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(k);
+					break;
+				default:
+					break;
+				}
+			}
+			kunden.setSearch(searchList);
+		} else {
+			kunden.Reset();
 		}
 	}
 	
-	//############### ActionListener
-	
+	public Kunde getKundeWithID(String idKunde){
+		Kunde tmpKunde = new Kunde();
+		for (Kunde k : kunden.getList()) {
+				if(k.idKunde.matches(idKunde.trim()))
+					tmpKunde = k;
+		}
+		return tmpKunde;
+	}
+
+	// ############### ActionListener
+
 	// Refresh-Button
 	class kundeRefreshListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			kunden.refreshData();
+			refreshKunden();
 		}
 
 	}
-	
+
 	// Neuer Kunde-Button
-	
+
 	class kundeNewListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-	
+
 	// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
 	class kundeSucheListener implements ActionListener {
 
@@ -246,6 +305,7 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
+
 	// Suchbutton ruft KundenSuche() auf bei Enter-Taste
 	class kundeSucheKeyListener implements KeyListener {
 
@@ -255,30 +315,85 @@ public class Main_Controller implements ListSelectionListener {
 				kundenSuche();
 
 		}
+
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 
 		}
+
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 	}
-	
-	
-	
+
 	/*
 	 * ################################################
 	 * ################################################
-	 * ################################################ 
-	 * ############ 						###########
-	 * ############			Tickets 		########### 
-	 * ############ 						###########
+	 * ################################################ ############ ###########
+	 * ############ Tickets ########### ############ ###########
 	 * ################################################
 	 * ################################################
 	 */
+	public void refreshTickets() {
+		tickets.setList(db.getTickets());
+	}
+
+	// Methode ruft Such-Procedure der Datenbank mit Werten aus
+	// Suchfeld+Suchspalte auf
+	public void ticketSuche() {
+		String suche = MainView.getTextSucheTicket();
+		String spalte = MainView.getSpalteSucheTicket();
+
+		suche = suche.trim().toUpperCase();
+		
+		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+
+		if (!(suche.equals("") || spalte.equals(""))) {
+			for (Ticket t : tickets.getList()) {
+				switch (spalte) {
+					case "ID":
+						if (t.idTicket.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+					case "Beschreibung":
+						if (t.beschreibung.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+					case "Level":
+						if (t.level.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+					case "Kategorie":
+						if (t.kategorie.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+					case "Priorität":
+						if (t.prioritaet.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+					case "Status":
+						if (t.status.toUpperCase().matches(
+								"(.*)" + suche + "(.*)"))
+							searchList.add(t);
+					break;
+
+				default:
+					break;
+				}
+			}
+			tickets.setSearch(searchList);
+		} else {
+			tickets.Reset();
+		}
+	}
 
 	// ########### ActionListener
 
@@ -287,13 +402,12 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			tickets.setList(db.getTickets());
+			refreshTickets();
 		}
 
 	}
-	
-	
-	//Neues Ticket eröffnen --> Fenster wird geöffnet und Comboboxen gefüllt!
+
+	// Neues Ticket eröffnen --> Fenster wird geöffnet und Comboboxen gefüllt!
 	class ticketNewListener implements ActionListener {
 
 		@Override
@@ -307,7 +421,7 @@ public class Main_Controller implements ListSelectionListener {
 			ComboBoxKategorie = new ComboBoxModelKategorie();
 			ComboBoxPriorität = new ComboBoxModelPriorität();
 			ComboBoxKunde = new ComboBoxModelKunde();
-			
+
 			TicketNeu.kat.setModel(ComboBoxKategorie);
 			TicketNeu.prio.setModel(ComboBoxPriorität);
 			TicketNeu.kunde.setModel(ComboBoxKunde);
@@ -316,7 +430,7 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
-	
+
 	// Button um neues Ticket zu speichern
 	class neuesTicket implements ActionListener {
 
@@ -337,16 +451,16 @@ public class Main_Controller implements ListSelectionListener {
 					&& !beschreibung.trim().equals("")) {
 
 				String tmpPrio = priorität.getArray().get(selIndexPrio).id;
-				String tmpKat =  kategorie.getArray().get(selIndexKat).id;
+				String tmpKat = kategorie.getArray().get(selIndexKat).id;
 				String idKunde = kunden.getArray().get(selIndexKunde).idKunde;
 				String idMitarbeiter = user.idMitarbeiter;
 
-				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio,
-						tmpKat, idKunde, idMitarbeiter);
+				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio, tmpKat,
+						idKunde, idMitarbeiter);
 				db.ticketNew(tmpTicket);
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
 						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-				
+
 				refreshTickets();
 				TicketNeu.dispose();
 
@@ -360,38 +474,6 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 
-	// Methode ruft Such-Procedure der Datenbank mit Werten aus Suchfeld+Suchspalte auf
-	private void ticketSuche() {
-		String suche = MainView.getTextSucheTicket();
-		String spalte = MainView.getSpalteSucheTicket();
-
-		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
-		
-		if (!(suche.equals("") || spalte.equals(""))) {
-					for (Ticket t : tickets.getList()) {
-						switch(spalte){
-							case "Status":
-								if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
-									searchList.add(t);
-								break;
-							
-								
-							
-							default: break;
-						}
-					}
-					tickets.setSearch(searchList);
-		} 
-		else {
-			tickets.Reset();
-		}
-	}
-
-	
-	public void refreshTickets() {
-		tickets.setList(db.getTickets());
-	}
-
 	// Suchbutton ruft die TicketSuche() auf mit Klick auf Button
 	class ticketSucheListener implements ActionListener {
 
@@ -401,6 +483,7 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
+
 	// Suchbutton ruft TicketSuche() auf bei Enter-Taste
 	class ticketSucheKeyListener implements KeyListener {
 
@@ -410,11 +493,13 @@ public class Main_Controller implements ListSelectionListener {
 				ticketSuche();
 
 		}
+
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 
 		}
+
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
@@ -422,9 +507,8 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 
-	
-
-	//################ Methode zeigt bei Klick auf Ticket in der Tabelle die Details des Tickets in der TicketInfo()
+	// ################ Methode zeigt bei Klick auf Ticket in der Tabelle die
+	// Details des Tickets in der TicketInfo()
 	public void valueChanged(ListSelectionEvent e) {
 		Object source = e.getSource();
 		if (source == MainView.tickets.getSelectionModel()) {
@@ -432,15 +516,17 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 
-	// Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der Tabelle
+	// Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der
+	// Tabelle
 	private void showTicketInfo() {
 		int selectedRow = MainView.getSelectedTicket();
 		if (selectedRow != -1) {
-	
+
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
-			Mitarbeiter tmpMitarbeiter = mitarbeiter.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
-			Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
-			
+			Mitarbeiter tmpMitarbeiter = mitarbeiter
+					.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
+			Kunde tmpKunde = getKundeWithID(tmpTicket.idKunde);
+
 			// Set additional Info for selected Disc
 			// if no info exists label is set to '-'
 			try {
@@ -457,44 +543,40 @@ public class Main_Controller implements ListSelectionListener {
 						.equals("")) ? tmpTicket.prioritaet : "-");
 				MainView.setInfoErstellzeitpunkt(!(tmpTicket.erstellzeitpunkt
 						.trim().equals("")) ? tmpTicket.erstellzeitpunkt : "-");
-				
+
 				MainView.setInfoAccount_M(!(tmpMitarbeiter.account.trim()
 						.equals("")) ? tmpMitarbeiter.account : "-");
 				MainView.setInfoHelpdesk(!(tmpMitarbeiter.level.trim()
 						.equals("")) ? tmpMitarbeiter.level : "-");
-				MainView.setInfoName_M(!(tmpMitarbeiter.name.trim()
-						.equals("")) ? tmpMitarbeiter.name : "-");
+				MainView.setInfoName_M(!(tmpMitarbeiter.name.trim().equals("")) ? tmpMitarbeiter.name
+						: "-");
 				MainView.setInfoEmail_M(!(tmpMitarbeiter.email.trim()
 						.equals("")) ? tmpMitarbeiter.email : "-");
 				MainView.setInfoTelefon_M(!(tmpMitarbeiter.telefon.trim()
 						.equals("")) ? tmpMitarbeiter.telefon : "-");
 				MainView.setInfoAbteilung(!(tmpMitarbeiter.abteilung.trim()
 						.equals("")) ? tmpMitarbeiter.abteilung : "-");
-				
-				
-				MainView.setInfoEmail_K(!(tmpKunde.email.trim()
-						.equals("")) ? tmpKunde.email : "-");
-				MainView.setInfoName_K(!(tmpKunde.name.trim()
-						.equals("")) ? tmpKunde.name : "-");
+
+				MainView.setInfoEmail_K(!(tmpKunde.email.trim().equals("")) ? tmpKunde.email
+						: "-");
+				MainView.setInfoName_K(!(tmpKunde.name.trim().equals("")) ? tmpKunde.name
+						: "-");
 				MainView.setInfoErreichbarkeit(!(tmpKunde.erreichbar.trim()
 						.equals("")) ? tmpKunde.erreichbar : "-");
-				MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim()
-						.equals("")) ? tmpKunde.telefon : "-");
+				MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim().equals("")) ? tmpKunde.telefon
+						: "-");
 
-				
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Fehler bei der Ticket-Info",
-						"Fehler", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+						"Fehler bei der Ticket-Info", "Fehler",
+						JOptionPane.PLAIN_MESSAGE);
 			}
 
 		}
 
 	}
 
-	
-	
-	
-	//################ Komboboxen für Ticket-Fenster
+	// ################ Komboboxen für Ticket-Fenster
 	@SuppressWarnings("serial")
 	class ComboBoxModelKategorie extends DefaultComboBoxModel {
 

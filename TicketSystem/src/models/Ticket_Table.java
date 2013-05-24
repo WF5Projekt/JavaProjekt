@@ -2,13 +2,12 @@ package models;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-	private String[] columnNames = Ticket.getColumnNames();;
+	private String[] columnNames = Ticket.getColumnNames();
 
 	
 	private ArrayList<Ticket> tickets;

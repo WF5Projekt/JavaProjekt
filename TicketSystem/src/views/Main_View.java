@@ -260,10 +260,8 @@ public class Main_View extends JFrame {
 																txt_sucheTicket.setColumns(10);
 																
 																		combo_sucheTicket = new JComboBox<String>();
+																		combo_sucheTicket.setMaximumRowCount(4);
 																		panel.add(combo_sucheTicket);
-																		combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(new String[] {
-																				"Status", "Priorit\u00E4t", "Kategorie", "Level", "Kundenname",
-																				"Mitarbeiter", "Ticket Beschreibung" }));
 																		
 																				btn_sucheTicket = new JButton("Suche");
 																				panel.add(btn_sucheTicket);
@@ -667,6 +665,7 @@ public class Main_View extends JFrame {
 																																																																																																txt_sucheKunde.setColumns(10);
 																																																																																																
 																																																																																																		combo_sucheKunde = new JComboBox<String>();
+																																																																																																		combo_sucheKunde.setMaximumRowCount(4);
 																																																																																																		combo_sucheKunde.setModel(new DefaultComboBoxModel<String>(new String[] {
 																																																																																																				"Name", "Adresse", "Kontakt", "Username" }));
 																																																																																																		panel_1.add(combo_sucheKunde);
@@ -763,8 +762,10 @@ public class Main_View extends JFrame {
 		public int getSelectedKunde() {
 			return kunden.getSelectedRow();
 		}
-	
-	
+		public void setComboKundenSuche(String[] comboListe){
+			this.combo_sucheKunde.setModel(new DefaultComboBoxModel<String>(comboListe));
+		}
+		
 	/*
 	 * ###################################
 	 * TICKET TAB
@@ -810,7 +811,9 @@ public class Main_View extends JFrame {
 	public int getSelectedTicket() {
 		return tickets.getSelectedRow();
 	}
-
+	public void setComboTicketSuche(String[] comboListe){
+		this.combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(comboListe));
+	}
 	
 	//############# Setter für die Ticketinfos
 	public void setInfoBeschreibung(String s) {
