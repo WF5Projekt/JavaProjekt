@@ -370,12 +370,31 @@ public class Main_Controller implements ListSelectionListener {
 		if (!(suche.equals("") || spalte.equals(""))) {
 					for (Ticket t : tickets.getList()) {
 						switch(spalte){
+							case "ID":
+								if(t.idTicket.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
+							case "Beschreibung":
+								if(t.beschreibung.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
+							case "Level":
+								if(t.level.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
+							case "Kategorie":
+								if(t.kategorie.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
+							case "Priorität":
+								if(t.prioritaet.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+									searchList.add(t);
+								break;
 							case "Status":
 								if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
 									searchList.add(t);
 								break;
 							
-								
 							
 							default: break;
 						}
