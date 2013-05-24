@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-	private String[] columnNames = Ticket.getColumnNames();;
+	private String[] columnNames = Ticket.getTableColumnNames();;
 
 	
 	private ArrayList<Ticket> tickets;
@@ -27,6 +27,7 @@ public class Ticket_Table extends AbstractTableModel {
 		this.tickets = backup;
 		fireTableDataChanged();
 	}
+	
 	
 	public ArrayList<Ticket> getList(){
 		return this.backup;

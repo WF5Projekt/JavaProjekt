@@ -29,32 +29,14 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import java.awt.Button;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.BoxLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.ImageIcon;
-import javax.swing.JList;
-import javax.swing.JToggleButton;
-import javax.swing.JSeparator;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.MatteBorder;
-import java.awt.Window.Type;
 import java.awt.Dimension;
 
 @SuppressWarnings("serial")
@@ -261,9 +243,6 @@ public class Main_View extends JFrame {
 																
 																		combo_sucheTicket = new JComboBox<String>();
 																		panel.add(combo_sucheTicket);
-																		combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(new String[] {
-																				"Status", "Priorit\u00E4t", "Kategorie", "Level", "Kundenname",
-																				"Mitarbeiter", "Ticket Beschreibung" }));
 																		
 																				btn_sucheTicket = new JButton("Suche");
 																				panel.add(btn_sucheTicket);
@@ -809,6 +788,9 @@ public class Main_View extends JFrame {
 	}
 	public int getSelectedTicket() {
 		return tickets.getSelectedRow();
+	}
+	public void setComboTicketSuche(String[] comboListe){
+		this.combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(comboListe));
 	}
 
 	

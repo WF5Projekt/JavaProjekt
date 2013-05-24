@@ -82,7 +82,7 @@ public class Ticket extends Database_Model {
 	}
 
 	// Spaltennamen für die Tabelle
-	public static String[] getColumnNames() {
+	public static String[] getTableColumnNames() {
 
 		String[] columnNames = { "ID", "Beschreibung", "Level", "Kategorie",
 				"Priorität", "Status" };
@@ -90,4 +90,5 @@ public class Ticket extends Database_Model {
 		return columnNames;
 	}
 
+	
 }

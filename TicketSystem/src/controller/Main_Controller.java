@@ -59,25 +59,25 @@ public class Main_Controller implements ListSelectionListener {
 
 	// Alle Tabellen werden in der MainView verknüpft/festgelegt
 	private void init() {
-		//Initalisierung der Datenbank-Befehle
 
-		//Fenster erstellen - aber nicht Sichtbar!
-		this.MainView = new Main_View();
-		
 		//Tabellen erstellen und Daten laden
 		this.tickets 		= 	new Ticket_Table();
 		this.kunden 		= 	new Kunde_Table();
 		this.mitarbeiter	= 	new Mitarbeiter_Table();
 		
 		refreshTickets();
-		
 		kunden.refreshData();
 		mitarbeiter.refreshData();
 		
 		//Zusatzdaten erstellen (werden beim Erstellen geladen)
 		this.priorität		= 	new Priorität();
 		this.kategorie		= 	new Kategorie();
+
+		//Fenster erstellen - aber nicht Sichtbar!
+		this.MainView = new Main_View();
+		MainView.setComboTicketSuche(Ticket.getColumnNames());
 		
+
 		
 		this.MainView.setModel(tickets);
 		this.MainView.setModel(kunden);
@@ -365,29 +365,50 @@ public class Main_Controller implements ListSelectionListener {
 		String suche = MainView.getTextSucheTicket();
 		String spalte = MainView.getSpalteSucheTicket();
 
+		//Such-Liste wird leer erstellt, hier kommen Tickets rein, die Suchkriterien erfüllen
 		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
 		
+		//Suchfeld soll nicht leer sein, ansonsten wird komplette TicketListe angezeigt.
 		if (!(suche.equals("") || spalte.equals(""))) {
+					//Für jedes Ticket wird geschaut, ob das Suchkriterium erfüllt ist
 					for (Ticket t : tickets.getList()) {
 						switch(spalte){
-							case "Status":
-								if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
-									searchList.add(t);
-								break;
-							
-								
-							
-							default: break;
+						case "ID":
+							if(t.idTicket.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
+						case "Beschreibung":
+							if(t.beschreibung.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
+						case "Level":
+							if(t.level.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
+						case "Kategorie":
+							if(t.kategorie.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
+						case "Priorität":
+							if(t.prioritaet.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
+						case "Status":
+							if(t.status.toUpperCase().matches("(.*)"+suche.toUpperCase()+"(.*)"))
+								searchList.add(t);
+							break;
 						}
 					}
+					//Nun die gefundenen Tickets als Liste an die Tabelle übergeben, diese speichert automatisch alle Tickets in Backup-Liste
 					tickets.setSearch(searchList);
 		} 
 		else {
+			//Alle Tickets werden wieder an Tabelle angezeigt (über Backup-Liste)
 			tickets.Reset();
 		}
 	}
 
-	
+	//Refresh läd die Tickets komplett neu aus Datenbank!
 	public void refreshTickets() {
 		tickets.setList(db.getTickets());
 	}
