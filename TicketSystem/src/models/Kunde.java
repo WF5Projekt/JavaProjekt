@@ -102,4 +102,8 @@ public class Kunde{
 		};
 		return columnNames;
 	}
+	
+	public String toString(){
+		return this.name;
+	}
 }

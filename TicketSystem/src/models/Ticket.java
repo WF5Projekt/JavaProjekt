@@ -93,5 +93,9 @@ public class Ticket{
 
 		return columnNames;
 	}
+	
+	public String toString(){
+		return this.idTicket;
+	}
 
 }

@@ -68,8 +68,8 @@ public class Main_Controller implements ListSelectionListener {
 
 		// Fenster erstellen - aber nicht Sichtbar!
 		this.MainView = new Main_View();
-		
-		//ComboBoxen bekommen den Wert der Mitarbeiter-Tabellenspalten
+
+		// ComboBoxen bekommen den Wert der Mitarbeiter-Tabellenspalten
 		MainView.setComboTicketSuche(Ticket.getColumnNames());
 		MainView.setComboKundenSuche(Kunde.getColumnNames());
 		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
@@ -123,8 +123,8 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 * ################################################
 	 */
-	
-	private void refreshMitarbeiter(){
+
+	private void refreshMitarbeiter() {
 		mitarbeiter.setList(db.getMitarbeiter());
 	}
 
@@ -136,8 +136,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		mitarbeiter.searchMitarbeiter(spalte, suche);
 	}
-	
-	
+
 	// ############### ActionListener
 
 	// Refresh-Button
@@ -202,8 +201,8 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 * ################################################
 	 */
-	
-	//Refresh lädt die Liste neu aus der Datenbank
+
+	// Refresh lädt die Liste neu aus der Datenbank
 	public void refreshKunden() {
 		kunden.setList(db.getKunden());
 	}
@@ -213,10 +212,9 @@ public class Main_Controller implements ListSelectionListener {
 	public void kundenSuche() {
 		String suche = MainView.getTextSucheKunde();
 		String spalte = MainView.getSpalteSucheKunde();
-		
+
 		kunden.searchKunde(spalte, suche);
 	}
-
 
 	// ############### ActionListener
 
@@ -414,6 +412,7 @@ public class Main_Controller implements ListSelectionListener {
 			showTicketInfo();
 		}
 	}
+	
 
 	// Setzt die TicketInfo auf die Daten des aktuellen Ticket-Objekts aus der
 	// Tabelle
@@ -422,15 +421,9 @@ public class Main_Controller implements ListSelectionListener {
 		if (selectedRow != -1) {
 
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
-			
-			Mitarbeiter tmpMitarbeiter = mitarbeiter
-					.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
-			
-			Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
 
-			// Set additional Info for selected Disc
-			// if no info exists label is set to '-'
-			
+			if (tmpTicket != null) {
+
 				MainView.setInfoBeschreibung(!(tmpTicket.beschreibung.trim()
 						.equals("")) ? tmpTicket.beschreibung : "-");
 				MainView.setInfoStatus(!(tmpTicket.status.trim().equals("")) ? tmpTicket.status
@@ -444,86 +437,108 @@ public class Main_Controller implements ListSelectionListener {
 				MainView.setInfoErstellzeitpunkt(!(tmpTicket.erstellzeitpunkt
 						.trim().equals("")) ? tmpTicket.erstellzeitpunkt : "-");
 
-				MainView.setInfoAccount_M(!(tmpMitarbeiter.account.trim()
-						.equals("")) ? tmpMitarbeiter.account : "-");
-				MainView.setInfoHelpdesk(!(tmpMitarbeiter.level.trim()
-						.equals("")) ? tmpMitarbeiter.level : "-");
-				MainView.setInfoName_M(!(tmpMitarbeiter.name.trim().equals("")) ? tmpMitarbeiter.name
-						: "-");
-				MainView.setInfoEmail_M(!(tmpMitarbeiter.email.trim()
-						.equals("")) ? tmpMitarbeiter.email : "-");
-				MainView.setInfoTelefon_M(!(tmpMitarbeiter.telefon.trim()
-						.equals("")) ? tmpMitarbeiter.telefon : "-");
-				MainView.setInfoAbteilung(!(tmpMitarbeiter.abteilung.trim()
-						.equals("")) ? tmpMitarbeiter.abteilung : "-");
+				if (tmpTicket.idMitarbeiter != null) {
 
-				MainView.setInfoEmail_K(!(tmpKunde.email.trim().equals("")) ? tmpKunde.email
-						: "-");
-				MainView.setInfoName_K(!(tmpKunde.name.trim().equals("")) ? tmpKunde.name
-						: "-");
-				MainView.setInfoErreichbarkeit(!(tmpKunde.erreichbar.trim()
-						.equals("")) ? tmpKunde.erreichbar : "-");
-				MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim().equals("")) ? tmpKunde.telefon
-						: "-");
+					Mitarbeiter tmpMitarbeiter = mitarbeiter
+							.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
 
-		}
+					MainView.setInfoAccount_M(!(tmpMitarbeiter.account.trim()
+							.equals("")) ? tmpMitarbeiter.account : "-");
+					MainView.setInfoHelpdesk(!(tmpMitarbeiter.level.trim()
+							.equals("")) ? tmpMitarbeiter.level : "-");
+					MainView.setInfoName_M(!(tmpMitarbeiter.name.trim()
+							.equals("")) ? tmpMitarbeiter.name : "-");
+					MainView.setInfoEmail_M(!(tmpMitarbeiter.email.trim()
+							.equals("")) ? tmpMitarbeiter.email : "-");
+					MainView.setInfoTelefon_M(!(tmpMitarbeiter.telefon.trim()
+							.equals("")) ? tmpMitarbeiter.telefon : "-");
+					MainView.setInfoAbteilung(!(tmpMitarbeiter.abteilung.trim()
+							.equals("")) ? tmpMitarbeiter.abteilung : "-");
+				} else {
+					MainView.setInfoAccount_M("-");
+					MainView.setInfoHelpdesk("-");
+					MainView.setInfoName_M("-");
+					MainView.setInfoEmail_M("-");
+					MainView.setInfoTelefon_M("-");
+					MainView.setInfoAbteilung("-");
+				}
 
-	}
+				if (tmpTicket.idKunde != "") {
+					Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
 
-	// ################ Komboboxen für Ticket-Fenster
-	@SuppressWarnings("serial")
-	class ComboBoxModelKategorie extends DefaultComboBoxModel {
+					MainView.setInfoEmail_K(!(tmpKunde.email.trim().equals("")) ? tmpKunde.email
+							: "-");
+					MainView.setInfoName_K(!(tmpKunde.name.trim().equals("")) ? tmpKunde.name
+							: "-");
+					MainView.setInfoErreichbarkeit(!(tmpKunde.erreichbar.trim()
+							.equals("")) ? tmpKunde.erreichbar : "-");
+					MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim()
+							.equals("")) ? tmpKunde.telefon : "-");
+				} else {
+					MainView.setInfoEmail_K("-");
+					MainView.setInfoName_K("-");
+					MainView.setInfoErreichbarkeit("-");
+					MainView.setInfoTelefon_K("-");
+				}
+			}
 
-		@Override
-		public int getSize() {
-			return kategorie.getArray().size();
-		}
-
-		@Override
-		public Kategorie getElementAt(int index) {
-			return kategorie.getArray().get(index);
-		}
-	}
-
-	@SuppressWarnings("serial")
-	class ComboBoxModelPriorität extends DefaultComboBoxModel {
-
-		@Override
-		public int getSize() {
-			return priorität.getArray().size();
-		}
-
-		@Override
-		public Priorität getElementAt(int index) {
-			return priorität.getArray().get(index);
 		}
 	}
+		// ################ Komboboxen für Ticket-Fenster
+		@SuppressWarnings("serial")
+		class ComboBoxModelKategorie extends DefaultComboBoxModel {
 
-	@SuppressWarnings("serial")
-	class ComboBoxModelKunde extends DefaultComboBoxModel {
+			@Override
+			public int getSize() {
+				return kategorie.getArray().size();
+			}
 
-		@Override
-		public int getSize() {
-			return kunden.getArray().size();
+			@Override
+			public Kategorie getElementAt(int index) {
+				return kategorie.getArray().get(index);
+			}
 		}
 
-		@Override
-		public Kunde getElementAt(int index) {
-			return kunden.getArray().get(index);
+		@SuppressWarnings("serial")
+		class ComboBoxModelPriorität extends DefaultComboBoxModel {
+
+			@Override
+			public int getSize() {
+				return priorität.getArray().size();
+			}
+
+			@Override
+			public Priorität getElementAt(int index) {
+				return priorität.getArray().get(index);
+			}
+		}
+
+		@SuppressWarnings("serial")
+		class ComboBoxModelKunde extends DefaultComboBoxModel {
+
+			@Override
+			public int getSize() {
+				return kunden.getArray().size();
+			}
+
+			@Override
+			public Kunde getElementAt(int index) {
+				return kunden.getArray().get(index);
+			}
+		}
+
+		@SuppressWarnings("serial")
+		class ComboBoxModelMitarbeiter extends DefaultComboBoxModel {
+
+			@Override
+			public int getSize() {
+				return mitarbeiter.getArray().size();
+			}
+
+			@Override
+			public Mitarbeiter getElementAt(int index) {
+				return mitarbeiter.getArray().get(index);
+			}
 		}
 	}
 
-	@SuppressWarnings("serial")
-	class ComboBoxModelMitarbeiter extends DefaultComboBoxModel {
-
-		@Override
-		public int getSize() {
-			return mitarbeiter.getArray().size();
-		}
-
-		@Override
-		public Mitarbeiter getElementAt(int index) {
-			return mitarbeiter.getArray().get(index);
-		}
-	}
-}
