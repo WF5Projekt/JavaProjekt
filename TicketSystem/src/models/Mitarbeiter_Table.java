@@ -1,99 +1,130 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
-public class Mitarbeiter_Table extends AbstractTableModel{
-	
-	private String[] columnNames;
+public class Mitarbeiter_Table extends AbstractTableModel {
 
-	
-	private Object[][] data = {};
-	private ArrayList<Mitarbeiter> inhalt;
+	private String[] columnNames = Mitarbeiter.getColumnNames();
+	private ArrayList<Mitarbeiter> mitarbeiter;
+	private ArrayList<Mitarbeiter> backup;
 
-	public ArrayList<Mitarbeiter> getArray(){
-		return this.inhalt;
+	public ArrayList<Mitarbeiter> getArray() {
+		return this.mitarbeiter;
 	}
+
+	public void setList(ArrayList<Mitarbeiter> mitarbeiter) {
+		this.mitarbeiter = mitarbeiter;
+		this.backup = mitarbeiter;
+		fireTableDataChanged();
+	}
+
+	public void reset() {
+		this.mitarbeiter = backup;
+		fireTableDataChanged();
+	}
+
+	public ArrayList<Mitarbeiter> getList() {
+		return this.mitarbeiter;
+	}
+
+	// Search filtert das "mitarbeiter"-Array
+	public void searchMitarbeiter(String spalte, String suche) {
+
+		suche = suche.trim().toUpperCase();
+
 	
-	// Refresh der Daten für die Tabelle
-		public void refreshData() {
-			try {
-				columnNames = Mitarbeiter.getColumnNames();
-				inhalt = Mitarbeiter.all();
-				data = new Object[inhalt.size()][];
-				for (int i = 0; i < inhalt.size(); i++) {
-					Mitarbeiter tmp = inhalt.get(i);
-					data[i] = tmp.toJTableArray();
+
+		if (!(suche.equals("") || spalte.equals(""))) {
+			
+
+			ArrayList<Mitarbeiter> searchList = new ArrayList<Mitarbeiter>();
+			
+			for (Mitarbeiter m : backup) {
+				switch (spalte) {
+				case "ID":
+					if (m.idMitarbeiter.toUpperCase().matches(
+							"(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Name":
+					if (m.name.toUpperCase().matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Adresse":
+					if (m.getAdresse().toUpperCase()
+							.matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Land":
+					if (m.land.toUpperCase().matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Abteilung":
+					if (m.land.toUpperCase().matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Level":
+					if (m.level.toUpperCase().matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "E-Mail":
+					if (m.email.toUpperCase().matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Telefon":
+					if (m.telefon.toUpperCase()
+							.matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				case "Username":
+					if (m.account.toUpperCase()
+							.matches("(.*)" + suche + "(.*)"))
+						searchList.add(m);
+					break;
+				default:
+					break;
 				}
-				this.fireTableDataChanged();
-			} catch (Exception e) {
-				JOptionPane.showInputDialog("Fehler in Refresh_Data Mitarbeiter");
 			}
+			this.mitarbeiter = searchList;
+		} else {
+			// bei leerem Suchfeld werden wieder alle Daten angezeigt.
+			reset();
 		}
-		
-		public void searchData(String spalte, String suche){
-			try{
-				inhalt = Mitarbeiter.search(spalte, suche);
-				data = new Object[inhalt.size()][];
-				for (int i = 0; i < inhalt.size(); i++) {
-					Mitarbeiter tmp = inhalt.get(i);
-					data[i] = tmp.toJTableArray();
-				}
-				this.fireTableDataChanged();	
-			}catch( Exception e){
-				JOptionPane.showInputDialog("Fehler bei Ticket Suche");
-			}
-		}
-		
-		public Mitarbeiter getMitarbeiterWithID(String idMitarbeiter){
-			
-			
-			int index = -1;
+		fireTableDataChanged();
+	}
 
-		    for (int i = 0; (i < inhalt.size()) && (index == -1); i++) {
-		        if (inhalt.get(i).idMitarbeiter.equals(idMitarbeiter)) {
-		            index = i;
-		        }
-		    }
-		    
-		    if(index == -1){
-		    	return null;
-		    }
-		    else{
-		    	return inhalt.get(index);
-		    }
-			
-			
-		}
-		
-		// AbstractTable bietet automatisch folgende Funktionen
+	public Mitarbeiter getMitarbeiterWithID(String idMitarbeiter) {
+		Mitarbeiter tmpMitarbeiter = null;
+		for (Mitarbeiter m : backup)
+			if (m.idMitarbeiter.matches(idMitarbeiter.trim()))
+				tmpMitarbeiter = m;
+		return tmpMitarbeiter;
+	}
 
-		public Mitarbeiter getEmployeeAtRow(int row) {
-			return inhalt.get(row);
-		}
+	public Mitarbeiter getEmployeeAtRow(int row) {
+		return mitarbeiter.get(row);
+	}
 
-		public int getRowOfEmployee(Mitarbeiter c) {
-			return inhalt.indexOf(c);
-		}
+	public int getRowOfEmployee(Mitarbeiter c) {
+		return mitarbeiter.indexOf(c);
+	}
 
-		public int getColumnCount() {
-			return columnNames.length;
-		}
+	public int getColumnCount() {
+		return columnNames.length;
+	}
 
-		public int getRowCount() {
-			return data.length;
-		}
+	public int getRowCount() {
+		return mitarbeiter.size();
+	}
 
-		public String getColumnName(int col) {
-			return columnNames[col];
-		}
+	public String getColumnName(int col) {
+		return columnNames[col];
+	}
 
-		public Object getValueAt(int row, int col) {
-			return data[row][col];
-		}
+	public Object getValueAt(int row, int col) {
+		return mitarbeiter.get(row).getValue(col);
+	}
 
 }

@@ -260,7 +260,7 @@ public class Main_View extends JFrame {
 																txt_sucheTicket.setColumns(10);
 																
 																		combo_sucheTicket = new JComboBox<String>();
-																		combo_sucheTicket.setMaximumRowCount(4);
+																		combo_sucheTicket.setMaximumRowCount(10);
 																		panel.add(combo_sucheTicket);
 																		
 																				btn_sucheTicket = new JButton("Suche");
@@ -610,6 +610,7 @@ public class Main_View extends JFrame {
 																																																																																						txt_sucheMitarbeiter.setColumns(10);
 																																																																																						
 																																																																																						combo_sucheMitarbeiter = new JComboBox<String>();
+																																																																																						combo_sucheMitarbeiter.setMaximumRowCount(10);
 																																																																																						combo_sucheMitarbeiter.setModel(new DefaultComboBoxModel<String>(new String[] {"Name", "Abteilung", "Kontakt", "Standort", "Username"}));
 																																																																																						panel_2.add(combo_sucheMitarbeiter);
 																																																																																						
@@ -665,7 +666,7 @@ public class Main_View extends JFrame {
 																																																																																																txt_sucheKunde.setColumns(10);
 																																																																																																
 																																																																																																		combo_sucheKunde = new JComboBox<String>();
-																																																																																																		combo_sucheKunde.setMaximumRowCount(4);
+																																																																																																		combo_sucheKunde.setMaximumRowCount(10);
 																																																																																																		combo_sucheKunde.setModel(new DefaultComboBoxModel<String>(new String[] {
 																																																																																																				"Name", "Adresse", "Kontakt", "Username" }));
 																																																																																																		panel_1.add(combo_sucheKunde);
@@ -717,6 +718,9 @@ public class Main_View extends JFrame {
 			}
 			public int getSelectedMitarbeiter() {
 				return mitarbeiter.getSelectedRow();
+			}
+			public void setComboMitarbeiterSuche(String[] comboListe){
+				this.combo_sucheMitarbeiter.setModel(new DefaultComboBoxModel<String>(comboListe));
 			}
 		
 

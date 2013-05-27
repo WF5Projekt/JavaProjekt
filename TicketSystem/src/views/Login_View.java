@@ -93,6 +93,7 @@ public class Login_View extends JFrame {
 		return MD5.MD5(String.valueOf(txt_passwort.getPassword()));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean leereFelder(){
 		boolean erg = false;
 		

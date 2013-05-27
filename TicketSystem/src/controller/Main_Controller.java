@@ -4,13 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import models.*;
+
+import models.Database_Operations;
+import models.Kategorie;
+import models.Kunde;
+import models.Kunde_Table;
+import models.Mitarbeiter;
+import models.Mitarbeiter_Table;
+import models.Priorität;
+import models.Ticket;
+import models.Ticket_Table;
 import views.Main_View;
 import views.newTicket_View;
 
@@ -61,8 +69,10 @@ public class Main_Controller implements ListSelectionListener {
 		// Fenster erstellen - aber nicht Sichtbar!
 		this.MainView = new Main_View();
 		
+		//ComboBoxen bekommen den Wert der Mitarbeiter-Tabellenspalten
 		MainView.setComboTicketSuche(Ticket.getColumnNames());
 		MainView.setComboKundenSuche(Kunde.getColumnNames());
+		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
 
 		// Tabellen erstellen und Daten laden
 		this.tickets = new Ticket_Table();
@@ -71,7 +81,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		refreshTickets();
 		refreshKunden();
-		mitarbeiter.refreshData();
+		refreshMitarbeiter();
 
 		// Zusatzdaten erstellen (werden beim Erstellen geladen)
 		this.priorität = new Priorität();
@@ -113,6 +123,10 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 * ################################################
 	 */
+	
+	private void refreshMitarbeiter(){
+		mitarbeiter.setList(db.getMitarbeiter());
+	}
 
 	// Methode ruft Such-Procedure der Datenbank mit Werten aus
 	// Suchfeld+Suchspalte auf
@@ -120,13 +134,10 @@ public class Main_Controller implements ListSelectionListener {
 		String suche = MainView.getTextSucheMitarbeiter();
 		String spalte = MainView.getSpalteSucheMitarbeiter();
 
-		if (!(suche.equals("") || spalte.equals(""))) {
-			mitarbeiter.searchData(spalte, suche);
-		} else {
-			mitarbeiter.refreshData();
-		}
+		mitarbeiter.searchMitarbeiter(spalte, suche);
 	}
-
+	
+	
 	// ############### ActionListener
 
 	// Refresh-Button
@@ -134,7 +145,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			mitarbeiter.refreshData();
+			refreshMitarbeiter();
 		}
 
 	}
@@ -191,7 +202,8 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 * ################################################
 	 */
-
+	
+	//Refresh lädt die Liste neu aus der Datenbank
 	public void refreshKunden() {
 		kunden.setList(db.getKunden());
 	}
@@ -202,76 +214,9 @@ public class Main_Controller implements ListSelectionListener {
 		String suche = MainView.getTextSucheKunde();
 		String spalte = MainView.getSpalteSucheKunde();
 		
-		suche = suche.trim().toUpperCase();
-		
-		ArrayList<Kunde> searchList = new ArrayList<Kunde>();
-		
-		if (!(suche.equals("") || spalte.equals(""))) {
-			for (Kunde k : kunden.getList()) {
-				switch (spalte) {
-					case "ID":
-						if (k.idKunde.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Name":
-						if (k.idKunde.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Geburtstag":
-						if (k.idKunde.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Adresse":
-						if (k.getAdresse().toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Land":
-						if (k.land.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Erreichbarkeit":
-						if (k.erreichbar.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "E-Mail":
-						if (k.email.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Telefon":
-						if (k.telefon.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-					case "Username":
-						if (k.account.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(k);
-					break;
-				default:
-					break;
-				}
-			}
-			kunden.setSearch(searchList);
-		} else {
-			kunden.Reset();
-		}
+		kunden.searchKunde(spalte, suche);
 	}
-	
-	public Kunde getKundeWithID(String idKunde){
-		Kunde tmpKunde = new Kunde();
-		for (Kunde k : kunden.getList()) {
-				if(k.idKunde.matches(idKunde.trim()))
-					tmpKunde = k;
-		}
-		return tmpKunde;
-	}
+
 
 	// ############### ActionListener
 
@@ -347,52 +292,7 @@ public class Main_Controller implements ListSelectionListener {
 		String suche = MainView.getTextSucheTicket();
 		String spalte = MainView.getSpalteSucheTicket();
 
-		suche = suche.trim().toUpperCase();
-		
-		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
-
-		if (!(suche.equals("") || spalte.equals(""))) {
-			for (Ticket t : tickets.getList()) {
-				switch (spalte) {
-					case "ID":
-						if (t.idTicket.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-					case "Beschreibung":
-						if (t.beschreibung.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-					case "Level":
-						if (t.level.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-					case "Kategorie":
-						if (t.kategorie.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-					case "Priorität":
-						if (t.prioritaet.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-					case "Status":
-						if (t.status.toUpperCase().matches(
-								"(.*)" + suche + "(.*)"))
-							searchList.add(t);
-					break;
-
-				default:
-					break;
-				}
-			}
-			tickets.setSearch(searchList);
-		} else {
-			tickets.Reset();
-		}
+		tickets.searchTicket(spalte, suche);
 	}
 
 	// ########### ActionListener
@@ -491,7 +391,6 @@ public class Main_Controller implements ListSelectionListener {
 		public void keyPressed(KeyEvent key) {
 			if (key.getKeyCode() == KeyEvent.VK_ENTER)
 				ticketSuche();
-
 		}
 
 		@Override
@@ -523,14 +422,15 @@ public class Main_Controller implements ListSelectionListener {
 		if (selectedRow != -1) {
 
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
+			
 			Mitarbeiter tmpMitarbeiter = mitarbeiter
 					.getMitarbeiterWithID(tmpTicket.idMitarbeiter);
-			Kunde tmpKunde = getKundeWithID(tmpTicket.idKunde);
+			
+			Kunde tmpKunde = kunden.getKundeWithID(tmpTicket.idKunde);
 
 			// Set additional Info for selected Disc
 			// if no info exists label is set to '-'
-			try {
-
+			
 				MainView.setInfoBeschreibung(!(tmpTicket.beschreibung.trim()
 						.equals("")) ? tmpTicket.beschreibung : "-");
 				MainView.setInfoStatus(!(tmpTicket.status.trim().equals("")) ? tmpTicket.status
@@ -565,12 +465,6 @@ public class Main_Controller implements ListSelectionListener {
 						.equals("")) ? tmpKunde.erreichbar : "-");
 				MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim().equals("")) ? tmpKunde.telefon
 						: "-");
-
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null,
-						"Fehler bei der Ticket-Info", "Fehler",
-						JOptionPane.PLAIN_MESSAGE);
-			}
 
 		}
 

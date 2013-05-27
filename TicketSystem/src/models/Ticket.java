@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class Ticket extends Database_Model {
+public class Ticket{
 
 	public String idKunde;
 	public String idMitarbeiter;
@@ -50,6 +50,10 @@ public class Ticket extends Database_Model {
 		this.idKunde = idK;
 		this.idKategorie = kat;
 		this.idMitarbeiter = idM;
+	}
+
+	public Ticket() {
+		// TODO Auto-generated constructor stub
 	}
 
 	// Für die Daten in der Tabelle , nicht alle Daten verwendet -> restliche

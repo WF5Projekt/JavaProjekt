@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class Kunde extends Database_Model {
+public class Kunde{
 
 	public String idKunde;
 	public String name;
@@ -46,7 +46,7 @@ public class Kunde extends Database_Model {
 	}
 
 	public String getAdresse(){
-		return this.strasse +" "+ this.hausnummer + " - " + this.ort;
+		return this.strasse +" "+ this.hausnummer + " - " + this.plz + " " + this.ort;
 	}
 	
 	public Object[] toJTableArray() {
