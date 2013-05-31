@@ -33,6 +33,9 @@ public class Main_Controller implements ListSelectionListener {
 	private Mitarbeiter user;
 
 	public Ticket_Table tickets;
+	public Ticket_Table faq;
+	public Ticket_Table gelöst;
+	
 	public Kunde_Table kunden;
 	public Mitarbeiter_Table mitarbeiter;
 
@@ -75,7 +78,9 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
 
 		// Tabellen erstellen und Daten laden
-		this.tickets = new Ticket_Table();
+		this.tickets = new Ticket_Table("Tickets");
+		this.faq = new Ticket_Table("FAQ");
+		this.gelöst = new Ticket_Table("Gelöst");
 		this.kunden = new Kunde_Table();
 		this.mitarbeiter = new Mitarbeiter_Table();
 
@@ -87,7 +92,7 @@ public class Main_Controller implements ListSelectionListener {
 		this.priorität = new Priorität();
 		this.kategorie = new Kategorie();
 
-		this.MainView.setModel(tickets);
+		this.MainView.setTabelle(tickets);
 		this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
 
@@ -100,6 +105,11 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addListenerTicketNew(new ticketNewListener());
 		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
+		MainView.addListenerAllTickets(new getAllTickets());
+		MainView.addListenerNeueTickets(new getNeueTickets());
+		MainView.addListenerMeineTickets(new getMeineTickets());
+		MainView.addListenerGeschlosseneTickets(new getGeschlosseneTickets());
+		MainView.addListenerFAQTickets(new getFAQTickets());
 
 		// Buttons im Kunden-Tab
 		MainView.addListenerKundeRefresh(new kundeRefreshListener());
@@ -282,7 +292,10 @@ public class Main_Controller implements ListSelectionListener {
 	 */
 	public void refreshTickets() {
 		tickets.setList(db.getTickets());
+		faq.setList(db.getFAQTickets());
+		gelöst.setList(db.getGelösteTickets());
 	}
+
 
 	// Methode ruft Such-Procedure der Datenbank mit Werten aus
 	// Suchfeld+Suchspalte auf
@@ -293,7 +306,57 @@ public class Main_Controller implements ListSelectionListener {
 		tickets.searchTicket(spalte, suche);
 	}
 
-	// ########### ActionListener
+	// ########### ActionListener Klassen
+	
+	/*
+	MainView.addListenerAllTickets(new getAllTickets());
+	MainView.addListenerTicketNew(new getNeueTickets());
+	MainView.addListenerMeineTickets(new getMeineTickets());
+	MainView.addListenerGeschlosseneTickets(new getGeschlosseneTickets());
+	MainView.addListenerFAQTickets(new getFAQTickets());
+*/
+	class getAllTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MainView.setTabelle(tickets);
+		}
+		
+	}
+	class getNeueTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MainView.setTabelle(tickets);
+			tickets.getNeueTickets();
+		}
+		
+	}
+	class getMeineTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MainView.setTabelle(tickets);
+			tickets.getMeineTickets(user);
+		}
+		
+	}
+	class getGeschlosseneTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MainView.setTabelle(gelöst);
+		}
+		
+	}
+	class getFAQTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MainView.setTabelle(faq);
+		}
+		
+	}
 
 	// Refresh-Button
 	class ticketRefreshListener implements ActionListener {
@@ -372,6 +435,9 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 
+	
+	
+	
 	// Suchbutton ruft die TicketSuche() auf mit Klick auf Button
 	class ticketSucheListener implements ActionListener {
 

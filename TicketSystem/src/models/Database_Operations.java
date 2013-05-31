@@ -35,21 +35,27 @@ public class Database_Operations extends Database_Model {
 			String beschreibung = result.getString(3);
 			String tmploesung = result.getString(4);
 			String ersteller = result.getString(5);
-			String kategorie = result.getString(6);
 
 			// Ticketdaten Kunde
-			String idKunde = result.getString(7);
+			String idKunde = result.getString(6);
 
-			String prioritaet = result.getString(9);
-			String status = result.getString(10);
-			String level = result.getString(11);
+			String idKategorie = result.getString(8);
+			String kategorie = result.getString(9);
+			String idPrioritaet = result.getString(10);
+			String prioritaet = result.getString(11);
+			String idStatus = result.getString(12);
+			String status = result.getString(13);
+			String idLevel = result.getString(14);
+			String level = result.getString(15);
 
 			// Ticketdaten Mitarbeiter
-			String idMitarbeiter = result.getString(12);
+			String idMitarbeiter = result.getString(16);
 
-			newTicket = new Ticket(idKunde, idMitarbeiter, ersteller, idTicket,
-					level, kategorie, prioritaet, status, beschreibung,
-					tmploesung, erstellzeitpunkt);
+			newTicket = new  Ticket( idTicket,  erstellzeitpunkt,
+					 beschreibung,  tmploesung,  ersteller,
+					 idKunde,  idKategorie,  kategorie,
+					 idPrioritaet,  prioritaet,  idStatus,
+					 status,  idLevel,  level,  idMitarbeiter);
 
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
@@ -59,7 +65,67 @@ public class Database_Operations extends Database_Model {
 		return newTicket;
 
 	}
+	private static Ticket getFAQticketsWithResultSet(ResultSet result) {
 
+		Ticket newTicket = null;
+
+		try {
+
+			// Daten Ticket
+			String idFAQ = result.getString(1);
+			String beschreibung = result.getString(2);
+			String tmploesung = result.getString(3);
+
+			String idKategorie = result.getString(4);
+			String kategorie = result.getString(5);
+			String idTicket = result.getString(6);
+			String idKunde = result.getString(7);
+			String idMitarbeiter = result.getString(9);
+
+			newTicket = new  Ticket( idFAQ,  beschreibung,  tmploesung,
+					 idKategorie,  kategorie,  idTicket,  idKunde,  idMitarbeiter);
+
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Fehler in FAQTicket_GetTicketWithResultSet");
+		}
+
+		return newTicket;
+
+	}
+	private static Ticket getGelöstesTicketWithResultSet(ResultSet result) {
+
+		Ticket newTicket = null;
+
+		try {
+
+			// Daten Ticket
+			String idTicket = result.getString(1);
+			String erstellzeitpunkt = result.getString(2);
+			String beschreibung = result.getString(3);
+			String tmploesung = result.getString(4);
+			String ersteller = result.getString(5);
+			String idKunde = result.getString(6);
+			String kunde = result.getString(7);
+			String idKategorie = result.getString(8);
+			String kategorie = result.getString(9);
+			String idMitarbeiter = result.getString(10);
+			String mitarbeiter = result.getString(11);
+
+			newTicket = new  Ticket( idTicket,  erstellzeitpunkt,
+					 beschreibung,  tmploesung,  ersteller,
+					 idKunde,  kunde,  idKategorie,  kategorie,
+					 idMitarbeiter,  mitarbeiter);
+
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Fehler in Gelöstes-Ticket_GetTicketWithResultSet");
+		}
+
+		return newTicket;
+
+	}
+	
 	// Gibt eine Liste aller Tickets zurück
 	public ArrayList<Ticket> getTickets() {
 
@@ -87,7 +153,62 @@ public class Database_Operations extends Database_Model {
 		}
 		return tickets;
 	}
+	
+	// Gibt eine Liste aller FAQ-Tickets zurück
+	public ArrayList<Ticket> getFAQTickets() {
 
+		// DB verbinden
+		Connection con = getConnection();
+
+		// Liste der Tickets erstellen
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+		Statement query;
+		try {
+			query = con.createStatement();
+			String sql = "select * FROM `allFAQtickets`";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getFAQticketsWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei FAQ-Ticket-Abfrage)");
+		}
+		return tickets;
+	}
+	// Gibt die Liste der Gelösten Tickets zurück
+	public ArrayList<Ticket> getGelösteTickets() {
+
+		// DB verbinden
+		Connection con = getConnection();
+
+		// Liste der Tickets erstellen
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+		Statement query;
+		try {
+			query = con.createStatement();
+			String sql = "select * FROM `allgelöste`";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getGelöstesTicketWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showInputDialog("Fehler bei Gelöstes-Ticket-Abfrage)");
+		}
+		return tickets;
+	}
+	
 	// Rufe nur Tickets von einem Kunden auf
 	public static ArrayList<Ticket> getTicketsKunde(String idKunde) {
 
@@ -149,7 +270,7 @@ public class Database_Operations extends Database_Model {
 			Statement stmt = con.createStatement();
 			String query = "call erstelleTicketJava( '" + t.beschreibung
 					+ "', '" + t.idKunde + "', '" + t.idKategorie + "', '"
-					+ t.idPriorität + "', '" + t.idMitarbeiter + "')";
+					+ t.idPrioritaet + "', '" + t.idMitarbeiter + "')";
 
 			stmt.execute(query);
 			stmt.close();

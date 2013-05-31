@@ -7,11 +7,24 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Ticket_Table extends AbstractTableModel {
 
-	private String[] columnNames = Ticket.getColumnNames();
+	
+	private String[] columnNames;
+	private String art;
 
 	private ArrayList<Ticket> tickets;
 	private ArrayList<Ticket> backup;
 
+	public Ticket_Table(String art){
+		if(art.equals("Tickets"))
+			columnNames = Ticket.getColumnNames();
+		if(art.equals("FAQ")){
+			columnNames = Ticket.getFAQColumnNames();
+		}
+		if(art.equals("Gelöst"))
+			columnNames = Ticket.getGelöstColumnNames();
+		this.art = art;
+	}
+	
 	public void setList(ArrayList<Ticket> tickets) {
 		this.tickets = tickets;
 		this.backup = tickets;
@@ -83,7 +96,36 @@ public class Ticket_Table extends AbstractTableModel {
 				tmpTicket = t;
 		return tmpTicket;
 	}
+	
+	public void getNeueTickets(){
+		
+		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+		
+		for (Ticket t : backup) {
+		
+				if (t.idStatus.matches("1") && t.idMitarbeiter == null)
+					searchList.add(t);
+		
+		}
+		this.tickets = searchList;
+		
+		fireTableDataChanged();
+	}
+	public void getMeineTickets(Mitarbeiter user){
+		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+		
+		for (Ticket t : backup) {
+		
+				if (t.idMitarbeiter != null && t.idMitarbeiter.matches(user.idMitarbeiter))
+					searchList.add(t);
+		
+		}
+		this.tickets = searchList;
+		
+		fireTableDataChanged();
+	}
 
+	
 	public Ticket getTicketAtRow(int row) {
 		return tickets.get(row);
 	}
@@ -105,7 +147,13 @@ public class Ticket_Table extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int row, int col) {
-		return tickets.get(row).getValue(col);
+		
+		if(art.equals("Tickets"))
+			return tickets.get(row).getValue(col);
+		else if(art.equals("FAQ"))
+			return tickets.get(row).getFAQValue(col);
+		else
+			return tickets.get(row).getGelöstValue(col);
 	}
 
 }

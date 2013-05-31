@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import sonstiges.MD5;
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class Login_View extends JFrame {
@@ -46,7 +47,7 @@ public class Login_View extends JFrame {
 		setBackground(Color.DARK_GRAY);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 371, 127);
+		setBounds(100, 100, 199, 151);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("Button.light"));
 		contentPane.setBorder(null);
@@ -55,7 +56,7 @@ public class Login_View extends JFrame {
 		txt_username.setBackground(UIManager.getColor("TextField.background"));
 		txt_username.setFont(new Font("Tahoma", Font.BOLD, 15));
 
-		txt_username.setBounds(78, 11, 95, 25);
+		txt_username.setBounds(78, 11, 105, 25);
 		contentPane.add(txt_username);
 		txt_username.setColumns(10);
 
@@ -68,17 +69,18 @@ public class Login_View extends JFrame {
 		JLabel lblPasswort = new JLabel("Passwort");
 		lblPasswort.setForeground(Color.BLACK);
 		lblPasswort.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblPasswort.setBounds(183, 15, 68, 14);
+		lblPasswort.setBounds(10, 53, 68, 14);
 		contentPane.add(lblPasswort);
 		txt_passwort.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txt_passwort.setBackground(UIManager.getColor("TextField.background"));
 
-		txt_passwort.setBounds(251, 11, 104, 25);
+		txt_passwort.setBounds(78, 47, 105, 25);
 		contentPane.add(txt_passwort);
+		btn_Login.setIcon(new ImageIcon(Login_View.class.getResource("/lib/png/login.png")));
 		btn_Login.setBackground(UIManager.getColor("Button.background"));
-		btn_Login.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btn_Login.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		btn_Login.setBounds(10, 47, 345, 42);
+		btn_Login.setBounds(10, 88, 173, 25);
 		contentPane.add(btn_Login);
 
 		this.setLocationRelativeTo(null);

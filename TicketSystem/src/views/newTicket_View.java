@@ -20,6 +20,8 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 
 import org.jdesktop.swingx.autocomplete.*;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class newTicket_View extends JFrame {
 	
@@ -32,6 +34,7 @@ public class newTicket_View extends JFrame {
 	public JComboBox<String> kunde;
 
 	public newTicket_View() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(newTicket_View.class.getResource("/lib/png/add.png")));
 		setUndecorated(true);
 		setResizable(false);
 		setAutoRequestFocus(false);
@@ -135,10 +138,12 @@ public class newTicket_View extends JFrame {
 		getContentPane().add(panel_4, BorderLayout.SOUTH);
 		
 		btn_Eröffnen = new JButton("Ticket er\u00F6ffnen");
+		btn_Eröffnen.setIcon(new ImageIcon(newTicket_View.class.getResource("/lib/png/save.png")));
 	
 		panel_4.add(btn_Eröffnen);
 		
 		btn_Abbruch = new JButton("Abbrechen");
+		btn_Abbruch.setIcon(new ImageIcon(newTicket_View.class.getResource("/lib/png/cancel.png")));
 		btn_Abbruch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();

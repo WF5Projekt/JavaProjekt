@@ -1,70 +1,55 @@
 package views;
 
 import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTabbedPane;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 
 import models.Kunde_Table;
 import models.Mitarbeiter_Table;
 import models.Ticket_Table;
-import javax.swing.JLabel;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import java.awt.Button;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.BoxLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.ImageIcon;
-import javax.swing.JList;
-import javax.swing.JToggleButton;
-import javax.swing.JSeparator;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.CardLayout;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.MatteBorder;
-import java.awt.Window.Type;
-import java.awt.Dimension;
 
 @SuppressWarnings("serial")
 public class Main_View extends JFrame {
 
 
 	private JPanel contentPane;
-	private JTabbedPane ticketView;
 	private JPanel mitarbeiterView;
 	private JPanel kundenView;
+	private JPanel ticketView;
 
 	//Ticket-Tab
 	private JScrollPane TicketscrollPane;
@@ -91,6 +76,11 @@ public class Main_View extends JFrame {
 	private JButton btn_ticketRefresh;
 	private JButton btn_sucheTicket;
 	private JButton btn_ticketNew;
+	private JButton btn_AllTickets;
+	private JButton btn_NeueTickets;
+	private JButton btn_MeineTickets;
+	private JButton btn_GeschlosseneTickets;
+	private JButton btn_FAQTickets;
 	
 	private JComboBox<String> combo_sucheTicket;
 	private JTextField txt_sucheTicket;
@@ -114,7 +104,7 @@ public class Main_View extends JFrame {
 	public JTable kunden;
 	
 	//Mitarbeiter-Tab
-	private JPanel panel_MitarbeiterButtons;
+	private JPanel panel_Fuﬂleiste;
 	private JPanel panel_2;
 	private JButton btn_mitarbeiterRefresh;
 	private JButton btn_mitarbeiterNew;
@@ -135,6 +125,11 @@ public class Main_View extends JFrame {
 	private JPanel panel_7;
 	private JPanel panel_8;
 	private JPanel panel_9;
+	private JPanel panel_10;
+	private JPanel panel_11;
+	private JButton btnBearbeiten;
+	private JPanel panel_12;
+	private JPanel panel_13;
 
 	public Main_View() {
 		setType(Type.POPUP);
@@ -171,14 +166,17 @@ public class Main_View extends JFrame {
 		panel_4.add(panel_6);
 		
 		showTickets = new JButton("Tickets");
+		showTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/connect.png")));
 		showTickets.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel_6.add(showTickets);
 		
 		btnKunden = new JButton("Kunden");
+		btnKunden.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/users.png")));
 		btnKunden.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel_6.add(btnKunden);
 		
 		btnMitarbeiter = new JButton("Mitarbeiter");
+		btnMitarbeiter.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/user-male-alt-3.png")));
 		btnMitarbeiter.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel_6.add(btnMitarbeiter);
 		btnMitarbeiter.addActionListener(new ActionListener() {
@@ -220,67 +218,138 @@ public class Main_View extends JFrame {
 		panel_5.setBackground(new Color(245, 245, 245));
 		contentPane.add(panel_5, BorderLayout.CENTER);
 		panel_5.setLayout(new CardLayout(0, 0));
-
-		ticketView = new JTabbedPane(JTabbedPane.TOP);
-		ticketView.setMinimumSize(new Dimension(10, 5));
-		ticketView.setBorder(null);
-		panel_5.add(ticketView, "name_463006202964198");
-		ticketView.setForeground(new Color(0, 0, 0));
-		ticketView.setBackground(new Color(245, 245, 245));
-		ticketView.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		ticketView.setOpaque(true);
 		
-				JPanel AlleTickets = new JPanel();
-				AlleTickets.setBackground(new Color(245, 245, 245));
-				AlleTickets.setVisible(false);
-				ticketView.addTab("Alle", null, AlleTickets, null);
-				ticketView.setEnabledAt(0, true);
-						AlleTickets.setLayout(new BorderLayout(2, 0));
-				
-				
-						JPanel panel_buttons = new JPanel();
-						panel_buttons.setBorder(new EmptyBorder(4, 1, 4, 1));
-						AlleTickets.add(panel_buttons, BorderLayout.SOUTH);
-						panel_buttons.setLayout(new BoxLayout(panel_buttons, BoxLayout.X_AXIS));
+				ticketView = new JPanel();
+				panel_5.add(ticketView, "name_581222764885545");
+				ticketView.setBackground(new Color(245, 245, 245));
+				ticketView.setVisible(false);
+				ticketView.setLayout(new BorderLayout(0, 0));
 						
-								btn_ticketRefresh = new JButton("Aktualisieren");
-								
-										panel_buttons.add(btn_ticketRefresh);
-										
-												btn_ticketNew = new JButton("Ticket er\u00F6ffnen");
-												panel_buttons.add(btn_ticketNew);
+						panel_10 = new JPanel();
+						panel_10.setBorder(new EmptyBorder(2, 1, 0, 2));
+						ticketView.add(panel_10, BorderLayout.WEST);
+						GridBagLayout gbl_panel_10 = new GridBagLayout();
+						gbl_panel_10.columnWidths = new int[]{0, 0};
+						gbl_panel_10.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+						gbl_panel_10.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+						gbl_panel_10.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+						panel_10.setLayout(gbl_panel_10);
 												
-														panel = new JPanel();
-														FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-														flowLayout.setAlignment(FlowLayout.RIGHT);
-														panel_buttons.add(panel);
+														btn_ticketRefresh = new JButton("Aktualisieren");
+														btn_ticketRefresh.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/3D-Z-Axis-Rotation.png")));
+														btn_ticketRefresh.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
+														GridBagConstraints gbc_btn_ticketRefresh = new GridBagConstraints();
+														gbc_btn_ticketRefresh.anchor = GridBagConstraints.NORTH;
+														gbc_btn_ticketRefresh.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_ticketRefresh.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_ticketRefresh.gridx = 0;
+														gbc_btn_ticketRefresh.gridy = 0;
+														panel_10.add(btn_ticketRefresh, gbc_btn_ticketRefresh);
 														
-																txt_sucheTicket = new JTextField();
-																panel.add(txt_sucheTicket);
-																txt_sucheTicket.setColumns(10);
-																
-																		combo_sucheTicket = new JComboBox<String>();
-																		combo_sucheTicket.setMaximumRowCount(10);
-																		panel.add(combo_sucheTicket);
-																		
-																				btn_sucheTicket = new JButton("Suche");
-																				panel.add(btn_sucheTicket);
+																btn_ticketNew = new JButton("Neues Ticket");
+																btn_ticketNew.setHorizontalAlignment(SwingConstants.LEFT);
+																btn_ticketNew.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/add.png")));
+																btn_ticketNew.setFont(new Font("Tahoma", Font.BOLD, 12));
+																GridBagConstraints gbc_btn_ticketNew = new GridBagConstraints();
+																gbc_btn_ticketNew.fill = GridBagConstraints.HORIZONTAL;
+																gbc_btn_ticketNew.insets = new Insets(0, 0, 5, 0);
+																gbc_btn_ticketNew.gridx = 0;
+																gbc_btn_ticketNew.gridy = 1;
+																panel_10.add(btn_ticketNew, gbc_btn_ticketNew);
+														
+														btnBearbeiten = new JButton("Bearbeiten");
+														btnBearbeiten.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/edit.png")));
+														btnBearbeiten.setHorizontalAlignment(SwingConstants.LEFT);
+														btnBearbeiten.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btnBearbeiten = new GridBagConstraints();
+														gbc_btnBearbeiten.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btnBearbeiten.insets = new Insets(0, 0, 5, 0);
+														gbc_btnBearbeiten.gridx = 0;
+														gbc_btnBearbeiten.gridy = 2;
+														panel_10.add(btnBearbeiten, gbc_btnBearbeiten);
+														
+														panel_11 = new JPanel();
+														GridBagConstraints gbc_panel_11 = new GridBagConstraints();
+														gbc_panel_11.insets = new Insets(0, 0, 5, 0);
+														gbc_panel_11.gridx = 0;
+														gbc_panel_11.gridy = 3;
+														panel_10.add(panel_11, gbc_panel_11);
+														panel_11.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+														
+														btn_AllTickets = new JButton("Alle Tickets");
+														btn_AllTickets.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_AllTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/list.png")));
+														btn_AllTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_AllTickets = new GridBagConstraints();
+														gbc_btn_AllTickets.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_AllTickets.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_AllTickets.gridx = 0;
+														gbc_btn_AllTickets.gridy = 4;
+														panel_10.add(btn_AllTickets, gbc_btn_AllTickets);
+														
+														btn_NeueTickets = new JButton("Neue Tickets");
+														btn_NeueTickets.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_NeueTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/connect.png")));
+														btn_NeueTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_NeueTickets = new GridBagConstraints();
+														gbc_btn_NeueTickets.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_NeueTickets.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_NeueTickets.gridx = 0;
+														gbc_btn_NeueTickets.gridy = 5;
+														panel_10.add(btn_NeueTickets, gbc_btn_NeueTickets);
+														
+														btn_MeineTickets = new JButton("Meine Tickets");
+														btn_MeineTickets.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_MeineTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/user-male.png")));
+														btn_MeineTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_MeineTickets = new GridBagConstraints();
+														gbc_btn_MeineTickets.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_MeineTickets.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_MeineTickets.gridx = 0;
+														gbc_btn_MeineTickets.gridy = 6;
+														panel_10.add(btn_MeineTickets, gbc_btn_MeineTickets);
+														
+														btn_GeschlosseneTickets = new JButton("Gel\u00F6ste Tickets");
+														btn_GeschlosseneTickets.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_GeschlosseneTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/check.png")));
+														btn_GeschlosseneTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_GeschlosseneTickets = new GridBagConstraints();
+														gbc_btn_GeschlosseneTickets.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_GeschlosseneTickets.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_GeschlosseneTickets.gridx = 0;
+														gbc_btn_GeschlosseneTickets.gridy = 7;
+														panel_10.add(btn_GeschlosseneTickets, gbc_btn_GeschlosseneTickets);
+														
+														btn_FAQTickets = new JButton("FAQ");
+														btn_FAQTickets.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_FAQTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/help.png")));
+														btn_FAQTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_FAQTickets = new GridBagConstraints();
+														gbc_btn_FAQTickets.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_FAQTickets.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_FAQTickets.gridx = 0;
+														gbc_btn_FAQTickets.gridy = 8;
+														panel_10.add(btn_FAQTickets, gbc_btn_FAQTickets);
+						
+						panel_9 = new JPanel();
+						ticketView.add(panel_9, BorderLayout.CENTER);
+																						panel_9.setLayout(new BorderLayout(0, 0));
 																				
 																						TicketscrollPane = new JScrollPane();
+																						panel_9.add(TicketscrollPane, BorderLayout.CENTER);
+																						TicketscrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 																						TicketscrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-																						AlleTickets.add(TicketscrollPane, BorderLayout.NORTH);
 																						
 																						tickets = new JTable();
 																						tickets.setFont(new Font("Calibri", Font.BOLD, 15));
 																						tickets.setFillsViewportHeight(true);
 																						tickets.setBackground(new Color(240, 248, 255));
-																						TicketscrollPane.setViewportView(tickets);
 																						
 																								panel_ticketdetails = new JPanel();
+																								panel_9.add(panel_ticketdetails, BorderLayout.SOUTH);
 																								panel_ticketdetails.setBackground(new Color(245, 245, 245));
-																								AlleTickets.add(panel_ticketdetails);
 																								panel_ticketdetails.setBorder(null);
-																								panel_ticketdetails.setLayout(new GridLayout(0, 1, 0, 0));
+																								panel_ticketdetails.setLayout(new BorderLayout(0, 0));
 																								
 																										JPanel panelInfoTicket = new JPanel();
 																										panelInfoTicket.setBackground(new Color(245, 245, 245));
@@ -327,74 +396,24 @@ public class Main_View extends JFrame {
 																																																		_level = new JLabel("-");
 																																																		_level.setVerticalAlignment(SwingConstants.TOP);
 																																																		_level.setHorizontalAlignment(SwingConstants.LEFT);
-																																																		panel_ticketdetails.add(panelInfoTicket);
-																																																		GroupLayout gl_panelInfoTicket = new GroupLayout(panelInfoTicket);
-																																																		gl_panelInfoTicket.setHorizontalGroup(
-																																																			gl_panelInfoTicket.createParallelGroup(Alignment.TRAILING)
-																																																				.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																					.addContainerGap()
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.TRAILING)
-																																																						.addComponent(lblKundendaten)
-																																																						.addComponent(lblErstellzeitpunkt, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-																																																					.addGap(18)
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																						.addComponent(_erstellzeitpunkt, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-																																																						.addComponent(_beschreibung, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE))
-																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																							.addGap(10)
-																																																							.addComponent(lblKategorie, GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
-																																																						.addComponent(lblStatus, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-																																																						.addComponent(lblPrioritt, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-																																																						.addComponent(lblLevek, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																							.addComponent(_kategorie, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-																																																							.addContainerGap())
-																																																						.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																							.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																								.addComponent(_status, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-																																																								.addContainerGap())
-																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																								.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																									.addComponent(_level, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-																																																									.addContainerGap())
-																																																								.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																									.addComponent(_priorit‰t, GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-																																																									.addGap(501))))))
-																																																		);
-																																																		gl_panelInfoTicket.setVerticalGroup(
-																																																			gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
-																																																				.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
-																																																						.addComponent(lblStatus)
-																																																						.addComponent(lblErstellzeitpunkt)
-																																																						.addComponent(_erstellzeitpunkt)
-																																																						.addComponent(_status))
-																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
-																																																						.addComponent(lblKundendaten)
-																																																						.addComponent(_beschreibung, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
-																																																							.addComponent(lblPrioritt)
-																																																							.addGap(5)
-																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
-																																																								.addComponent(lblLevek)
-																																																								.addComponent(_level))
-																																																							.addGap(7)
-																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
-																																																								.addComponent(lblKategorie)
-																																																								.addComponent(_kategorie)))
-																																																						.addComponent(_priorit‰t))
-																																																					.addGap(103))
-																																																		);
-																																																		panelInfoTicket.setLayout(gl_panelInfoTicket);
+																																																		panel_ticketdetails.add(panelInfoTicket, BorderLayout.CENTER);
+																																																		panelInfoTicket.setLayout(new MigLayout("", "[82px][395px][82px][131px]", "[14px][14px][5px][14px][7px][35px]"));
+																																																		panelInfoTicket.add(lblKundendaten, "cell 0 1,alignx right,aligny top");
+																																																		panelInfoTicket.add(lblErstellzeitpunkt, "cell 0 0,growx,aligny top");
+																																																		panelInfoTicket.add(_erstellzeitpunkt, "cell 1 0,alignx left,aligny top");
+																																																		panelInfoTicket.add(_beschreibung, "cell 1 1 1 5,grow");
+																																																		panelInfoTicket.add(lblKategorie, "cell 2 5,growx,aligny top");
+																																																		panelInfoTicket.add(lblStatus, "cell 2 0,growx,aligny top");
+																																																		panelInfoTicket.add(lblPrioritt, "cell 2 1,alignx right,aligny top");
+																																																		panelInfoTicket.add(lblLevek, "cell 2 3,growx,aligny top");
+																																																		panelInfoTicket.add(_kategorie, "cell 3 5,growx,aligny top");
+																																																		panelInfoTicket.add(_status, "cell 3 0,growx,aligny top");
+																																																		panelInfoTicket.add(_level, "cell 3 3,growx,aligny top");
+																																																		panelInfoTicket.add(_priorit‰t, "cell 3 1,growx,aligny top");
 																																																		
 																																																		panel_3 = new JPanel();
 																																																		panel_3.setBackground(new Color(245, 245, 245));
-																																																		panel_ticketdetails.add(panel_3);
+																																																		panel_ticketdetails.add(panel_3, BorderLayout.SOUTH);
 																																																		panel_3.setLayout(new GridLayout(0, 2, 0, 0));
 																																																		
 																																																				JPanel panelInfoMitarbeiter = new JPanel();
@@ -418,204 +437,233 @@ public class Main_View extends JFrame {
 																																																										_email_m = new JLabel("-");
 																																																										_email_m.setVerticalAlignment(SwingConstants.TOP);
 																																																										_email_m.setHorizontalAlignment(SwingConstants.LEFT);
+																																																										
+																																																												_nachname_m = new JLabel("-");
+																																																												_nachname_m.setVerticalAlignment(SwingConstants.TOP);
+																																																												_nachname_m.setHorizontalAlignment(SwingConstants.LEFT);
 																																																												
-																																																														_nachname_m = new JLabel("-");
-																																																														_nachname_m.setVerticalAlignment(SwingConstants.TOP);
-																																																														_nachname_m.setHorizontalAlignment(SwingConstants.LEFT);
+																																																														_telefon_m = new JLabel("-");
+																																																														_telefon_m.setVerticalAlignment(SwingConstants.TOP);
+																																																														_telefon_m.setHorizontalAlignment(SwingConstants.LEFT);
 																																																														
-																																																																_telefon_m = new JLabel("-");
-																																																																_telefon_m.setVerticalAlignment(SwingConstants.TOP);
-																																																																_telefon_m.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																_abteilung.setVerticalAlignment(SwingConstants.TOP);
+																																																																_abteilung.setHorizontalAlignment(SwingConstants.LEFT);
 																																																																
-																																																																		_abteilung.setVerticalAlignment(SwingConstants.TOP);
-																																																																		_abteilung.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																		
-																																																																		JLabel lblHelpdesk = new JLabel("HelpDesk:");
-																																																																		lblHelpdesk.setHorizontalAlignment(SwingConstants.RIGHT);
-																																																																		
-																																																																		_level_m = new JLabel("-");
-																																																																		_level_m.setVerticalAlignment(SwingConstants.TOP);
-																																																																		_level_m.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																		
-																																																																		JLabel lblUsername = new JLabel("Username:");
-																																																																		lblUsername.setHorizontalAlignment(SwingConstants.RIGHT);
-																																																																		
-																																																																		_account_m = new JLabel("-");
-																																																																		_account_m.setVerticalAlignment(SwingConstants.TOP);
-																																																																		_account_m.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																		GroupLayout gl_panelInfoMitarbeiter = new GroupLayout(
-																																																																				panelInfoMitarbeiter);
-																																																																		gl_panelInfoMitarbeiter.setHorizontalGroup(
-																																																																			gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																JLabel lblHelpdesk = new JLabel("HelpDesk:");
+																																																																lblHelpdesk.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																
+																																																																_level_m = new JLabel("-");
+																																																																_level_m.setVerticalAlignment(SwingConstants.TOP);
+																																																																_level_m.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																
+																																																																JLabel lblUsername = new JLabel("Username:");
+																																																																lblUsername.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																
+																																																																_account_m = new JLabel("-");
+																																																																_account_m.setVerticalAlignment(SwingConstants.TOP);
+																																																																_account_m.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																GroupLayout gl_panelInfoMitarbeiter = new GroupLayout(
+																																																																		panelInfoMitarbeiter);
+																																																																gl_panelInfoMitarbeiter.setHorizontalGroup(
+																																																																	gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																		.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
+																																																																			.addGap(19)
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.TRAILING)
+																																																																				.addComponent(lblName_1, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+																																																																				.addComponent(lblTelefon_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																				.addComponent(lblEmail_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
+																																																																			.addGap(6)
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING, false)
+																																																																				.addComponent(_email_m, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																																																																				.addComponent(_telefon_m, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																																																																				.addComponent(_nachname_m, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+																																																																			.addGap(18)
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
 																																																																				.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																					.addGap(19)
-																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.TRAILING)
-																																																																						.addComponent(lblName_1, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-																																																																						.addComponent(lblTelefon_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-																																																																						.addComponent(lblEmail_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-																																																																					.addGap(6)
-																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING, false)
-																																																																						.addComponent(_email_m, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-																																																																						.addComponent(_telefon_m, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-																																																																						.addComponent(_nachname_m, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
-																																																																					.addGap(18)
 																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
 																																																																						.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																							.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
-																																																																								.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																									.addComponent(lblAbteilung, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-																																																																									.addGap(18)
-																																																																									.addComponent(_abteilung, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-																																																																									.addGap(13))
-																																																																								.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																									.addComponent(lblHelpdesk, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-																																																																									.addGap(18)
-																																																																									.addComponent(_level_m, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-																																																																									.addPreferredGap(ComponentPlacement.RELATED)))
-																																																																							.addGap(7))
-																																																																						.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																							.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																							.addComponent(lblAbteilung, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
 																																																																							.addGap(18)
-																																																																							.addComponent(_account_m, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-																																																																							.addContainerGap())))
-																																																																		);
-																																																																		gl_panelInfoMitarbeiter.setVerticalGroup(
-																																																																			gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																							.addComponent(_abteilung, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+																																																																							.addGap(13))
+																																																																						.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
+																																																																							.addComponent(lblHelpdesk, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																							.addGap(18)
+																																																																							.addComponent(_level_m, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+																																																																							.addPreferredGap(ComponentPlacement.RELATED)))
+																																																																					.addGap(7))
 																																																																				.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
-																																																																					.addContainerGap()
-																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.TRAILING)
-																																																																						.addComponent(lblName_1)
-																																																																						.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
-																																																																							.addComponent(_nachname_m)
-																																																																							.addComponent(lblAbteilung)
-																																																																							.addComponent(_abteilung)))
-																																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
-																																																																						.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
-																																																																							.addComponent(_telefon_m)
-																																																																							.addComponent(lblTelefon_1))
-																																																																						.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
-																																																																							.addComponent(_level_m)
-																																																																							.addComponent(lblHelpdesk)))
-																																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																																					.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
-																																																																						.addComponent(lblUsername)
-																																																																						.addComponent(_account_m)
-																																																																						.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
-																																																																							.addComponent(_email_m)
-																																																																							.addComponent(lblEmail_1, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))))
-																																																																		);
-																																																																		panelInfoMitarbeiter.setLayout(gl_panelInfoMitarbeiter);
+																																																																					.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																					.addGap(18)
+																																																																					.addComponent(_account_m, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+																																																																					.addContainerGap())))
+																																																																);
+																																																																gl_panelInfoMitarbeiter.setVerticalGroup(
+																																																																	gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																		.addGroup(gl_panelInfoMitarbeiter.createSequentialGroup()
+																																																																			.addContainerGap()
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.TRAILING)
+																																																																				.addComponent(lblName_1)
+																																																																				.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
+																																																																					.addComponent(_nachname_m)
+																																																																					.addComponent(lblAbteilung)
+																																																																					.addComponent(_abteilung)))
+																																																																			.addPreferredGap(ComponentPlacement.RELATED)
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																				.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
+																																																																					.addComponent(_telefon_m)
+																																																																					.addComponent(lblTelefon_1))
+																																																																				.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
+																																																																					.addComponent(_level_m)
+																																																																					.addComponent(lblHelpdesk)))
+																																																																			.addPreferredGap(ComponentPlacement.RELATED)
+																																																																			.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.LEADING)
+																																																																				.addComponent(lblUsername)
+																																																																				.addComponent(_account_m)
+																																																																				.addGroup(gl_panelInfoMitarbeiter.createParallelGroup(Alignment.BASELINE)
+																																																																					.addComponent(_email_m)
+																																																																					.addComponent(lblEmail_1, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))))
+																																																																);
+																																																																panelInfoMitarbeiter.setLayout(gl_panelInfoMitarbeiter);
+																																																																
+																																																																		JPanel panelInfoErsteller = new JPanel();
+																																																																		panelInfoErsteller.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+																																																																		panel_3.add(panelInfoErsteller);
+																																																																		panelInfoErsteller.setBorder(new TitledBorder(null, "Ersteller",
+																																																																				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 																																																																		
-																																																																				JPanel panelInfoErsteller = new JPanel();
-																																																																				panel_3.add(panelInfoErsteller);
-																																																																				panelInfoErsteller.setBorder(new TitledBorder(null, "Ersteller",
-																																																																						TitledBorder.LEADING, TitledBorder.TOP, null, null));
+																																																																				JLabel lblTelefon = new JLabel("Telefon:");
+																																																																				lblTelefon.setHorizontalAlignment(SwingConstants.RIGHT);
 																																																																				
-																																																																						JLabel lblTelefon = new JLabel("Telefon:");
-																																																																						lblTelefon.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																						JLabel lblName = new JLabel("Name:");
+																																																																						lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 																																																																						
-																																																																								JLabel lblName = new JLabel("Name:");
-																																																																								lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																								_name_k = new JLabel("-");
+																																																																								_name_k.setVerticalAlignment(SwingConstants.TOP);
+																																																																								_name_k.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																								
+																																																																										JLabel lblEmail = new JLabel("Email:");
+																																																																										lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
 																																																																										
-																																																																												_name_k = new JLabel("-");
-																																																																												_name_k.setVerticalAlignment(SwingConstants.TOP);
-																																																																												_name_k.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																												_email_k = new JLabel("-");
+																																																																												_email_k.setVerticalAlignment(SwingConstants.TOP);
+																																																																												_email_k.setHorizontalAlignment(SwingConstants.LEFT);
 																																																																												
-																																																																														JLabel lblEmail = new JLabel("Email:");
-																																																																														lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																														_telefon_k = new JLabel("-");
+																																																																														_telefon_k.setVerticalAlignment(SwingConstants.TOP);
+																																																																														_telefon_k.setHorizontalAlignment(SwingConstants.LEFT);
 																																																																														
-																																																																																_email_k = new JLabel("-");
-																																																																																_email_k.setVerticalAlignment(SwingConstants.TOP);
-																																																																																_email_k.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																																
-																																																																																		_telefon_k = new JLabel("-");
-																																																																																		_telefon_k.setVerticalAlignment(SwingConstants.TOP);
-																																																																																		_telefon_k.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																																		
-																																																																																		_erreichbarkeit = new JLabel("-");
-																																																																																		_erreichbarkeit.setVerticalAlignment(SwingConstants.TOP);
-																																																																																		_erreichbarkeit.setHorizontalAlignment(SwingConstants.LEFT);
-																																																																																		
-																																																																																		lblErreichbar = new JLabel("Erreichbar:");
-																																																																																		lblErreichbar.setHorizontalAlignment(SwingConstants.RIGHT);
-																																																																																		GroupLayout gl_panelInfoErsteller = new GroupLayout(panelInfoErsteller);
-																																																																																		gl_panelInfoErsteller.setHorizontalGroup(
-																																																																																			gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
-																																																																																				.addGroup(gl_panelInfoErsteller.createSequentialGroup()
-																																																																																					.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-																																																																																					.addPreferredGap(ComponentPlacement.UNRELATED)
-																																																																																					.addComponent(_name_k, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
-																																																																																					.addGap(18)
-																																																																																					.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.TRAILING)
-																																																																																						.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-																																																																																						.addComponent(lblTelefon, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-																																																																																						.addComponent(lblErreichbar, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-																																																																																					.addPreferredGap(ComponentPlacement.UNRELATED)
-																																																																																					.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING, false)
-																																																																																						.addComponent(_email_k, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-																																																																																						.addComponent(_telefon_k, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-																																																																																						.addComponent(_erreichbarkeit, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
-																																																																																					.addContainerGap(104, Short.MAX_VALUE))
-																																																																																		);
-																																																																																		gl_panelInfoErsteller.setVerticalGroup(
-																																																																																			gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
-																																																																																				.addGroup(gl_panelInfoErsteller.createSequentialGroup()
-																																																																																					.addContainerGap()
-																																																																																					.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
-																																																																																						.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
-																																																																																							.addComponent(lblTelefon)
-																																																																																							.addComponent(_telefon_k))
-																																																																																						.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.TRAILING)
-																																																																																							.addComponent(_name_k)
-																																																																																							.addComponent(lblName)))
-																																																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																																																					.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
-																																																																																						.addComponent(_email_k)
-																																																																																						.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
-																																																																																					.addPreferredGap(ComponentPlacement.RELATED)
-																																																																																					.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
-																																																																																						.addComponent(_erreichbarkeit)
-																																																																																						.addComponent(lblErreichbar))
-																																																																																					.addContainerGap(34, Short.MAX_VALUE))
-																																																																																		);
-																																																																																		panelInfoErsteller.setLayout(gl_panelInfoErsteller);
-																																																																																		
-																																																																																		panel_9 = new JPanel();
-																																																																																		FlowLayout flowLayout_4 = (FlowLayout) panel_9.getLayout();
-																																																																																		ticketView.addTab("Neue", null, panel_9, null);
+																																																																														_erreichbarkeit = new JLabel("-");
+																																																																														_erreichbarkeit.setVerticalAlignment(SwingConstants.TOP);
+																																																																														_erreichbarkeit.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																														
+																																																																														lblErreichbar = new JLabel("Erreichbar:");
+																																																																														lblErreichbar.setHorizontalAlignment(SwingConstants.RIGHT);
+																																																																														GroupLayout gl_panelInfoErsteller = new GroupLayout(panelInfoErsteller);
+																																																																														gl_panelInfoErsteller.setHorizontalGroup(
+																																																																															gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
+																																																																																.addGroup(gl_panelInfoErsteller.createSequentialGroup()
+																																																																																	.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+																																																																																	.addPreferredGap(ComponentPlacement.UNRELATED)
+																																																																																	.addComponent(_name_k, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
+																																																																																	.addGap(18)
+																																																																																	.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.TRAILING)
+																																																																																		.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																																		.addComponent(lblTelefon, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+																																																																																		.addComponent(lblErreichbar, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
+																																																																																	.addPreferredGap(ComponentPlacement.UNRELATED)
+																																																																																	.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING, false)
+																																																																																		.addComponent(_email_k, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																																																																																		.addComponent(_telefon_k, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+																																																																																		.addComponent(_erreichbarkeit, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+																																																																																	.addContainerGap(104, Short.MAX_VALUE))
+																																																																														);
+																																																																														gl_panelInfoErsteller.setVerticalGroup(
+																																																																															gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
+																																																																																.addGroup(gl_panelInfoErsteller.createSequentialGroup()
+																																																																																	.addContainerGap()
+																																																																																	.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.LEADING)
+																																																																																		.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
+																																																																																			.addComponent(lblTelefon)
+																																																																																			.addComponent(_telefon_k))
+																																																																																		.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.TRAILING)
+																																																																																			.addComponent(_name_k)
+																																																																																			.addComponent(lblName)))
+																																																																																	.addPreferredGap(ComponentPlacement.RELATED)
+																																																																																	.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
+																																																																																		.addComponent(_email_k)
+																																																																																		.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+																																																																																	.addPreferredGap(ComponentPlacement.RELATED)
+																																																																																	.addGroup(gl_panelInfoErsteller.createParallelGroup(Alignment.BASELINE)
+																																																																																		.addComponent(_erreichbarkeit)
+																																																																																		.addComponent(lblErreichbar))
+																																																																																	.addContainerGap(34, Short.MAX_VALUE))
+																																																																														);
+																																																																														panelInfoErsteller.setLayout(gl_panelInfoErsteller);
+																																																																														
+																																																																														
+																																																																																JPanel panel_buttons = new JPanel();
+																																																																																panel_buttons.setBorder(new EmptyBorder(0, 1, 0, 0));
+																																																																																ticketView.add(panel_buttons, BorderLayout.SOUTH);
+																																																																																panel_buttons.setLayout(new BoxLayout(panel_buttons, BoxLayout.X_AXIS));
+																																																																																						
+																																																																																								panel = new JPanel();
+																																																																																								panel.setBorder(null);
+																																																																																								FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+																																																																																								flowLayout.setAlignment(FlowLayout.LEFT);
+																																																																																								panel_buttons.add(panel);
+																																																																																										
+																																																																																												btn_sucheTicket = new JButton("Suche");
+																																																																																												btn_sucheTicket.setFont(new Font("Tahoma", Font.BOLD, 12));
+																																																																																												btn_sucheTicket.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/search.png")));
+																																																																																												panel.add(btn_sucheTicket);
+																																																																																										
+																																																																																												combo_sucheTicket = new JComboBox<String>();
+																																																																																												combo_sucheTicket.setFont(new Font("Tahoma", Font.BOLD, 12));
+																																																																																												combo_sucheTicket.setMaximumRowCount(10);
+																																																																																												panel.add(combo_sucheTicket);
+																																																																																												
+																																																																																														txt_sucheTicket = new JTextField();
+																																																																																														txt_sucheTicket.setBackground(SystemColor.text);
+																																																																																														txt_sucheTicket.setFont(new Font("Tahoma", Font.PLAIN, 12));
+																																																																																														panel.add(txt_sucheTicket);
+																																																																																														txt_sucheTicket.setColumns(10);
 																																																																																				
 																																																																																						mitarbeiterView = new JPanel();
 																																																																																						mitarbeiterView.setBackground(new Color(245, 245, 245));
 																																																																																						panel_5.add(mitarbeiterView, "name_463006249781500");
 																																																																																						mitarbeiterView.setLayout(new BorderLayout(0, 0));
 																																																																																						
-																																																																																						panel_MitarbeiterButtons = new JPanel();
-																																																																																						panel_MitarbeiterButtons.setBorder(new EmptyBorder(4, 1, 4, 1));
-																																																																																						mitarbeiterView.add(panel_MitarbeiterButtons, BorderLayout.SOUTH);
-																																																																																						panel_MitarbeiterButtons.setLayout(new BoxLayout(panel_MitarbeiterButtons, BoxLayout.X_AXIS));
+																																																																																						panel_12 = new JPanel();
+																																																																																						panel_12.setBorder(new EmptyBorder(2, 1, 0, 2));
+																																																																																						mitarbeiterView.add(panel_12, BorderLayout.WEST);
+																																																																																						GridBagLayout gbl_panel_12 = new GridBagLayout();
+																																																																																						gbl_panel_12.columnWidths = new int[] {0, 0, 0};
+																																																																																						gbl_panel_12.rowHeights = new int[] {0, 0, 0, 10};
+																																																																																						gbl_panel_12.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+																																																																																						gbl_panel_12.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+																																																																																						panel_12.setLayout(gbl_panel_12);
 																																																																																						
 																																																																																						btn_mitarbeiterRefresh = new JButton("Aktualisieren");
-																																																																																						panel_MitarbeiterButtons.add(btn_mitarbeiterRefresh);
+																																																																																						btn_mitarbeiterRefresh.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																																						GridBagConstraints gbc_btn_mitarbeiterRefresh = new GridBagConstraints();
+																																																																																						gbc_btn_mitarbeiterRefresh.fill = GridBagConstraints.HORIZONTAL;
+																																																																																						gbc_btn_mitarbeiterRefresh.insets = new Insets(0, 0, 5, 0);
+																																																																																						gbc_btn_mitarbeiterRefresh.gridx = 0;
+																																																																																						gbc_btn_mitarbeiterRefresh.gridy = 0;
+																																																																																						panel_12.add(btn_mitarbeiterRefresh, gbc_btn_mitarbeiterRefresh);
+																																																																																						btn_mitarbeiterRefresh.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/3D-Z-Axis-Rotation.png")));
+																																																																																						btn_mitarbeiterRefresh.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
 																																																																																						
 																																																																																						btn_mitarbeiterNew = new JButton("Neuer Mitarbeiter");
-																																																																																						panel_MitarbeiterButtons.add(btn_mitarbeiterNew);
-																																																																																						
-																																																																																						panel_2 = new JPanel();
-																																																																																						panel_MitarbeiterButtons.add(panel_2);
-																																																																																						panel_2.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-																																																																																						
-																																																																																						txt_sucheMitarbeiter = new JTextField();
-																																																																																						panel_2.add(txt_sucheMitarbeiter);
-																																																																																						txt_sucheMitarbeiter.setColumns(10);
-																																																																																						
-																																																																																						combo_sucheMitarbeiter = new JComboBox<String>();
-																																																																																						combo_sucheMitarbeiter.setMaximumRowCount(10);
-																																																																																						combo_sucheMitarbeiter.setModel(new DefaultComboBoxModel<String>(new String[] {"Name", "Abteilung", "Kontakt", "Standort", "Username"}));
-																																																																																						panel_2.add(combo_sucheMitarbeiter);
-																																																																																						
-																																																																																						btn_sucheMitarbeiter = new JButton("Suchen");
-																																																																																						panel_2.add(btn_sucheMitarbeiter);
+																																																																																						btn_mitarbeiterNew.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																																						GridBagConstraints gbc_btn_mitarbeiterNew = new GridBagConstraints();
+																																																																																						gbc_btn_mitarbeiterNew.insets = new Insets(0, 0, 5, 0);
+																																																																																						gbc_btn_mitarbeiterNew.gridx = 0;
+																																																																																						gbc_btn_mitarbeiterNew.gridy = 1;
+																																																																																						panel_12.add(btn_mitarbeiterNew, gbc_btn_mitarbeiterNew);
+																																																																																						btn_mitarbeiterNew.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/add.png")));
+																																																																																						btn_mitarbeiterNew.setFont(new Font("Tahoma", Font.BOLD, 12));
 																																																																																						
 																																																																																						MitarbeiterScrollPane = new JScrollPane();
 																																																																																						MitarbeiterScrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -626,11 +674,68 @@ public class Main_View extends JFrame {
 																																																																																						mitarbeiter.setFont(new Font("Calibri", Font.BOLD, 15));
 																																																																																						mitarbeiter.setFillsViewportHeight(true);
 																																																																																						MitarbeiterScrollPane.setViewportView(mitarbeiter);
+																																																																																						
+																																																																																						panel_Fuﬂleiste = new JPanel();
+																																																																																						panel_Fuﬂleiste.setBorder(new EmptyBorder(4, 1, 4, 1));
+																																																																																						mitarbeiterView.add(panel_Fuﬂleiste, BorderLayout.SOUTH);
+																																																																																						panel_Fuﬂleiste.setLayout(new BoxLayout(panel_Fuﬂleiste, BoxLayout.X_AXIS));
+																																																																																						
+																																																																																						panel_2 = new JPanel();
+																																																																																						panel_Fuﬂleiste.add(panel_2);
+																																																																																						panel_2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+																																																																																						
+																																																																																						btn_sucheMitarbeiter = new JButton("Suchen");
+																																																																																						btn_sucheMitarbeiter.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/search.png")));
+																																																																																						btn_sucheMitarbeiter.setFont(new Font("Tahoma", Font.BOLD, 12));
+																																																																																						panel_2.add(btn_sucheMitarbeiter);
+																																																																																						
+																																																																																						combo_sucheMitarbeiter = new JComboBox<String>();
+																																																																																						combo_sucheMitarbeiter.setFont(new Font("Tahoma", Font.BOLD, 12));
+																																																																																						combo_sucheMitarbeiter.setMaximumRowCount(10);
+																																																																																						combo_sucheMitarbeiter.setModel(new DefaultComboBoxModel<String>(new String[] {"Name", "Abteilung", "Kontakt", "Standort", "Username"}));
+																																																																																						panel_2.add(combo_sucheMitarbeiter);
+																																																																																						
+																																																																																						txt_sucheMitarbeiter = new JTextField();
+																																																																																						txt_sucheMitarbeiter.setBackground(SystemColor.text);
+																																																																																						txt_sucheMitarbeiter.setFont(new Font("Tahoma", Font.PLAIN, 12));
+																																																																																						panel_2.add(txt_sucheMitarbeiter);
+																																																																																						txt_sucheMitarbeiter.setColumns(10);
 																																																																																		
 																																																																																				kundenView = new JPanel();
 																																																																																				kundenView.setBackground(new Color(245, 245, 245));
 																																																																																				panel_5.add(kundenView, "name_463006295653787");
 																																																																																				kundenView.setLayout(new BorderLayout(0, 0));
+																																																																																						
+																																																																																						panel_13 = new JPanel();
+																																																																																						panel_13.setBorder(new EmptyBorder(2, 1, 0, 2));
+																																																																																						kundenView.add(panel_13, BorderLayout.WEST);
+																																																																																						GridBagLayout gbl_panel_13 = new GridBagLayout();
+																																																																																						gbl_panel_13.columnWidths = new int[]{0, 0};
+																																																																																						gbl_panel_13.rowHeights = new int[]{0, 0, 0, 0, 0};
+																																																																																						gbl_panel_13.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+																																																																																						gbl_panel_13.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+																																																																																						panel_13.setLayout(gbl_panel_13);
+																																																																																								
+																																																																																										btn_kundeRefresh = new JButton("Aktualisieren");
+																																																																																										btn_kundeRefresh.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																																										GridBagConstraints gbc_btn_kundeRefresh = new GridBagConstraints();
+																																																																																										gbc_btn_kundeRefresh.insets = new Insets(0, 0, 5, 0);
+																																																																																										gbc_btn_kundeRefresh.gridx = 0;
+																																																																																										gbc_btn_kundeRefresh.gridy = 0;
+																																																																																										panel_13.add(btn_kundeRefresh, gbc_btn_kundeRefresh);
+																																																																																										btn_kundeRefresh.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
+																																																																																										btn_kundeRefresh.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/3D-Z-Axis-Rotation.png")));
+																																																																																								
+																																																																																										btn_kundeNew = new JButton("Neuer Kunde");
+																																																																																										btn_kundeNew.setHorizontalAlignment(SwingConstants.LEFT);
+																																																																																										GridBagConstraints gbc_btn_kundeNew = new GridBagConstraints();
+																																																																																										gbc_btn_kundeNew.fill = GridBagConstraints.HORIZONTAL;
+																																																																																										gbc_btn_kundeNew.insets = new Insets(0, 0, 5, 0);
+																																																																																										gbc_btn_kundeNew.gridx = 0;
+																																																																																										gbc_btn_kundeNew.gridy = 1;
+																																																																																										panel_13.add(btn_kundeNew, gbc_btn_kundeNew);
+																																																																																										btn_kundeNew.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/add.png")));
+																																																																																										btn_kundeNew.setFont(new Font("Tahoma", Font.BOLD, 12));
 																																																																																				
 																																																																																						KundenScrollPane = new JScrollPane();
 																																																																																						KundenScrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -649,30 +754,29 @@ public class Main_View extends JFrame {
 																																																																																								kundenView.add(panel_KundenButtons, BorderLayout.SOUTH);
 																																																																																								panel_KundenButtons.setLayout(new BoxLayout(panel_KundenButtons,
 																																																																																										BoxLayout.X_AXIS));
-																																																																																								
-																																																																																										btn_kundeRefresh = new JButton("Aktualisieren");
-																																																																																										panel_KundenButtons.add(btn_kundeRefresh);
-																																																																																										
-																																																																																												btn_kundeNew = new JButton("Neuer Kunde");
-																																																																																												panel_KundenButtons.add(btn_kundeNew);
 																																																																																												
 																																																																																														panel_1 = new JPanel();
 																																																																																														FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
-																																																																																														flowLayout_1.setAlignment(FlowLayout.RIGHT);
+																																																																																														flowLayout_1.setAlignment(FlowLayout.LEFT);
 																																																																																														panel_KundenButtons.add(panel_1);
-																																																																																														
-																																																																																																txt_sucheKunde = new JTextField();
-																																																																																																panel_1.add(txt_sucheKunde);
-																																																																																																txt_sucheKunde.setColumns(10);
+																																																																																																
+																																																																																																		btn_sucheKunde = new JButton("Suchen");
+																																																																																																		btn_sucheKunde.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/search.png")));
+																																																																																																		btn_sucheKunde.setFont(new Font("Tahoma", Font.BOLD, 12));
+																																																																																																		panel_1.add(btn_sucheKunde);
 																																																																																																
 																																																																																																		combo_sucheKunde = new JComboBox<String>();
+																																																																																																		combo_sucheKunde.setFont(new Font("Tahoma", Font.BOLD, 12));
 																																																																																																		combo_sucheKunde.setMaximumRowCount(10);
 																																																																																																		combo_sucheKunde.setModel(new DefaultComboBoxModel<String>(new String[] {
 																																																																																																				"Name", "Adresse", "Kontakt", "Username" }));
 																																																																																																		panel_1.add(combo_sucheKunde);
 																																																																																																		
-																																																																																																				btn_sucheKunde = new JButton("Suchen");
-																																																																																																				panel_1.add(btn_sucheKunde);
+																																																																																																				txt_sucheKunde = new JTextField();
+																																																																																																				txt_sucheKunde.setBackground(SystemColor.text);
+																																																																																																				txt_sucheKunde.setFont(new Font("Tahoma", Font.PLAIN, 12));
+																																																																																																				panel_1.add(txt_sucheKunde);
+																																																																																																				txt_sucheKunde.setColumns(10);
 
 		this.setLocationRelativeTo(null);
 	}
@@ -785,6 +889,11 @@ public class Main_View extends JFrame {
 	public void setModel(Ticket_Table t) {
 		tickets.setModel(t);
 	}
+	
+	public void setTabelle(Ticket_Table t){
+		setModel(t);
+		TicketscrollPane.setViewportView(tickets);
+	}
 
 
 	//########### ActionListener f¸r Ticket-Buttons
@@ -804,7 +913,25 @@ public class Main_View extends JFrame {
 		btn_sucheTicket.addActionListener(a);
 	}
 	
+	public void addListenerAllTickets(ActionListener a){
+		btn_AllTickets.addActionListener(a);
+	}
+	public void addListenerNeueTickets(ActionListener a){
+		btn_NeueTickets.addActionListener(a);
+	}
+	public void addListenerMeineTickets(ActionListener a){
+		btn_MeineTickets.addActionListener(a);
+	}
+	public void addListenerGeschlosseneTickets(ActionListener a){
+		btn_GeschlosseneTickets.addActionListener(a);
+	}
+	public void addListenerFAQTickets(ActionListener a){
+		btn_FAQTickets.addActionListener(a);
+	}
 
+	
+	
+	
 	//########### Suchfeld: Such-Text und die Such-Spalte wird an den Controller gegeben.
 	public String getTextSucheTicket() {
 		return this.txt_sucheTicket.getText();
@@ -819,6 +946,7 @@ public class Main_View extends JFrame {
 		this.combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(comboListe));
 	}
 	
+
 	//############# Setter f¸r die Ticketinfos
 	public void setInfoBeschreibung(String s) {
 		this._beschreibung.setText(s);
