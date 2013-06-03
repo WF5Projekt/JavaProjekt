@@ -10,16 +10,17 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import models.Attribut;
+import models.AttributComboBox;
 import models.Database_Operations;
-import models.Kategorie;
 import models.Kunde;
 import models.Kunde_Table;
 import models.Mitarbeiter;
 import models.Mitarbeiter_Table;
-import models.Priorität;
 import models.Ticket;
 import models.Ticket_Table;
 import views.Main_View;
+import views.editTicket;
 import views.newTicket_View;
 
 public class Main_Controller implements ListSelectionListener {
@@ -39,13 +40,13 @@ public class Main_Controller implements ListSelectionListener {
 	public Kunde_Table kunden;
 	public Mitarbeiter_Table mitarbeiter;
 
-	public Priorität priorität;
-	public Kategorie kategorie;
 
-	// Komboboxen bei Ticket
-	public ComboBoxModelKategorie ComboBoxKategorie;
-	public ComboBoxModelPriorität ComboBoxPriorität;
-	public ComboBoxModelKunde ComboBoxKunde;
+	// Komboboxen
+	public AttributComboBox priorität;
+	public AttributComboBox kategorie;
+	public AttributComboBox status;
+	
+	public ComboBoxModelKunde ComboBoxKunde;	
 	public ComboBoxModelMitarbeiter ComboBoxMitarbeiter;
 
 	public Main_Controller(Mitarbeiter user) {
@@ -59,7 +60,7 @@ public class Main_Controller implements ListSelectionListener {
 			addListener();
 		} catch (Exception e) {
 			JOptionPane
-					.showInputDialog("Listener/Models können nicht Initialisiert werden");
+					.showMessageDialog(MainView, "Listener/Models können nicht Initialisiert werden");
 		}
 
 		this.MainView.setVisible(true);
@@ -72,11 +73,6 @@ public class Main_Controller implements ListSelectionListener {
 		// Fenster erstellen - aber nicht Sichtbar!
 		this.MainView = new Main_View();
 
-		// ComboBoxen bekommen den Wert der Mitarbeiter-Tabellenspalten
-		MainView.setComboTicketSuche(Ticket.getColumnNames());
-		MainView.setComboKundenSuche(Kunde.getColumnNames());
-		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
-
 		// Tabellen erstellen und Daten laden
 		this.tickets = new Ticket_Table("Tickets");
 		this.faq = new Ticket_Table("FAQ");
@@ -87,22 +83,46 @@ public class Main_Controller implements ListSelectionListener {
 		refreshTickets();
 		refreshKunden();
 		refreshMitarbeiter();
+		
+		refreshComboBoxen();
 
-		// Zusatzdaten erstellen (werden beim Erstellen geladen)
-		this.priorität = new Priorität();
-		this.kategorie = new Kategorie();
+		// Zum Suchen in den Tabellen, bekommen die Comboboxen den Wert der Tabellenspalten
+		MainView.setComboTicketSuche(Ticket.getColumnNames());
+		MainView.setComboKundenSuche(Kunde.getColumnNames());
+		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
 
+		
+	
+		
 		this.MainView.setTabelle(tickets);
 		this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
 
 	}
+	
+	private void reload(){
+		refreshTickets();
+		refreshKunden();
+		refreshMitarbeiter();
+		
+		refreshComboBoxen();
+	}
+	
+	private void refreshComboBoxen(){
+		// Zusatzdaten erstellen
+		priorität = new AttributComboBox(db.getAttribut("prioritaet"));
+		kategorie = new AttributComboBox(db.getAttribut("kategorie"));
+		status = new AttributComboBox(db.getAttribut("status"));
+	}
 
 	// Button-Listener werden festgelegt
 	private void addListener() {
+		MainView.addListenerRefreshAll(new RefreshAll());
+		
 		// Buttons im Ticket-Tab
 		MainView.addListenerTicketRefresh(new ticketRefreshListener());
 		MainView.addListenerTicketNew(new ticketNewListener());
+		MainView.addListenerTicketEdit(new ticketEditListener());
 		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 		MainView.addListenerAllTickets(new getAllTickets());
@@ -124,6 +144,16 @@ public class Main_Controller implements ListSelectionListener {
 		// Tabellen-Listener
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
+	
+	
+	class RefreshAll implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			reload();
+		}
+		
+	}
 
 	/*
 	 * ################################################
@@ -138,7 +168,7 @@ public class Main_Controller implements ListSelectionListener {
 		mitarbeiter.setList(db.getMitarbeiter());
 	}
 
-	// Methode ruft Such-Procedure der Datenbank mit Werten aus
+	// Methode ruft Suche im Array der Tabelle mit Werten aus
 	// Suchfeld+Suchspalte auf
 	private void mitarbeiterSuche() {
 		String suche = MainView.getTextSucheMitarbeiter();
@@ -151,15 +181,11 @@ public class Main_Controller implements ListSelectionListener {
 
 	// Refresh-Button
 	class mitarbeiterRefreshListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			refreshMitarbeiter();
 		}
-
 	}
-
-	// Neuer Kunde-Button
 
 	class mitarbeiterNewListener implements ActionListener {
 
@@ -319,6 +345,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			tickets.reset();
 			MainView.setTabelle(tickets);
 		}
 		
@@ -379,13 +406,15 @@ public class Main_Controller implements ListSelectionListener {
 			TicketNeu.addListenerButton(new neuesTicket());
 
 			// ComboBoxen füllen
-			ComboBoxKategorie = new ComboBoxModelKategorie();
-			ComboBoxPriorität = new ComboBoxModelPriorität();
+			
 			ComboBoxKunde = new ComboBoxModelKunde();
-
-			TicketNeu.kat.setModel(ComboBoxKategorie);
-			TicketNeu.prio.setModel(ComboBoxPriorität);
 			TicketNeu.kunde.setModel(ComboBoxKunde);
+			TicketNeu.kunde.setSelectedIndex(0);
+			
+			TicketNeu.prio.setModel(priorität);
+			TicketNeu.prio.setSelectedIndex(0);
+			TicketNeu.kat.setModel(kategorie);
+			TicketNeu.kat.setSelectedIndex(0);
 
 			TicketNeu.setVisible(true);
 		}
@@ -398,9 +427,9 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			int selIndexKat = TicketNeu.kat.getSelectedIndex();
-			int selIndexPrio = TicketNeu.prio.getSelectedIndex();
-			int selIndexKunde = TicketNeu.kunde.getSelectedIndex();
+			int selectedKat = TicketNeu.kat.getSelectedIndex();
+			int selectedPrio = TicketNeu.prio.getSelectedIndex();
+			int selectedKunde = TicketNeu.kunde.getSelectedIndex();
 
 			String beschreibung = TicketNeu._beschreibung.getText();
 			// Falls nicht alle Daten angegeben sind -> Button-Aktion abbrechen!
@@ -408,15 +437,16 @@ public class Main_Controller implements ListSelectionListener {
 			// idPriorität, idKategorie, idKunde, idMitarbeiter und in Datenbank
 			// mit NewTicket() gespeichert
 
-			if (selIndexKat >= 0 && selIndexPrio >= 0 && selIndexKunde >= 0
+			if (selectedKat >= 0 && selectedPrio >= 0 && selectedKunde >= 0
 					&& !beschreibung.trim().equals("")) {
 
-				String tmpPrio = priorität.getArray().get(selIndexPrio).id;
-				String tmpKat = kategorie.getArray().get(selIndexKat).id;
-				String idKunde = kunden.getArray().get(selIndexKunde).idKunde;
+				Attribut tmpPrio = priorität.getObjectAt(selectedPrio);
+				Attribut tmpKat = kategorie.getObjectAt(selectedKat);
+				
+				String idKunde = kunden.getArray().get(selectedKunde).idKunde;
 				String idMitarbeiter = user.idMitarbeiter;
 
-				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio, tmpKat,
+				Ticket tmpTicket = new Ticket(beschreibung, tmpPrio.id, tmpKat.id,
 						idKunde, idMitarbeiter);
 				db.ticketNew(tmpTicket);
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
@@ -434,8 +464,34 @@ public class Main_Controller implements ListSelectionListener {
 
 		}
 	}
-
 	
+	//Edit Ticket: 
+	//1. Fenster wird erzeugt
+	//2. Selektiertes Ticket wird Fenster übergeben
+	//3. Fenster stellt das Ticket dar (auch Komboboxen zeigen den Selektierten wert)
+	//4. Ticket kann bearbeitet werden
+	//5. wird Ticket gespeichert, wird Ticket an Datenbank geschickt
+	class ticketEditListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
+			try{
+				
+			
+			editTicket view = new editTicket();
+			view.setTicket(tmpTicket);
+			view.setCombo(kategorie);
+
+			view.setVisible(true);
+			} catch(Exception e){
+					JOptionPane
+							.showMessageDialog(MainView, "Listener/Models können nicht Initialisiert werden");
+				
+			}
+		}
+		
+	}
 	
 	
 	// Suchbutton ruft die TicketSuche() auf mit Klick auf Button
@@ -551,33 +607,6 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 		// ################ Komboboxen für Ticket-Fenster
-		@SuppressWarnings("serial")
-		class ComboBoxModelKategorie extends DefaultComboBoxModel {
-
-			@Override
-			public int getSize() {
-				return kategorie.getArray().size();
-			}
-
-			@Override
-			public Kategorie getElementAt(int index) {
-				return kategorie.getArray().get(index);
-			}
-		}
-
-		@SuppressWarnings("serial")
-		class ComboBoxModelPriorität extends DefaultComboBoxModel {
-
-			@Override
-			public int getSize() {
-				return priorität.getArray().size();
-			}
-
-			@Override
-			public Priorität getElementAt(int index) {
-				return priorität.getArray().get(index);
-			}
-		}
 
 		@SuppressWarnings("serial")
 		class ComboBoxModelKunde extends DefaultComboBoxModel {

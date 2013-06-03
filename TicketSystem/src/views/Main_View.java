@@ -41,6 +41,7 @@ import models.Ticket_Table;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 
 @SuppressWarnings("serial")
 public class Main_View extends JFrame {
@@ -127,11 +128,13 @@ public class Main_View extends JFrame {
 	private JPanel panel_9;
 	private JPanel panel_10;
 	private JPanel panel_11;
-	private JButton btnBearbeiten;
+	private JButton btn_TicketBearbeiten;
 	private JPanel panel_12;
 	private JPanel panel_13;
+	private JButton btnAllesAktualisieren;
 
 	public Main_View() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main_View.class.getResource("/lib/png/cup.png")));
 		setType(Type.POPUP);
 		setResizable(false);
 		setBackground(new Color(245, 245, 245));
@@ -214,6 +217,11 @@ public class Main_View extends JFrame {
 		flowLayout_3.setAlignment(FlowLayout.RIGHT);
 		panel_4.add(panel_7);
 		
+		btnAllesAktualisieren = new JButton("Alles Aktualisieren");
+		btnAllesAktualisieren.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/3D-Z-Axis-Rotation.png")));
+		btnAllesAktualisieren.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel_7.add(btnAllesAktualisieren);
+		
 		panel_5 = new JPanel();
 		panel_5.setBackground(new Color(245, 245, 245));
 		contentPane.add(panel_5, BorderLayout.CENTER);
@@ -257,16 +265,16 @@ public class Main_View extends JFrame {
 																gbc_btn_ticketNew.gridy = 1;
 																panel_10.add(btn_ticketNew, gbc_btn_ticketNew);
 														
-														btnBearbeiten = new JButton("Bearbeiten");
-														btnBearbeiten.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/edit.png")));
-														btnBearbeiten.setHorizontalAlignment(SwingConstants.LEFT);
-														btnBearbeiten.setFont(new Font("Tahoma", Font.BOLD, 12));
-														GridBagConstraints gbc_btnBearbeiten = new GridBagConstraints();
-														gbc_btnBearbeiten.fill = GridBagConstraints.HORIZONTAL;
-														gbc_btnBearbeiten.insets = new Insets(0, 0, 5, 0);
-														gbc_btnBearbeiten.gridx = 0;
-														gbc_btnBearbeiten.gridy = 2;
-														panel_10.add(btnBearbeiten, gbc_btnBearbeiten);
+														btn_TicketBearbeiten = new JButton("Bearbeiten");
+														btn_TicketBearbeiten.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/edit.png")));
+														btn_TicketBearbeiten.setHorizontalAlignment(SwingConstants.LEFT);
+														btn_TicketBearbeiten.setFont(new Font("Tahoma", Font.BOLD, 12));
+														GridBagConstraints gbc_btn_TicketBearbeiten = new GridBagConstraints();
+														gbc_btn_TicketBearbeiten.fill = GridBagConstraints.HORIZONTAL;
+														gbc_btn_TicketBearbeiten.insets = new Insets(0, 0, 5, 0);
+														gbc_btn_TicketBearbeiten.gridx = 0;
+														gbc_btn_TicketBearbeiten.gridy = 2;
+														panel_10.add(btn_TicketBearbeiten, gbc_btn_TicketBearbeiten);
 														
 														panel_11 = new JPanel();
 														GridBagConstraints gbc_panel_11 = new GridBagConstraints();
@@ -397,19 +405,68 @@ public class Main_View extends JFrame {
 																																																		_level.setVerticalAlignment(SwingConstants.TOP);
 																																																		_level.setHorizontalAlignment(SwingConstants.LEFT);
 																																																		panel_ticketdetails.add(panelInfoTicket, BorderLayout.CENTER);
-																																																		panelInfoTicket.setLayout(new MigLayout("", "[82px][395px][82px][131px]", "[14px][14px][5px][14px][7px][35px]"));
-																																																		panelInfoTicket.add(lblKundendaten, "cell 0 1,alignx right,aligny top");
-																																																		panelInfoTicket.add(lblErstellzeitpunkt, "cell 0 0,growx,aligny top");
-																																																		panelInfoTicket.add(_erstellzeitpunkt, "cell 1 0,alignx left,aligny top");
-																																																		panelInfoTicket.add(_beschreibung, "cell 1 1 1 5,grow");
-																																																		panelInfoTicket.add(lblKategorie, "cell 2 5,growx,aligny top");
-																																																		panelInfoTicket.add(lblStatus, "cell 2 0,growx,aligny top");
-																																																		panelInfoTicket.add(lblPrioritt, "cell 2 1,alignx right,aligny top");
-																																																		panelInfoTicket.add(lblLevek, "cell 2 3,growx,aligny top");
-																																																		panelInfoTicket.add(_kategorie, "cell 3 5,growx,aligny top");
-																																																		panelInfoTicket.add(_status, "cell 3 0,growx,aligny top");
-																																																		panelInfoTicket.add(_level, "cell 3 3,growx,aligny top");
-																																																		panelInfoTicket.add(_priorität, "cell 3 1,growx,aligny top");
+																																																		GroupLayout gl_panelInfoTicket = new GroupLayout(panelInfoTicket);
+																																																		gl_panelInfoTicket.setHorizontalGroup(
+																																																			gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																				.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																							.addGap(21)
+																																																							.addComponent(lblKundendaten)
+																																																							.addGap(4)
+																																																							.addComponent(_beschreibung, GroupLayout.PREFERRED_SIZE, 421, GroupLayout.PREFERRED_SIZE))
+																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																							.addGap(7)
+																																																							.addComponent(lblErstellzeitpunkt, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+																																																							.addGap(4)
+																																																							.addComponent(_erstellzeitpunkt, GroupLayout.PREFERRED_SIZE, 421, GroupLayout.PREFERRED_SIZE)))
+																																																					.addGap(18)
+																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+																																																							.addGap(18)
+																																																							.addComponent(_status, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
+																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING, false)
+																																																								.addComponent(lblKategorie, GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+																																																								.addComponent(lblLevek, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																																																								.addComponent(lblPrioritt, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+																																																							.addGap(18)
+																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																								.addComponent(_kategorie, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+																																																								.addComponent(_level, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+																																																								.addComponent(_priorität, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
+																																																							.addGap(273))))
+																																																		);
+																																																		gl_panelInfoTicket.setVerticalGroup(
+																																																			gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																				.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																					.addGap(7)
+																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																						.addComponent(lblErstellzeitpunkt)
+																																																						.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
+																																																							.addComponent(lblStatus)
+																																																							.addComponent(_status))
+																																																						.addComponent(_erstellzeitpunkt))
+																																																					.addPreferredGap(ComponentPlacement.RELATED)
+																																																					.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.LEADING)
+																																																						.addComponent(lblKundendaten)
+																																																						.addGroup(gl_panelInfoTicket.createSequentialGroup()
+																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
+																																																								.addComponent(lblPrioritt)
+																																																								.addComponent(_priorität))
+																																																							.addGap(13)
+																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
+																																																								.addComponent(lblLevek)
+																																																								.addComponent(_level))
+																																																							.addGap(15)
+																																																							.addGroup(gl_panelInfoTicket.createParallelGroup(Alignment.BASELINE)
+																																																								.addComponent(lblKategorie)
+																																																								.addComponent(_kategorie)))
+																																																						.addComponent(_beschreibung, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+																																																					.addContainerGap())
+																																																		);
+																																																		panelInfoTicket.setLayout(gl_panelInfoTicket);
 																																																		
 																																																		panel_3 = new JPanel();
 																																																		panel_3.setBackground(new Color(245, 245, 245));
@@ -781,7 +838,11 @@ public class Main_View extends JFrame {
 		this.setLocationRelativeTo(null);
 	}
 
-
+	public void addListenerRefreshAll(ActionListener a){
+		btnAllesAktualisieren.addActionListener(a);
+	}
+	
+	
 	/*
 	 * ###################################
 	 * MITARBEITER TAB
@@ -928,6 +989,9 @@ public class Main_View extends JFrame {
 	public void addListenerFAQTickets(ActionListener a){
 		btn_FAQTickets.addActionListener(a);
 	}
+	public void addListenerTicketEdit(ActionListener a){
+		btn_TicketBearbeiten.addActionListener(a);
+	}
 
 	
 	
@@ -946,10 +1010,11 @@ public class Main_View extends JFrame {
 		this.combo_sucheTicket.setModel(new DefaultComboBoxModel<String>(comboListe));
 	}
 	
+	
 
 	//############# Setter für die Ticketinfos
 	public void setInfoBeschreibung(String s) {
-		this._beschreibung.setText(s);
+		this._beschreibung.setText("<html>"+s+"</html>");
 	}
 
 	public void setInfoStatus(String s) {

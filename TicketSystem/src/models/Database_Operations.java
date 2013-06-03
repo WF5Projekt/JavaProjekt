@@ -629,6 +629,55 @@ public class Database_Operations extends Database_Model {
 				ex.printStackTrace();
 			}
 		}
+		/*
+		 * ######################################################################
+		 * ######################################################################
+		 * ######################################################################
+		 * ######################################################################
+		 * 
+		 * ATTRIBUTE
+		 * 
+		 * ######################################################################
+		 * ######################################################################
+		 * ######################################################################
+		 */
+		
+		private static Attribut getAttributWithResultSet(ResultSet result) {
+			Attribut a = null;
 
+			try {
 
+				String id = result.getString(1);
+				String bezeichnung = result.getString(2);
+
+				a = new Attribut(id, bezeichnung);
+
+			} catch (SQLException e) {
+				JOptionPane.showInputDialog("Fehler beim Erstellen des Attribut-Objekts");
+			}
+
+			return a;
+
+		}
+		public ArrayList<Attribut> getAttribut(String attribut) {
+			Connection con = getConnection();
+			
+			ArrayList<Attribut> attribute = new ArrayList<Attribut>();
+			
+			Statement query;
+			try {
+				query = con.createStatement();
+				String sql = "SELECT * FROM "+attribut+""; // Tabelle eintragen
+
+				ResultSet result = query.executeQuery(sql);
+				while (result.next()) {
+					attribute.add(getAttributWithResultSet(result));
+				}
+				query.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return attribute;
+		}
 }

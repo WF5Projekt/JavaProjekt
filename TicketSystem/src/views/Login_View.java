@@ -17,6 +17,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import sonstiges.MD5;
 import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 @SuppressWarnings("serial")
 public class Login_View extends JFrame {
@@ -34,6 +35,7 @@ public class Login_View extends JFrame {
 	 * Create the frame.
 	 */
 	public Login_View() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login_View.class.getResource("/lib/png/cup.png")));
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -45,7 +47,6 @@ public class Login_View extends JFrame {
 		//setUndecorated(true);
 		setResizable(false);
 		setBackground(Color.DARK_GRAY);
-		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 199, 151);
 		contentPane = new JPanel();

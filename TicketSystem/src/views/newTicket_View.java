@@ -23,6 +23,7 @@ import org.jdesktop.swingx.autocomplete.*;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
+@SuppressWarnings("serial")
 public class newTicket_View extends JFrame {
 	
 	private JButton btn_Abbruch;
@@ -61,6 +62,7 @@ public class newTicket_View extends JFrame {
 		AutoCompleteDecorator.decorate(prio);
 		
 		_beschreibung = new JTextArea();
+		_beschreibung.setColumns(10);
 		_beschreibung.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		_beschreibung.setBackground(SystemColor.text);
 		_beschreibung.setRows(11);
