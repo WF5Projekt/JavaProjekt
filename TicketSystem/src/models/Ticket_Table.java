@@ -96,6 +96,21 @@ public class Ticket_Table extends AbstractTableModel {
 				tmpTicket = t;
 		return tmpTicket;
 	}
+
+	public void getFertigeTickets() {
+	ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+		
+		for (Ticket t : backup) {
+		
+				if (t.idStatus.matches("4") && t.idMitarbeiter == null)
+					searchList.add(t);
+		
+		}
+		this.tickets = searchList;
+		
+		fireTableDataChanged();
+	
+	}
 	
 	public void getNeueTickets(){
 		
@@ -155,5 +170,6 @@ public class Ticket_Table extends AbstractTableModel {
 		else
 			return tickets.get(row).getGelöstValue(col);
 	}
+
 
 }

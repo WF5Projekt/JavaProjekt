@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 
 public class Database_Operations extends Database_Model {
 
+
+	
 	/*
 	 * ######################################################################
 	 * ######################################################################
@@ -270,7 +272,7 @@ public class Database_Operations extends Database_Model {
 			Statement stmt = con.createStatement();
 			String query = "call erstelleTicketJava( '" + t.beschreibung
 					+ "', '" + t.idKunde + "', '" + t.idKategorie + "', '"
-					+ t.idPrioritaet + "', '" + t.idMitarbeiter + "')";
+					+ t.idPrioritaet + "')";
 
 			stmt.execute(query);
 			stmt.close();
@@ -280,13 +282,41 @@ public class Database_Operations extends Database_Model {
 		}
 
 	}
-
-	// Ticket in Datenbank speichern
-	public void ticketSave(Ticket t) {
+	
+	public void ticketGelöst(Ticket t) {
 		Connection con = getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "";
+			/*
+			 * idTicket, idMitarbeiter werden wieder getrennt
+			 */
+			String query = "call sp_unbindTicket(' " + t.idTicket + "', '"+ t.idMitarbeiter + "')";
+
+			stmt.execute(query);
+			
+			//Ticket wird gespeichert
+			query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
+					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
+			stmt.execute(query);
+			
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	// Ticket in Datenbank speichern
+	public void ticketSaveEdit(Ticket t) {
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			/*
+			 * idTicket, beschreibung, tmploesung, idKategorie, idPrioritaet, idStatus, idLevel
+			 */
+			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
+					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
 
 			stmt.execute(query);
 			stmt.close();
@@ -295,6 +325,29 @@ public class Database_Operations extends Database_Model {
 			ex.printStackTrace();
 		}
 	}
+	// Ticket Erfassen
+	public void ticketErfassen(Ticket t) {
+			Connection con = getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				/*
+				 * Ticket updaten, falls Kategorie oder Ähnliches geändert wurde
+				 * und Ticket einem Mitarbeiter zuweisen ->
+				 * `sp_bindTicket`(idTicket INT(11),idMitarbeiter INT(11))
+				 */
+				String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
+						+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
+				stmt.execute(query);
+				
+				query = "call sp_bindTicket(' " + t.idTicket + "', '"+ t.idMitarbeiter + "')";
+				
+				stmt.execute(query);
+				stmt.close();
+				con.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
 
 	// Lösche Ticket aus Datenbank
 	public void ticketDelete(Ticket t) {

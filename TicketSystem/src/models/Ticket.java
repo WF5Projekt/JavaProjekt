@@ -86,12 +86,11 @@ public class Ticket{
 	
 
 	// Konstruktur zum Erstellen eines Tickets für die neu-Anlage eines Tickets
-	public Ticket(String beschr, String prio, String kat, String idK, String idM) {
+	public Ticket(String beschr, String prio, String kat, String idK) {
 		this.beschreibung = beschr;
 		this.idPrioritaet = prio;
 		this.idKunde = idK;
 		this.idKategorie = kat;
-		this.idMitarbeiter = idM;
 	}
 
 	public Ticket() {

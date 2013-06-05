@@ -16,9 +16,13 @@ public class Attribut{
 			return array;	
 	}
 	
+	public String getID(){
+		return this.id;
+	}
+	
 	@Override
 	public String toString() {
-		return this.bezeichnung;
+		return this.id + " - " + this.bezeichnung;
 	}
 	
 
