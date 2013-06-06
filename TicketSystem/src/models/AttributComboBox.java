@@ -9,14 +9,16 @@ public class AttributComboBox extends DefaultComboBoxModel<String>{
 
 	private ArrayList<Attribut> attribute;
 	private int index = -1;
+
 	
-	public AttributComboBox(ArrayList<Attribut> attribute){
+	public void setArray(ArrayList<Attribut> attribute){
 		this.attribute = attribute;
 	}
 	
 	public ArrayList<Attribut> getAttribute(){
 		return this.attribute;
 	}
+	
 	@Override
 	public int getSize() {
 		return attribute.size();

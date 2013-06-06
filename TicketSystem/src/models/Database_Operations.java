@@ -265,21 +265,42 @@ public class Database_Operations extends Database_Model {
 	}
 	
 	// Neues Ticket in Datenbank erstellen
-	public void ticketNew(Ticket t) {
+	// gleichzeitig wird das neu erstellte Ticket an die Ticket-Table gegeben
+	public Ticket ticketNew(Ticket t) {
 
 		Connection con = getConnection();
 		try {
-			Statement stmt = con.createStatement();
+			
 			String query = "call erstelleTicketJava( '" + t.beschreibung
 					+ "', '" + t.idKunde + "', '" + t.idKategorie + "', '"
 					+ t.idPrioritaet + "')";
 
-			stmt.execute(query);
+
+			Statement stmt = con.createStatement();
+			int test = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			
+		
+			
+		
+			query = "select * from `alltickets` where `idTicket` = '"+test +"'";
+			
+			ResultSet result = stmt.executeQuery(query);
+			
+			Ticket neuesTicket = null;
+			while (result.next()) {
+				neuesTicket = getTicketsWithResultSet(result);
+			}
+			
 			stmt.close();
 			con.close();
+
+			return neuesTicket;
+			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
+		return null;
+		
 
 	}
 	

@@ -1,10 +1,5 @@
 package models;
 
-import java.sql.*;
-import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
-
 public class Kunde{
 
 	public String idKunde;
@@ -104,6 +99,9 @@ public class Kunde{
 	}
 	
 	public String toString(){
-		return this.name;
+		return this.idKunde + "-" + this.name;
+	}
+	public String toID(){
+		return this.idKunde;
 	}
 }

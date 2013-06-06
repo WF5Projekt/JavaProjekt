@@ -1,30 +1,30 @@
 package views;
 
 import java.awt.CardLayout;
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import models.AttributComboBox;
-import models.Ticket;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import models.AttributComboBox;
+import models.KundenCombo;
+import models.Ticket;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import javax.swing.JScrollPane;
 
 public class ticketBearbeitung_View extends JFrame {
 
@@ -43,7 +43,6 @@ public class ticketBearbeitung_View extends JFrame {
 	
 	private JComboBox<String> combo_Kategorie;
 	private JComboBox<String> combo_Prioritaet;
-	private JComboBox<String> combo_Status;
 	
 	//Objekte in TicketErfassen
 	private JButton btn_TicketErfassen;
@@ -60,16 +59,17 @@ public class ticketBearbeitung_View extends JFrame {
 	
 	//Objekte in TicketErstellen
 	private JPanel TicketErstellen;
-	private JTextArea text_beschreibung3;
+	private JTextArea text_NewBeschreibung;
 	private JLabel label_2;
-	private JComboBox<String> combo_Kategorie3;
+	public JComboBox<String> combo_NewKategorie;
 	private JLabel label_4;
-	private JComboBox<String> combo_Prioritaet3;
+	public JComboBox<String> combo_NewPrioritaet;
 	private JLabel label_5;
-	private JComboBox<String> combo_Kunde;
+	public JComboBox<String> combo_NewK;
 	private JLabel lblKunde;
 	private JButton button;
 	private JButton btn_TicketErstellen;
+	private JButton btn_Loesungsvorschlag;
 	
 	public ticketBearbeitung_View() {
 		setResizable(false);
@@ -217,9 +217,6 @@ public class ticketBearbeitung_View extends JFrame {
 		JLabel label_kategorie = new JLabel("Kategorie");
 		label_kategorie.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		JLabel label_status = new JLabel("Status");
-		label_status.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
 		JLabel label_prioritaet = new JLabel("Priorit\u00E4t");
 		label_prioritaet.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
@@ -237,8 +234,6 @@ public class ticketBearbeitung_View extends JFrame {
 		
 		combo_Prioritaet = new JComboBox<String>();
 		
-		combo_Status = new JComboBox<String>();
-		
 		btn_Abbrechen = new JButton("Abbrechen");
 		btn_Abbrechen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -252,66 +247,66 @@ public class ticketBearbeitung_View extends JFrame {
 		btn_TicketSpeichern.setIcon(new ImageIcon(ticketBearbeitung_View.class.getResource("/lib/png/check.png")));
 		btn_TicketSpeichern.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
+		btn_Loesungsvorschlag = new JButton("L\u00F6sungsvorschlag geben");
+		btn_Loesungsvorschlag.setIcon(new ImageIcon(ticketBearbeitung_View.class.getResource("/lib/png/arrow-1-forward.png")));
+		btn_Loesungsvorschlag.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
 		
 		GroupLayout gl_TicketBearbeiten = new GroupLayout(TicketBearbeiten);
 		gl_TicketBearbeiten.setHorizontalGroup(
 			gl_TicketBearbeiten.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_TicketBearbeiten.createSequentialGroup()
-					.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_TicketBearbeiten.createSequentialGroup()
+					.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_TicketBearbeiten.createSequentialGroup()
 							.addGap(20)
 							.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(combo_Kategorie, Alignment.LEADING, 0, 175, Short.MAX_VALUE)
 								.addComponent(label_kategorie, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.LEADING)
-								.addComponent(combo_Prioritaet, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label_prioritaet, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
-							.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(label_status, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
-								.addComponent(combo_Status, 0, 137, Short.MAX_VALUE)))
-						.addGroup(Alignment.TRAILING, gl_TicketBearbeiten.createSequentialGroup()
-							.addGap(20)
-							.addComponent(text_Beschreibung, GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_TicketBearbeiten.createSequentialGroup()
-							.addGap(20)
-							.addComponent(text_Loesung, GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_TicketBearbeiten.createSequentialGroup()
-							.addContainerGap(289, Short.MAX_VALUE)
+								.addGroup(gl_TicketBearbeiten.createSequentialGroup()
+									.addComponent(combo_Prioritaet, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+									.addComponent(btn_Loesungsvorschlag, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))
+								.addComponent(label_prioritaet, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_TicketBearbeiten.createSequentialGroup()
+							.addContainerGap()
 							.addComponent(btn_TicketSpeichern, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btn_Abbrechen, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_TicketBearbeiten.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(label_beschreibung, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_TicketBearbeiten.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(label_Lösung, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(Alignment.LEADING, gl_TicketBearbeiten.createSequentialGroup()
+							.addGap(20)
+							.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.LEADING)
+								.addComponent(label_Lösung, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
+								.addComponent(text_Loesung)))
+						.addGroup(Alignment.LEADING, gl_TicketBearbeiten.createSequentialGroup()
+							.addGap(20)
+							.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.LEADING)
+								.addComponent(label_beschreibung, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+								.addComponent(text_Beschreibung))))
 					.addContainerGap())
 		);
 		gl_TicketBearbeiten.setVerticalGroup(
 			gl_TicketBearbeiten.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_TicketBearbeiten.createSequentialGroup()
-					.addGap(9)
+					.addContainerGap()
 					.addComponent(label_beschreibung, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(4)
 					.addComponent(text_Beschreibung, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(11)
 					.addComponent(label_Lösung, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(text_Loesung, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 					.addGap(30)
 					.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_kategorie, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_prioritaet, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_status, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
+						.addComponent(label_prioritaet, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.BASELINE)
 						.addComponent(combo_Kategorie, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(combo_Prioritaet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(combo_Status, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(btn_Loesungsvorschlag))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_TicketBearbeiten.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btn_TicketSpeichern)
 						.addComponent(btn_Abbrechen))
@@ -324,26 +319,26 @@ public class ticketBearbeitung_View extends JFrame {
 		TicketErstellen = new JPanel();
 		content.add(TicketErstellen, "name_1030169512649547");
 		
-		text_beschreibung3 = new JTextArea();
-		text_beschreibung3.setWrapStyleWord(true);
-		text_beschreibung3.setLineWrap(true);
-		text_beschreibung3.setFont(new Font("Tahoma", Font.BOLD, 12));
+		text_NewBeschreibung = new JTextArea();
+		text_NewBeschreibung.setWrapStyleWord(true);
+		text_NewBeschreibung.setLineWrap(true);
+		text_NewBeschreibung.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		label_2 = new JLabel("Problembeschreibung:");
 		label_2.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_Kategorie3 = new JComboBox<String>();
+		combo_NewKategorie = new JComboBox<String>();
 		
 		label_4 = new JLabel("Kategorie");
 		label_4.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_Prioritaet3 = new JComboBox<String>();
+		combo_NewPrioritaet = new JComboBox<String>();
 		
 		label_5 = new JLabel("Priorit\u00E4t");
 		label_5.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_Kunde = new JComboBox<String>();
-		AutoCompleteDecorator.decorate(combo_Kunde);
+		combo_NewK = new JComboBox<String>();
+		AutoCompleteDecorator.decorate(combo_NewK);
 		
 		lblKunde = new JLabel("Kunde angeben:");
 		lblKunde.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -370,7 +365,7 @@ public class ticketBearbeitung_View extends JFrame {
 						.addGroup(gl_TicketErstellen.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_TicketErstellen.createSequentialGroup()
 								.addGap(10)
-								.addComponent(combo_Kunde, GroupLayout.PREFERRED_SIZE, 278, GroupLayout.PREFERRED_SIZE)
+								.addComponent(combo_NewK, GroupLayout.PREFERRED_SIZE, 278, GroupLayout.PREFERRED_SIZE)
 								.addContainerGap())
 							.addGroup(Alignment.TRAILING, gl_TicketErstellen.createSequentialGroup()
 								.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
@@ -389,16 +384,16 @@ public class ticketBearbeitung_View extends JFrame {
 										.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
 										.addGap(186))
 									.addGroup(gl_TicketErstellen.createSequentialGroup()
-										.addComponent(combo_Kategorie3, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+										.addComponent(combo_NewKategorie, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
 										.addGap(65)))
 								.addGroup(gl_TicketErstellen.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_TicketErstellen.createSequentialGroup()
 										.addGap(10)
-										.addComponent(combo_Prioritaet3, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE))
+										.addComponent(combo_NewPrioritaet, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE))
 									.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
 								.addGap(76)))
 						.addGroup(Alignment.TRAILING, gl_TicketErstellen.createSequentialGroup()
-							.addComponent(text_beschreibung3, GroupLayout.PREFERRED_SIZE, 571, GroupLayout.PREFERRED_SIZE)
+							.addComponent(text_NewBeschreibung, GroupLayout.PREFERRED_SIZE, 571, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())))
 		);
 		gl_TicketErstellen.setVerticalGroup(
@@ -407,19 +402,19 @@ public class ticketBearbeitung_View extends JFrame {
 					.addContainerGap()
 					.addComponent(lblKunde, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(combo_Kunde, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(combo_NewK, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(text_beschreibung3, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+					.addComponent(text_NewBeschreibung, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
 					.addGap(48)
 					.addGroup(gl_TicketErstellen.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 						.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
 					.addGap(7)
 					.addGroup(gl_TicketErstellen.createParallelGroup(Alignment.BASELINE)
-						.addComponent(combo_Kategorie3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(combo_Prioritaet3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(combo_NewKategorie, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(combo_NewPrioritaet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(58)
 					.addGroup(gl_TicketErstellen.createParallelGroup(Alignment.TRAILING)
 						.addComponent(button, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
@@ -444,11 +439,9 @@ public class ticketBearbeitung_View extends JFrame {
 		
 		this.combo_Kategorie.setModel(kategorie);
 		this.combo_Prioritaet.setModel(priorität);
-		this.combo_Status.setModel(status);
 		
 		combo_Kategorie.setSelectedIndex(Integer.parseInt(t.idKategorie)-1);
 		combo_Prioritaet.setSelectedIndex(Integer.parseInt(t.idPrioritaet)-1);
-		combo_Status.setSelectedIndex(Integer.parseInt(t.idStatus)-1);
 		
 		this.TicketErfassen.setVisible(false);
 		this.TicketErstellen.setVisible(false);
@@ -462,13 +455,15 @@ public class ticketBearbeitung_View extends JFrame {
 		
 		this.t.idKategorie = Integer.toString(combo_Kategorie.getSelectedIndex()+1);
 		this.t.idPrioritaet = Integer.toString(combo_Prioritaet.getSelectedIndex()+1);
-		this.t.idStatus = Integer.toString(combo_Status.getSelectedIndex()+1);
 
 		return this.t;
 	}
 	
 	public void addListenerTicketSave(ActionListener a) {
 		btn_TicketSpeichern.addActionListener(a);
+	}
+	public void addListenerTicketLoesung(ActionListener a){
+		this.btn_Loesungsvorschlag.addActionListener(a);
 	}
 	
 	//Panel für TicketErfassen erstellen
@@ -502,18 +497,19 @@ public class ticketBearbeitung_View extends JFrame {
 	}
 	
 	
-	public void TicketErstellen(Ticket t, AttributComboBox kategorie, AttributComboBox priorität, DefaultComboBoxModel kunden){
+	public void TicketErstellen(Ticket t, AttributComboBox kategorie, AttributComboBox priorität, KundenCombo kunden){
 		this.t = t;
 		
 		this.setTitle("Neues Ticket erstellen");
 		
-		text_beschreibung3.setText(t.beschreibung);
-		this.combo_Kategorie3.setModel(kategorie);
-		this.combo_Prioritaet3.setModel(priorität);
-		this.combo_Kunde.setModel(kunden);
+		text_NewBeschreibung.setText(t.beschreibung);
+		this.combo_NewKategorie.setModel(kategorie);
+		this.combo_NewPrioritaet.setModel(priorität);
+		this.combo_NewK.setModel(kunden);
+		
 
-		this.combo_Kategorie3.setSelectedIndex(0);
-		this.combo_Prioritaet3.setSelectedIndex(0);
+		this.combo_NewKategorie.setSelectedIndex(0);
+		this.combo_NewPrioritaet.setSelectedIndex(0);
 		
 
 		this.TicketErfassen.setVisible(false);
@@ -525,11 +521,8 @@ public class ticketBearbeitung_View extends JFrame {
 	public void addListenerTicketErstellen(ActionListener a){
 		btn_TicketErstellen.addActionListener(a);
 	}
-	public Ticket erstelleTicket(){
-		this.t.idKategorie = Integer.toString(combo_Kategorie3.getSelectedIndex()+1);
-		this.t.idPrioritaet = Integer.toString(combo_Prioritaet3.getSelectedIndex()+1);
-		this.t.idKunde = Integer.toString(combo_Kunde.getSelectedIndex()+1);
-		this.t.beschreibung = this.text_beschreibung3.getText();
-		return this.t;
+	public String erstelleTicket(){
+		return this.text_NewBeschreibung.getText();
 	}
+
 }

@@ -5,21 +5,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import models.AttributComboBox;
-import models.Database_Operations;
-import models.Kunde;
-import models.Kunde_Table;
-import models.Mitarbeiter;
-import models.Mitarbeiter_Table;
-import models.Ticket;
-import models.Ticket_Table;
-import views.Main_View;
-import views.ticketBearbeitung_View;
+import models.*;
+import views.*;
 
 public class Main_Controller implements ListSelectionListener {
 
@@ -44,8 +35,8 @@ public class Main_Controller implements ListSelectionListener {
 	public AttributComboBox kategorie;
 	public AttributComboBox status;
 	
-	public ComboBoxModelKunde ComboBoxKunde;	
-	public ComboBoxModelMitarbeiter ComboBoxMitarbeiter;
+	public KundenCombo KundenCombo;	
+	public MitarbeiterCombo MitarbeiterCombo;
 
 	public Main_Controller(Mitarbeiter user) {
 
@@ -79,13 +70,15 @@ public class Main_Controller implements ListSelectionListener {
 		this.kunden = new Kunde_Table();
 		this.mitarbeiter = new Mitarbeiter_Table();
 
-		refreshTickets();
-		refreshKunden();
-		refreshMitarbeiter();
 		
-		refreshComboBoxen();
-
+		
+		MitarbeiterCombo = new MitarbeiterCombo();
+		KundenCombo = new KundenCombo();
+		priorität = new AttributComboBox();
+		kategorie = new AttributComboBox();
+		status = new AttributComboBox();
 		// Zum Suchen in den Tabellen, bekommen die Comboboxen den Wert der Tabellenspalten
+
 		MainView.setComboTicketSuche(Ticket.getColumnNames());
 		MainView.setComboKundenSuche(Kunde.getColumnNames());
 		MainView.setComboMitarbeiterSuche(Mitarbeiter.getColumnNames());
@@ -96,24 +89,26 @@ public class Main_Controller implements ListSelectionListener {
 		this.MainView.setTabelle(tickets);
 		this.MainView.setModel(kunden);
 		this.MainView.setModel(mitarbeiter);
+		
+		reload();
 
 	}
 	
 	private void reload(){
-		refreshTickets();
-		refreshKunden();
-		refreshMitarbeiter();
+		reloadTickets();
+		reloadKunden();
+		reloadMitarbeiter();
 		
 		refreshComboBoxen();
 	}
 	
 	private void refreshComboBoxen(){
 		// Zusatzdaten erstellen
-		priorität = new AttributComboBox(db.getAttribut("prioritaet"));
-		kategorie = new AttributComboBox(db.getAttribut("kategorie"));
-		status = new AttributComboBox(db.getAttribut("status"));
-		ComboBoxKunde = new ComboBoxModelKunde();
-		ComboBoxMitarbeiter = new ComboBoxModelMitarbeiter();
+		priorität.setArray(db.getAttribut("prioritaet"));
+		kategorie.setArray(db.getAttribut("kategorie"));
+		status.setArray(db.getAttribut("status"));
+		KundenCombo.setArray(db.getKunden());
+		MitarbeiterCombo.setArray(db.getMitarbeiter());
 	}
 
 	// Button-Listener werden festgelegt
@@ -167,10 +162,12 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 */
 
-	private void refreshMitarbeiter() {
+	private void reloadMitarbeiter() {
 		mitarbeiter.setList(db.getMitarbeiter());
 	}
-
+	private void resetMitarbeiter() {
+		mitarbeiter.reset();
+	}
 	// Methode ruft Suche im Array der Tabelle mit Werten aus
 	// Suchfeld+Suchspalte auf
 	private void mitarbeiterSuche() {
@@ -186,7 +183,7 @@ public class Main_Controller implements ListSelectionListener {
 	class mitarbeiterRefreshListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			refreshMitarbeiter();
+			reloadMitarbeiter();
 		}
 	}
 
@@ -242,8 +239,11 @@ public class Main_Controller implements ListSelectionListener {
 	 */
 
 	// Refresh lädt die Liste neu aus der Datenbank
-	public void refreshKunden() {
+	public void reloadKunden() {
 		kunden.setList(db.getKunden());
+	}
+	public void resetKunden(){
+		kunden.reset();
 	}
 
 	// Methode ruft Such-Procedure der Datenbank mit Werten aus
@@ -262,7 +262,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			refreshKunden();
+			reloadKunden();
 		}
 
 	}
@@ -319,11 +319,16 @@ public class Main_Controller implements ListSelectionListener {
 	 * ################################################
 	 * ################################################
 	 */
-	public void refreshTickets() {
+	public void reloadTickets() {
 		tickets.setList(db.getTickets());
 		faq.setList(db.getFAQTickets());
 		gelöst.setList(db.getGelösteTickets());
 		MainView.viewButtonsAlle();
+	}
+	public void refreshTickets(){
+		tickets.reset();
+		faq.reset();
+		gelöst.reset();
 	}
 
 
@@ -409,7 +414,7 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			refreshTickets();
+			reloadTickets();
 		}
 
 	}
@@ -421,7 +426,7 @@ public class Main_Controller implements ListSelectionListener {
 		public void actionPerformed(ActionEvent arg0) {
 	
 			TicketEditView = new ticketBearbeitung_View();
-			TicketEditView.TicketErstellen(new Ticket(), kategorie, priorität, ComboBoxKunde);
+			TicketEditView.TicketErstellen(new Ticket(), kategorie, priorität, KundenCombo);
 			TicketEditView.addListenerTicketErstellen(new neuesTicket());
 			
 			}
@@ -438,17 +443,29 @@ public class Main_Controller implements ListSelectionListener {
 			// Falls nicht alle Daten angegeben sind -> Button-Aktion abbrechen!
 			// Daten vollständig: das Ticket wird erstellt mit: Beschreibung,
 			// idPriorität, idKategorie, idKunde, idMitarbeiter und in Datenbank
-			// mit NewTicket() gespeichert
-			Ticket tmpTicket = TicketEditView.erstelleTicket();
+			// mit NewTicket() gespeichert	
+			Ticket tmpTicket = new Ticket();
+			
+			int idKat = TicketEditView.combo_NewKategorie.getSelectedIndex();
+			tmpTicket.idKategorie = kategorie.getObjectAt(idKat).id;
+			int idPrio = TicketEditView.combo_NewPrioritaet.getSelectedIndex();
+			tmpTicket.idPrioritaet = priorität.getObjectAt(idPrio).id;
+			int idKunde = TicketEditView.combo_NewK.getSelectedIndex();
+			tmpTicket.idKunde = KundenCombo.getObjectAt(idKunde).idKunde;
+
+			tmpTicket.beschreibung = TicketEditView.erstelleTicket();
+		
 
 			if (! ( tmpTicket.idKategorie.equals("") || tmpTicket.idPrioritaet.equals("") || tmpTicket.idKunde.equals("")	
 					|| tmpTicket.beschreibung.trim().equals("") ) ) {
 
-				db.ticketNew(tmpTicket);
+				Ticket neuesTicket = db.ticketNew(tmpTicket);
+				tickets.ticketUpdate(neuesTicket);
+				tickets.reset();
+				
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
 						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-
-				refreshTickets();
+			
 				TicketEditView.dispose();
 
 			} else {
@@ -480,6 +497,7 @@ public class Main_Controller implements ListSelectionListener {
 				TicketEditView = new ticketBearbeitung_View();
 				TicketEditView.TicketBearbeiten(tmpTicket, kategorie, priorität, status);
 				TicketEditView.addListenerTicketSave(new EditTicketListener());
+				TicketEditView.addListenerTicketLoesung(new EditTicketLoesungListener());
 				
 				} catch(Exception e){
 						JOptionPane
@@ -495,35 +513,64 @@ public class Main_Controller implements ListSelectionListener {
 		}
 		
 	}
-	class EditTicketListener implements ActionListener{
+
+	class EditTicketListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+
 			Ticket temp = TicketEditView.saveEditedTicket();
+
+			// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
+			// gesetzt.
+			if (temp.idStatus.equals("2"))
+				temp.idStatus = "3";
 			
-			if(temp.idStatus.equals("4")){
-				int entscheidung = JOptionPane.showConfirmDialog(null,
-                        "Ihr Ticket wird nun an das Level 1 zurückgeleitet!", "Sind Sie sicher?",
-                        JOptionPane.YES_NO_OPTION);
-				// 0 = Ja, 1= Nein
-				if( entscheidung == 0){
-				db.ticketGelöst(temp);
-				}
-				else return;
-			}
-			else{
-				db.ticketSaveEdit(temp);
-				JOptionPane.showMessageDialog(null, "Ticket geändert!",
-						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-			}
-			
+			db.ticketSaveEdit(temp);
+			//Ticket lokal updaten
+			tickets.ticketUpdate(temp);
+			//Tabelle aktualisieren
 			refreshTickets();
+			tickets.getMeineTickets(user);
+
+			JOptionPane.showMessageDialog(null, "Ticket bearbeitet!",
+					"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
+
 			TicketEditView.dispose();
 		}
-		
+
 	}
-	
+
+	class EditTicketLoesungListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Ticket temp = TicketEditView.saveEditedTicket();
+			if(!temp.tmploesung.trim().equals("")){
+				int entscheidung = JOptionPane.showConfirmDialog(null,
+						"Ihr Ticket wird nun an das Level 1 zurückgeleitet!",
+						"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
+				// 0 = Ja, 1= Nein
+				if (entscheidung == 0) {
+					db.ticketGelöst(temp);
+
+					//Ticket lokal updaten
+					tickets.ticketUpdate(temp);
+					//Tabelle aktualisieren
+					refreshTickets();
+					tickets.getMeineTickets(user);
+
+					TicketEditView.dispose();
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(TicketEditView, "Kein Lösungsvorschlag!");
+			}
+			
+		}
+
+	}
+
 	class ticketErfassenListener implements ActionListener{
 
 		@Override
@@ -533,7 +580,7 @@ public class Main_Controller implements ListSelectionListener {
 			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
 			try{
 				TicketEditView = new ticketBearbeitung_View();
-				TicketEditView.TicketErfassen(tmpTicket, kategorie, priorität, ComboBoxMitarbeiter);
+				TicketEditView.TicketErfassen(tmpTicket, kategorie, priorität, MitarbeiterCombo);
 				TicketEditView.addListenerTicketErfassen(new ErfasseTicketListener());
 				
 			}catch(Exception e){
@@ -554,8 +601,13 @@ public class Main_Controller implements ListSelectionListener {
 			db.ticketErfassen(temp);
 			JOptionPane.showMessageDialog(null, "Ticket erfasst und Mitarbeiter zugewiesen!",
 					"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-			
+
+			//Ticket lokal updaten
+			tickets.ticketUpdate(temp);
+			//Tabelle aktualisieren
 			refreshTickets();
+			tickets.getNeueTickets();
+			
 			TicketEditView.dispose();
 			
 		}
@@ -675,34 +727,6 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 		
+
 	
-	// ################ Komboboxen für Ticket-Fenster
-
-	@SuppressWarnings({ "serial", "rawtypes" })
-	class ComboBoxModelKunde extends DefaultComboBoxModel {
-
-		@Override
-		public int getSize() {
-			return kunden.getArray().size();
-		}
-
-		@Override
-		public Kunde getElementAt(int index) {
-			return kunden.getArray().get(index);
-		}
-	}
-
-	@SuppressWarnings({ "serial", "rawtypes" })
-	class ComboBoxModelMitarbeiter extends DefaultComboBoxModel {
-
-		@Override
-		public int getSize() {
-			return mitarbeiter.getArray().size();
-		}
-
-		@Override
-		public Mitarbeiter getElementAt(int index) {
-			return mitarbeiter.getArray().get(index);
-		}
-	}
 }

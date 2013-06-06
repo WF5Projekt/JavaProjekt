@@ -139,7 +139,17 @@ public class Ticket_Table extends AbstractTableModel {
 		
 		fireTableDataChanged();
 	}
-
+	
+	public void ticketUpdate(Ticket tmp){
+		if(tmp.idTicket == null || tmp.idTicket.equals("") || tmp.idTicket.equals("0")) return;
+		for(Ticket t: backup){
+			
+			if(t.idTicket.matches(tmp.idTicket)){
+				t = tmp;
+				return;
+			}
+		}
+	}
 	
 	public Ticket getTicketAtRow(int row) {
 		return tickets.get(row);
