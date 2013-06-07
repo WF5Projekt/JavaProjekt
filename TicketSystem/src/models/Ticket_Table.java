@@ -10,6 +10,7 @@ public class Ticket_Table extends AbstractTableModel {
 	
 	private String[] columnNames;
 	private String art;
+	public String aktuell = "tickets";
 
 	private ArrayList<Ticket> tickets;
 	private ArrayList<Ticket> backup;
@@ -139,13 +140,27 @@ public class Ticket_Table extends AbstractTableModel {
 		
 		fireTableDataChanged();
 	}
-	
+	public void getTicketsAbteilung(Mitarbeiter user){
+		
+		ArrayList<Ticket> searchList = new ArrayList<Ticket>();
+		
+		for (Ticket t : backup) {
+		
+				if (t.idKategorie != null && t.idMitarbeiter == null && t.idStatus.matches("2") && t.idKategorie.matches(user.idZuständigkeit))
+					searchList.add(t);
+		
+		}
+		this.tickets = searchList;
+		
+		fireTableDataChanged();
+	}
 	public void ticketUpdate(Ticket tmp){
 		if(tmp.idTicket == null || tmp.idTicket.equals("") || tmp.idTicket.equals("0")) return;
 		for(Ticket t: backup){
 			
 			if(t.idTicket.matches(tmp.idTicket)){
 				t = tmp;
+				fireTableDataChanged();
 				return;
 			}
 		}
@@ -180,6 +195,8 @@ public class Ticket_Table extends AbstractTableModel {
 		else
 			return tickets.get(row).getGelöstValue(col);
 	}
+
+
 
 
 }

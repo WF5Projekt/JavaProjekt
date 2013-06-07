@@ -1,36 +1,45 @@
 package models;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
-public class AttributComboBox extends DefaultComboBoxModel<String>{
-
-	private ArrayList<Attribut> attribute;
-	private int index = -1;
-
+public class AttributComboBox extends DefaultComboBoxModel{
 	
-	public void setArray(ArrayList<Attribut> attribute){
+	//neuer Vector wird erstellt
+	private Vector<Attribut> attribute = new Vector<Attribut>();
+
+
+	public void setArray(Vector<Attribut> attribute){
 		this.attribute = attribute;
 	}
 	
-	public ArrayList<Attribut> getAttribute(){
+	public Vector<Attribut> getArray(){
 		return this.attribute;
 	}
-	
 	@Override
 	public int getSize() {
 		return attribute.size();
 	}
+	
+	@Override
+	public int getIndexOf(Object arg0){
+		int index = -1;
+		for(int i = 0; i<attribute.size(); i++){
+			if(	attribute.elementAt(i).getID().equals(arg0)){
+				index = i;
+			}
+		}
+		return index;
+		
+	}
 
 	@Override
-	public String getElementAt(int index) {
-		return attribute.get(index).toString();
+	public Attribut getElementAt(int index) {
+		return attribute.elementAt(index);
 	}
-	public Attribut getObjectAt(int index){
-		return attribute.get(index);
-	}
+
 
 
 	

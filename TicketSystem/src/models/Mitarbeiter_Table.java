@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 public class Mitarbeiter_Table extends AbstractTableModel {
 
 	private String[] columnNames = Mitarbeiter.getColumnNames();
+	
 	private ArrayList<Mitarbeiter> mitarbeiter;
 	private ArrayList<Mitarbeiter> backup;
 
@@ -69,6 +70,9 @@ public class Mitarbeiter_Table extends AbstractTableModel {
 					if (m.level.toUpperCase().matches("(.*)" + suche + "(.*)"))
 						searchList.add(m);
 					break;
+				case "Zuständigkeit":
+					if(m.zuständigkeit.toUpperCase().matches("(.*)" + suche +"(.*)"))
+						searchList.add(m);
 				case "E-Mail":
 					if (m.email.toUpperCase().matches("(.*)" + suche + "(.*)"))
 						searchList.add(m);

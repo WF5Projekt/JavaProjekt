@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -17,11 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import models.AttributComboBox;
 import models.KundenCombo;
+import models.MitarbeiterCombo;
 import models.Ticket;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -29,6 +28,12 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 public class ticketBearbeitung_View extends JFrame {
 
 	private Ticket t;
+	
+	private AttributComboBox kategorie;
+	private AttributComboBox priorität;
+	private KundenCombo kunden;
+	private MitarbeiterCombo mitarbeiter;
+	
 	
 	private JPanel content;
 	private JPanel TicketErfassen;
@@ -41,37 +46,35 @@ public class ticketBearbeitung_View extends JFrame {
 	private JTextArea text_Beschreibung;
 	private JTextArea text_Loesung;
 	
-	private JComboBox<String> combo_Kategorie;
-	private JComboBox<String> combo_Prioritaet;
+	private JComboBox combo_Kategorie;
+	private JComboBox combo_Prioritaet;
 	
 	//Objekte in TicketErfassen
 	private JButton btn_TicketErfassen;
 	private JButton btnAbbrechen;
-	private JComboBox<String> combo_Kategorie2;
-	private JComboBox<String> combo_Prioritaet2;
+	private JComboBox combo_Kategorie2;
+	private JComboBox combo_Prioritaet2;
 	private JTextArea text_Beschreibung2;
-	public JComboBox<String> combo_Mitarbeiter;
 
 	private JLabel label;
 	private JLabel label_1;
 	private JLabel label_3;
-	private JLabel lblZustndigenMitarbeiterWhlen;
 	
 	//Objekte in TicketErstellen
 	private JPanel TicketErstellen;
 	private JTextArea text_NewBeschreibung;
 	private JLabel label_2;
-	public JComboBox<String> combo_NewKategorie;
+	public JComboBox combo_NewKategorie;
 	private JLabel label_4;
-	public JComboBox<String> combo_NewPrioritaet;
+	public JComboBox combo_NewPrioritaet;
 	private JLabel label_5;
-	public JComboBox<String> combo_NewK;
+	public JComboBox combo_NewK;
 	private JLabel lblKunde;
 	private JButton button;
 	private JButton btn_TicketErstellen;
 	private JButton btn_Loesungsvorschlag;
 	
-	public ticketBearbeitung_View() {
+	public ticketBearbeitung_View(AttributComboBox kategorie, AttributComboBox priorität, MitarbeiterCombo mitarbeiter, KundenCombo kunden) {
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ticketBearbeitung_View.class.getResource("/lib/png/pen.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -85,36 +88,31 @@ public class ticketBearbeitung_View extends JFrame {
 		TicketErfassen = new JPanel();
 		
 	
+		this.kategorie = kategorie;
+		this.priorität = priorität;
+		this.mitarbeiter = mitarbeiter;
+		this.kunden = kunden;
 		
 		/*
 		 * ------------------------------------------------------------Layout für TicketBearbeiten
 		 */
 		content.add(TicketErfassen, "name_1015676565602887");
 		
-		combo_Kategorie2 = new JComboBox<String>();
+		combo_Kategorie2 = new JComboBox();
+		combo_Prioritaet2 = new JComboBox();
 		
 		label = new JLabel("Kategorie");
 		label.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		combo_Prioritaet2 = new JComboBox<String>();
 		
 		label_1 = new JLabel("Priorit\u00E4t");
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		text_Beschreibung2 = new JTextArea();
 		text_Beschreibung2.setWrapStyleWord(true);
-		text_Beschreibung2.setEditable(false);
 		text_Beschreibung2.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		label_3 = new JLabel("Problembeschreibung:");
 		label_3.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		combo_Mitarbeiter = new JComboBox<String>();
-		AutoCompleteDecorator.decorate(combo_Mitarbeiter);
-		
-		lblZustndigenMitarbeiterWhlen = new JLabel("Zust\u00E4ndigen Mitarbeiter w\u00E4hlen:");
-		lblZustndigenMitarbeiterWhlen.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblZustndigenMitarbeiterWhlen.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		btnAbbrechen = new JButton("Abbrechen");
 		btnAbbrechen.addActionListener(new ActionListener() {
@@ -157,12 +155,6 @@ public class ticketBearbeitung_View extends JFrame {
 							.addGap(20)
 							.addComponent(text_Beschreibung2, GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
 						.addGroup(gl_TicketErfassen.createSequentialGroup()
-							.addContainerGap(358, Short.MAX_VALUE)
-							.addComponent(combo_Mitarbeiter, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_TicketErfassen.createSequentialGroup()
-							.addGap(280)
-							.addComponent(lblZustndigenMitarbeiterWhlen, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
-						.addGroup(gl_TicketErfassen.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
@@ -182,11 +174,7 @@ public class ticketBearbeitung_View extends JFrame {
 					.addGroup(gl_TicketErfassen.createParallelGroup(Alignment.BASELINE)
 						.addComponent(combo_Kategorie2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(combo_Prioritaet2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(70)
-					.addComponent(lblZustndigenMitarbeiterWhlen, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(combo_Mitarbeiter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
 					.addGroup(gl_TicketErfassen.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnAbbrechen)
 						.addComponent(btn_TicketErfassen))
@@ -230,9 +218,8 @@ public class ticketBearbeitung_View extends JFrame {
 		text_Loesung.setLineWrap(true);
 		text_Loesung.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_Kategorie = new JComboBox<String>();
-		
-		combo_Prioritaet = new JComboBox<String>();
+		combo_Kategorie = new JComboBox();
+		combo_Prioritaet = new JComboBox();
 		
 		btn_Abbrechen = new JButton("Abbrechen");
 		btn_Abbrechen.addActionListener(new ActionListener() {
@@ -327,18 +314,19 @@ public class ticketBearbeitung_View extends JFrame {
 		label_2 = new JLabel("Problembeschreibung:");
 		label_2.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_NewKategorie = new JComboBox<String>();
+		combo_NewKategorie = new JComboBox();
+		combo_NewK = new JComboBox();	
+		combo_NewPrioritaet = new JComboBox();
+		AutoCompleteDecorator.decorate(combo_NewK);
 		
 		label_4 = new JLabel("Kategorie");
 		label_4.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		combo_NewPrioritaet = new JComboBox<String>();
+	
 		
 		label_5 = new JLabel("Priorit\u00E4t");
 		label_5.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		combo_NewK = new JComboBox<String>();
-		AutoCompleteDecorator.decorate(combo_NewK);
+		
 		
 		lblKunde = new JLabel("Kunde angeben:");
 		lblKunde.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -429,7 +417,7 @@ public class ticketBearbeitung_View extends JFrame {
 		
 	}
 	//Panel für die Ticketbearbeitung wird aufgerufen und Ticket dargestellt.
-	public void TicketBearbeiten(Ticket t, AttributComboBox kategorie, AttributComboBox priorität, AttributComboBox status){
+	public void TicketBearbeiten(Ticket t){
 		this.t = t;
 		
 		this.setTitle("Ticket bearbeiten");
@@ -440,8 +428,9 @@ public class ticketBearbeitung_View extends JFrame {
 		this.combo_Kategorie.setModel(kategorie);
 		this.combo_Prioritaet.setModel(priorität);
 		
-		combo_Kategorie.setSelectedIndex(Integer.parseInt(t.idKategorie)-1);
-		combo_Prioritaet.setSelectedIndex(Integer.parseInt(t.idPrioritaet)-1);
+		this.combo_Kategorie.setSelectedIndex(kategorie.getIndexOf(t.idKategorie));
+		this.combo_Prioritaet.setSelectedIndex(priorität.getIndexOf(t.idPrioritaet));
+
 		
 		this.TicketErfassen.setVisible(false);
 		this.TicketErstellen.setVisible(false);
@@ -452,9 +441,8 @@ public class ticketBearbeitung_View extends JFrame {
 	public Ticket saveEditedTicket(){
 		this.t.beschreibung = text_Beschreibung.getText();
 		this.t.tmploesung = text_Loesung.getText();
-		
-		this.t.idKategorie = Integer.toString(combo_Kategorie.getSelectedIndex()+1);
-		this.t.idPrioritaet = Integer.toString(combo_Prioritaet.getSelectedIndex()+1);
+		this.t.idKategorie = kategorie.getElementAt(combo_Kategorie.getSelectedIndex()).getID();
+		this.t.idPrioritaet = priorität.getElementAt(combo_Prioritaet.getSelectedIndex()).getID();
 
 		return this.t;
 	}
@@ -467,7 +455,7 @@ public class ticketBearbeitung_View extends JFrame {
 	}
 	
 	//Panel für TicketErfassen erstellen
-	public void TicketErfassen(Ticket t, AttributComboBox kategorie, AttributComboBox priorität, DefaultComboBoxModel mitarbeiter){
+	public void TicketErfassen(Ticket t){
 		this.t = t;
 		
 		this.setTitle("Ticket erfassen");
@@ -475,10 +463,11 @@ public class ticketBearbeitung_View extends JFrame {
 		text_Beschreibung2.setText(t.beschreibung);
 		this.combo_Kategorie2.setModel(kategorie);
 		this.combo_Prioritaet2.setModel(priorität);
-		this.combo_Mitarbeiter.setModel(mitarbeiter);
 		
-		combo_Kategorie2.setSelectedIndex(Integer.parseInt(t.idKategorie)-1);
-		combo_Prioritaet2.setSelectedIndex(Integer.parseInt(t.idPrioritaet)-1);
+		
+		this.combo_Kategorie2.setSelectedIndex(kategorie.getIndexOf(t.idKategorie));
+		this.combo_Prioritaet2.setSelectedIndex(priorität.getIndexOf(t.idPrioritaet));
+		
 
 		this.TicketErfassen.setVisible(true);
 		this.TicketErstellen.setVisible(false);
@@ -489,29 +478,24 @@ public class ticketBearbeitung_View extends JFrame {
 		btn_TicketErfassen.addActionListener(a);
 	}
 	public Ticket erfasseTicket(){
-		this.t.idKategorie = Integer.toString(combo_Kategorie2.getSelectedIndex()+1);
-		this.t.idPrioritaet = Integer.toString(combo_Prioritaet2.getSelectedIndex()+1);
-		this.t.idMitarbeiter = Integer.toString(combo_Mitarbeiter.getSelectedIndex()+1);
+		this.t.idKategorie = kategorie.getElementAt(combo_Kategorie2.getSelectedIndex()).getID();
+		this.t.idPrioritaet =  priorität.getElementAt(combo_Prioritaet2.getSelectedIndex()).getID();
 		this.t.beschreibung = this.text_Beschreibung2.getText();
+		
 		return this.t;
 	}
 	
 	
-	public void TicketErstellen(Ticket t, AttributComboBox kategorie, AttributComboBox priorität, KundenCombo kunden){
+	public void TicketErstellen(Ticket t){
 		this.t = t;
 		
 		this.setTitle("Neues Ticket erstellen");
 		
-		text_NewBeschreibung.setText(t.beschreibung);
-		this.combo_NewKategorie.setModel(kategorie);
-		this.combo_NewPrioritaet.setModel(priorität);
-		this.combo_NewK.setModel(kunden);
+		combo_NewKategorie.setModel(kategorie);
+		combo_NewPrioritaet.setModel(priorität);
+		combo_NewK.setModel(kunden);
 		
-
-		this.combo_NewKategorie.setSelectedIndex(0);
-		this.combo_NewPrioritaet.setSelectedIndex(0);
 		
-
 		this.TicketErfassen.setVisible(false);
 		this.TicketErstellen.setVisible(true);
 		this.TicketBearbeiten.setVisible(false);
@@ -521,8 +505,16 @@ public class ticketBearbeitung_View extends JFrame {
 	public void addListenerTicketErstellen(ActionListener a){
 		btn_TicketErstellen.addActionListener(a);
 	}
-	public String erstelleTicket(){
-		return this.text_NewBeschreibung.getText();
+	public Ticket erstelleTicket(){
+		Ticket temp = new Ticket();
+		
+		temp.beschreibung = text_NewBeschreibung.getText();
+		temp.idKategorie = kategorie.getElementAt(combo_NewKategorie.getSelectedIndex()).getID();
+		temp.idPrioritaet =  priorität.getElementAt(combo_NewPrioritaet.getSelectedIndex()).getID();
+		temp.idKunde = kunden.getObjectAt(combo_NewK.getSelectedIndex()).idKunde;
+		
+		return temp;
+		
 	}
 
 }

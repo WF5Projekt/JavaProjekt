@@ -2,11 +2,13 @@ package models;
 
 import java.util.ArrayList;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 import models.Mitarbeiter;
 
 public class MitarbeiterCombo extends DefaultComboBoxModel {
+	
 	private ArrayList<Mitarbeiter> mitarbeiter;
 	private int index = -1;
 
@@ -16,6 +18,9 @@ public class MitarbeiterCombo extends DefaultComboBoxModel {
 
 	public ArrayList<Mitarbeiter> getMitarbeiter() {
 		return this.mitarbeiter;
+	}
+	public Attribut[] getMitarbeiterArray(){
+		return (Attribut[]) this.mitarbeiter.toArray();
 	}
 
 	@Override

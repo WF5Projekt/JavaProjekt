@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -304,6 +305,8 @@ public class Database_Operations extends Database_Model {
 
 	}
 	
+	
+	
 	public void ticketGelöst(Ticket t) {
 		Connection con = getConnection();
 		try {
@@ -315,6 +318,7 @@ public class Database_Operations extends Database_Model {
 
 			stmt.execute(query);
 			
+			t.idStatus = "4";
 			//Ticket wird gespeichert
 			query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
 					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
@@ -336,7 +340,10 @@ public class Database_Operations extends Database_Model {
 			/*
 			 * idTicket, beschreibung, tmploesung, idKategorie, idPrioritaet, idStatus, idLevel
 			 */
-			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
+			String tmpLoesung = "";
+			if(t.tmploesung != null) tmpLoesung = t.tmploesung;
+			
+			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ tmpLoesung + "', '"+ t.idKategorie
 					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
 
 			stmt.execute(query);
@@ -353,14 +360,9 @@ public class Database_Operations extends Database_Model {
 				Statement stmt = con.createStatement();
 				/*
 				 * Ticket updaten, falls Kategorie oder Ähnliches geändert wurde
-				 * und Ticket einem Mitarbeiter zuweisen ->
-				 * `sp_bindTicket`(idTicket INT(11),idMitarbeiter INT(11))
 				 */
-				String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '"+ t.tmploesung + "', '"+ t.idKategorie
+				String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '', '"+ t.idKategorie
 						+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
-				stmt.execute(query);
-				
-				query = "call sp_bindTicket(' " + t.idTicket + "', '"+ t.idMitarbeiter + "')";
 				
 				stmt.execute(query);
 				stmt.close();
@@ -370,6 +372,26 @@ public class Database_Operations extends Database_Model {
 			}
 		}
 
+	public void ticketZumBearbeiten(Ticket t, Mitarbeiter user){
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			/*
+			 * Ticket wird einem Mitarbeiter zugewiesen
+			 */
+			
+			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '', '"+ t.idKategorie
+			+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
+			stmt.execute(query);
+			
+			query = "call sp_bindTicket(' " + t.idTicket + "', '"+ user.idMitarbeiter + "')";
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 	// Lösche Ticket aus Datenbank
 	public void ticketDelete(Ticket t) {
 		Connection con = getConnection();
@@ -542,16 +564,20 @@ public class Database_Operations extends Database_Model {
 				String idAbteilung= result.getString(9);
 				String level= result.getString(16);
 				String idLevel= result.getString(15);
+				String idZuständigkeit = result.getString(17);
+				String zuständigkeit = result.getString(18);
 				
 				String email= result.getString(13);
 				String telefon= result.getString(14);
 				String account= result.getString(12);
 				String idAccount= result.getString(11);
 				
+		
+				
 				newMitarbeiter = new Mitarbeiter( idMitarbeiter,  name,  geburt,
 						 strasse,  hausnummer,  plz,  ort,
 						 land,  abteilung,  idAbteilung,  level,
-						 idLevel,  email,  telefon,  account,
+						 idLevel, idZuständigkeit, zuständigkeit, email,  telefon,  account,
 						 idAccount);
 
 			} catch (SQLException e) {
@@ -733,10 +759,10 @@ public class Database_Operations extends Database_Model {
 			return a;
 
 		}
-		public ArrayList<Attribut> getAttribut(String attribut) {
+		public Vector getAttribut(String attribut) {
 			Connection con = getConnection();
 			
-			ArrayList<Attribut> attribute = new ArrayList<Attribut>();
+			Vector attribute = new Vector();
 			
 			Statement query;
 			try {

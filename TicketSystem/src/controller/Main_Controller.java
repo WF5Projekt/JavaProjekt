@@ -124,6 +124,7 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 		MainView.addListenerAllTickets(new getAllTickets());
 		MainView.addListenerNeueTickets(new getNeueTickets());
+		MainView.addListenerTicketsOffen(new getOffeneTickets());
 		MainView.addListenerMeineTickets(new getMeineTickets());
 		MainView.addListenerTicketAbgeschlossene(new getAbgeschlosseneTickets());
 		MainView.addListenerFAQTickets(new getFAQTickets());
@@ -354,9 +355,25 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			tickets.aktuell = "tickets";
 			tickets.reset();
 			MainView.setTabelle(tickets);
+			showTicketInfo();
+			MainView.viewDetails(true);
 			MainView.viewButtonsAlle();
+		}
+		
+	}
+	class getOffeneTickets implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			tickets.aktuell = "tickets";
+			tickets.getTicketsAbteilung(user);
+			MainView.setTabelle(tickets);
+			showTicketInfo();
+			MainView.viewDetails(true);
+			MainView.viewButtonsMeine();
 		}
 		
 	}
@@ -364,8 +381,11 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			tickets.aktuell = "tickets";
 			MainView.setTabelle(tickets);
 			MainView.viewButtonsNeue();
+			showTicketInfo();
+			MainView.viewDetails(true);
 			tickets.getNeueTickets();
 		}
 		
@@ -374,8 +394,12 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			tickets.aktuell = "tickets";
+			
 			MainView.setTabelle(tickets);
 			MainView.viewButtonsMeine();
+			showTicketInfo();
+			MainView.viewDetails(true);
 			tickets.getMeineTickets(user);
 		}
 		
@@ -384,7 +408,10 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			tickets.aktuell = "gelöste";
 			MainView.setTabelle(gelöst);
+			showTicketInfo();
+			MainView.viewDetails(true);
 			MainView.viewButtonsAbgeschlossene();
 		}
 		
@@ -394,6 +421,10 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			MainView.viewButtonsFAQ();
+			showTicketInfo();
+			MainView.viewDetails(false);
+			
+			tickets.aktuell = "faq";
 			MainView.setTabelle(faq);
 		}
 		
@@ -402,8 +433,12 @@ public class Main_Controller implements ListSelectionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			tickets.aktuell = "tickets";
+			
 			MainView.setTabelle(tickets);
+			showTicketInfo();
 			MainView.viewButtonsFertigeTickets();
+			MainView.viewDetails(true);
 			tickets.getFertigeTickets();
 		}
 		
@@ -415,6 +450,7 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			reloadTickets();
+			showTicketInfo();
 		}
 
 	}
@@ -425,8 +461,8 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 	
-			TicketEditView = new ticketBearbeitung_View();
-			TicketEditView.TicketErstellen(new Ticket(), kategorie, priorität, KundenCombo);
+			TicketEditView = new ticketBearbeitung_View( kategorie, priorität,MitarbeiterCombo, KundenCombo);
+			TicketEditView.TicketErstellen(new Ticket());
 			TicketEditView.addListenerTicketErstellen(new neuesTicket());
 			
 			}
@@ -444,25 +480,14 @@ public class Main_Controller implements ListSelectionListener {
 			// Daten vollständig: das Ticket wird erstellt mit: Beschreibung,
 			// idPriorität, idKategorie, idKunde, idMitarbeiter und in Datenbank
 			// mit NewTicket() gespeichert	
-			Ticket tmpTicket = new Ticket();
-			
-			int idKat = TicketEditView.combo_NewKategorie.getSelectedIndex();
-			tmpTicket.idKategorie = kategorie.getObjectAt(idKat).id;
-			int idPrio = TicketEditView.combo_NewPrioritaet.getSelectedIndex();
-			tmpTicket.idPrioritaet = priorität.getObjectAt(idPrio).id;
-			int idKunde = TicketEditView.combo_NewK.getSelectedIndex();
-			tmpTicket.idKunde = KundenCombo.getObjectAt(idKunde).idKunde;
-
-			tmpTicket.beschreibung = TicketEditView.erstelleTicket();
+			Ticket tmpTicket = TicketEditView.erstelleTicket();
 		
-
 			if (! ( tmpTicket.idKategorie.equals("") || tmpTicket.idPrioritaet.equals("") || tmpTicket.idKunde.equals("")	
 					|| tmpTicket.beschreibung.trim().equals("") ) ) {
 
 				Ticket neuesTicket = db.ticketNew(tmpTicket);
-				tickets.ticketUpdate(neuesTicket);
-				tickets.reset();
-				
+				reloadTickets();
+				MainView.viewButtonsAlle();
 				JOptionPane.showMessageDialog(null, "Ticket eröffnet!",
 						"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
 			
@@ -491,25 +516,22 @@ public class Main_Controller implements ListSelectionListener {
 			
 			try{
 			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
-			try{
-				
-				
-				TicketEditView = new ticketBearbeitung_View();
-				TicketEditView.TicketBearbeiten(tmpTicket, kategorie, priorität, status);
-				TicketEditView.addListenerTicketSave(new EditTicketListener());
-				TicketEditView.addListenerTicketLoesung(new EditTicketLoesungListener());
-				
-				} catch(Exception e){
-						JOptionPane
-								.showMessageDialog(MainView, "Ups! Da ging wohl etwas beim Öffnen des Ticket-Bearbeiten Fensters schief.");
-					
-				}
+					try{
+						TicketEditView = new ticketBearbeitung_View( kategorie, priorität, MitarbeiterCombo, KundenCombo);
+						
+						
+						TicketEditView.TicketBearbeiten(tmpTicket);
+						TicketEditView.addListenerTicketSave(new EditTicketListener());
+						TicketEditView.addListenerTicketLoesung(new EditTicketLoesungListener());
+						
+						} catch(Exception e){
+								JOptionPane
+										.showMessageDialog(MainView, "Ups! Da ging wohl etwas beim Öffnen des Ticket-Bearbeiten Fensters schief.");
+						}
 			}catch(Exception e){
 				JOptionPane
 				.showMessageDialog(MainView, "Bitte zu bearbeitendes Ticket auswählen!");
-			}
-			
-	
+			}	
 		}
 		
 	}
@@ -521,22 +543,44 @@ public class Main_Controller implements ListSelectionListener {
 
 			Ticket temp = TicketEditView.saveEditedTicket();
 
+
+			if(temp.idMitarbeiter == null){
+				int entscheidung = JOptionPane.showConfirmDialog(null,
+			
+					"Ticket wird Ihnen zugewiesen.",
+					"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
+				// 0 = Ja, 1= Nein
+				if (entscheidung == 1) {
+					TicketEditView.dispose();
+					return;
+				}					
+				else{
+					// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
+					// gesetzt.
+					if (temp.idStatus.equals("2"))
+						temp.idStatus = "3";
+			
+					db.ticketZumBearbeiten(temp, user);
+					//Ticket lokal updaten
+					tickets.ticketUpdate(temp);
+					
+					tickets.getMeineTickets(user);
+
+				
+					TicketEditView.dispose();
+				}
+			}
 			// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
 			// gesetzt.
-			if (temp.idStatus.equals("2"))
-				temp.idStatus = "3";
-			
 			db.ticketSaveEdit(temp);
-			//Ticket lokal updaten
-			tickets.ticketUpdate(temp);
-			//Tabelle aktualisieren
-			refreshTickets();
+			reloadTickets();
+			
 			tickets.getMeineTickets(user);
 
-			JOptionPane.showMessageDialog(null, "Ticket bearbeitet!",
-					"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
-
+		
 			TicketEditView.dispose();
+			
+		
 		}
 
 	}
@@ -554,10 +598,7 @@ public class Main_Controller implements ListSelectionListener {
 				if (entscheidung == 0) {
 					db.ticketGelöst(temp);
 
-					//Ticket lokal updaten
-					tickets.ticketUpdate(temp);
-					//Tabelle aktualisieren
-					refreshTickets();
+					reloadTickets();
 					tickets.getMeineTickets(user);
 
 					TicketEditView.dispose();
@@ -579,8 +620,8 @@ public class Main_Controller implements ListSelectionListener {
 			try{
 			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
 			try{
-				TicketEditView = new ticketBearbeitung_View();
-				TicketEditView.TicketErfassen(tmpTicket, kategorie, priorität, MitarbeiterCombo);
+				TicketEditView = new ticketBearbeitung_View(kategorie, priorität, MitarbeiterCombo, KundenCombo);
+				TicketEditView.TicketErfassen(tmpTicket);
 				TicketEditView.addListenerTicketErfassen(new ErfasseTicketListener());
 				
 			}catch(Exception e){
@@ -597,16 +638,14 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Ticket temp = TicketEditView.erfasseTicket();
-			
+			temp.idStatus = "2"; //Erfasst
 			db.ticketErfassen(temp);
-			JOptionPane.showMessageDialog(null, "Ticket erfasst und Mitarbeiter zugewiesen!",
+			JOptionPane.showMessageDialog(null, "Ticket erfasst! Wird in kürze Bearbeitet",
 					"Erfolgreich", JOptionPane.PLAIN_MESSAGE);
 
-			//Ticket lokal updaten
-			tickets.ticketUpdate(temp);
-			//Tabelle aktualisieren
-			refreshTickets();
+
 			tickets.getNeueTickets();
+			refreshTickets();
 			
 			TicketEditView.dispose();
 			
@@ -659,17 +698,21 @@ public class Main_Controller implements ListSelectionListener {
 	// Tabelle
 	private void showTicketInfo() {
 		int selectedRow = MainView.getSelectedTicket();
+
 		if (selectedRow != -1) {
 
 			Ticket tmpTicket = tickets.getTicketAtRow(selectedRow);
 
-			if (tmpTicket != null) {
+			if (tmpTicket != null
+					&& (tickets.aktuell.matches("tickets") || tickets.aktuell
+							.matches("gelöste"))) {
 
 				MainView.setInfoBeschreibung(!(tmpTicket.beschreibung.trim()
 						.equals("")) ? tmpTicket.beschreibung : "-");
-				if(!(tmpTicket.tmploesung == null))
-				MainView.setInfoLösung(!(tmpTicket.equals("")) ? tmpTicket.tmploesung : "-");
-			
+				if (!(tmpTicket.tmploesung == null))
+					MainView.setInfoLösung(!(tmpTicket.equals("")) ? tmpTicket.tmploesung
+							: "-");
+
 				MainView.setInfoStatus(!(tmpTicket.status.trim().equals("")) ? tmpTicket.status
 						: "-");
 				MainView.setInfoKategorie(!(tmpTicket.kategorie.trim()
@@ -713,7 +756,7 @@ public class Main_Controller implements ListSelectionListener {
 							: "-");
 					MainView.setInfoErreichbarkeit(!(tmpKunde.erreichbar.trim()
 							.equals("")) ? tmpKunde.erreichbar : "-");
-					
+
 					MainView.setInfoTelefon_K(!(tmpKunde.telefon.trim()
 							.equals("")) ? tmpKunde.telefon : "-");
 				} else {
@@ -724,6 +767,35 @@ public class Main_Controller implements ListSelectionListener {
 				}
 			}
 
+			else if (tmpTicket != null && tickets.aktuell.equals("faq")) {
+				MainView.setInfoBeschreibung(!(tmpTicket.beschreibung.trim()
+						.equals("")) ? tmpTicket.beschreibung : "-");
+				if (!(tmpTicket.tmploesung == null))
+					MainView.setInfoLösung(!(tmpTicket.equals("")) ? tmpTicket.tmploesung
+							: "-");
+
+			}
+
+			else {
+				MainView.setInfoHelpdesk("-");
+				MainView.setInfoName_M("-");
+				MainView.setInfoEmail_M("-");
+				MainView.setInfoTelefon_M("-");
+				MainView.setInfoAbteilung("-");
+				MainView.setInfoEmail_K("-");
+				MainView.setInfoName_K("-");
+				MainView.setInfoErreichbarkeit("-");
+				MainView.setInfoTelefon_K("-");
+
+				MainView.setInfoBeschreibung("-");
+				MainView.setInfoLösung("-");
+
+				MainView.setInfoStatus("-");
+				MainView.setInfoKategorie("-");
+				MainView.setInfoLevel("-");
+				MainView.setInfoPriorität("-");
+				MainView.setInfoErstellzeitpunkt("-");
+			}
 		}
 	}
 		

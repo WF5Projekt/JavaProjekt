@@ -16,6 +16,8 @@ public class Mitarbeiter extends Database_Model {
 	public String idAbteilung;
 	public String level;
 	public String idLevel;
+	public String idZuständigkeit;
+	public String zuständigkeit;
 	
 	public String email;
 	public String telefon;
@@ -27,7 +29,7 @@ public class Mitarbeiter extends Database_Model {
 	public Mitarbeiter(String idMitarbeiter, String name, String geburt,
 			String strasse, String hausnummer, String plz, String ort,
 			String land, String abteilung, String idAbteilung, String level,
-			String idLevel, String email, String telefon, String account,
+			String idLevel, String idZuständigkeit, String zuständigkeit, String email, String telefon, String account,
 			String idAccount) {
 		this.idMitarbeiter = idMitarbeiter;
 		this.name = name;
@@ -41,6 +43,8 @@ public class Mitarbeiter extends Database_Model {
 		this.idAbteilung = idAbteilung;
 		this.level = level;
 		this.idLevel = idLevel;
+		this.idZuständigkeit = idZuständigkeit;
+		this.zuständigkeit = zuständigkeit;
 		this.email = email;
 		this.telefon = telefon;
 		this.account = account;
@@ -63,6 +67,7 @@ public class Mitarbeiter extends Database_Model {
 				this.land,
 				this.abteilung,
 				this.level,
+				this.zuständigkeit,
 				this.email,
 				this.telefon,
 				this.account
@@ -76,8 +81,9 @@ public class Mitarbeiter extends Database_Model {
 				"Name",  
 				"Adresse",
 				"Land",
-				"Abteilung", 
+				"Abteilung",
 				"Level",
+				"Zuständig für",
 				"E-Mail",
 				"Telefon",
 				"Username"
@@ -93,15 +99,15 @@ public class Mitarbeiter extends Database_Model {
 		case 1:
 			return this.name;
 		case 2:
-			return this.plz;
-		case 3:
 			return this.getAdresse();
-		case 4:
+		case 3:
 			return this.land;
-		case 5:
+		case 4:
 			return this.abteilung;
-		case 6:
+		case 5:
 			return this.level;
+		case 6:
+			return this.zuständigkeit;
 		case 7:
 			return this.email;
 		case 8:

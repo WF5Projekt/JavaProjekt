@@ -24,6 +24,4 @@ public class Attribut{
 	public String toString() {
 		return this.id + " - " + this.bezeichnung;
 	}
-	
-
 }

@@ -136,12 +136,13 @@ public class Main_View extends JFrame {
 	private JPanel panel_13;
 	private JButton btn_Einstellungen;
 	private JButton btn_TicketAlsFAQ;
-	private JButton btn_TicketLoesen;
+	private JButton btn_TicketAnKunde;
 	private JLabel lblAnzeigen;
 	private JButton btn_AbgeschlosseneTickets;
 	private JPanel panelInfoTicket2;
 	private JLabel _loesung;
 	private JLabel lblLsungsvorschlag;
+	private JButton btn_TicketsOffen;
 
 	public Main_View() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -319,22 +320,22 @@ public class Main_View extends JFrame {
 		gbc_btn_TicketBearbeiten.gridy = 3;
 		panel_10.add(btn_TicketBearbeiten, gbc_btn_TicketBearbeiten);
 
-		btn_TicketLoesen = new JButton("Abschlie\u00DFen");
+		btn_TicketAnKunde = new JButton("Antwort an Kunde");
 
-		btn_TicketLoesen.setVisible(false);
-		btn_TicketLoesen.setHorizontalAlignment(SwingConstants.LEFT);
-		btn_TicketLoesen.setIcon(new ImageIcon(Main_View.class
+		btn_TicketAnKunde.setVisible(false);
+		btn_TicketAnKunde.setHorizontalAlignment(SwingConstants.LEFT);
+		btn_TicketAnKunde.setIcon(new ImageIcon(Main_View.class
 				.getResource("/lib/png/check.png")));
-		btn_TicketLoesen.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_btn_TicketLoesen = new GridBagConstraints();
-		gbc_btn_TicketLoesen.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_TicketLoesen.anchor = GridBagConstraints.SOUTH;
-		gbc_btn_TicketLoesen.insets = new Insets(0, 0, 5, 0);
-		gbc_btn_TicketLoesen.gridx = 0;
-		gbc_btn_TicketLoesen.gridy = 4;
-		panel_10.add(btn_TicketLoesen, gbc_btn_TicketLoesen);
+		btn_TicketAnKunde.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_btn_TicketAnKunde = new GridBagConstraints();
+		gbc_btn_TicketAnKunde.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btn_TicketAnKunde.anchor = GridBagConstraints.SOUTH;
+		gbc_btn_TicketAnKunde.insets = new Insets(0, 0, 5, 0);
+		gbc_btn_TicketAnKunde.gridx = 0;
+		gbc_btn_TicketAnKunde.gridy = 4;
+		panel_10.add(btn_TicketAnKunde, gbc_btn_TicketAnKunde);
 
-		btn_TicketAlsFAQ = new JButton("Als FAQ");
+		btn_TicketAlsFAQ = new JButton("Als FAQ speichern");
 		btn_TicketAlsFAQ.setVisible(false);
 		btn_TicketAlsFAQ.setHorizontalAlignment(SwingConstants.LEFT);
 		btn_TicketAlsFAQ.setIcon(new ImageIcon(Main_View.class
@@ -375,72 +376,83 @@ public class Main_View extends JFrame {
 		gbc_btn_NeueTickets.gridx = 0;
 		gbc_btn_NeueTickets.gridy = 8;
 		panel_10.add(btn_NeueTickets, gbc_btn_NeueTickets);
-
-		btn_MeineTickets = new JButton("Meine Tickets");
-		btn_MeineTickets.setHorizontalAlignment(SwingConstants.LEFT);
-		btn_MeineTickets.setIcon(new ImageIcon(Main_View.class
-				.getResource("/lib/png/user-male.png")));
-		btn_MeineTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_btn_MeineTickets = new GridBagConstraints();
-		gbc_btn_MeineTickets.insets = new Insets(0, 0, 5, 0);
-		gbc_btn_MeineTickets.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_MeineTickets.gridx = 0;
-		gbc_btn_MeineTickets.gridy = 9;
-		panel_10.add(btn_MeineTickets, gbc_btn_MeineTickets);
 		
-				btn_GelösteTickets = new JButton("Gel\u00F6ste Tickets pr\u00FCfen");
-				btn_GelösteTickets.setHorizontalAlignment(SwingConstants.LEFT);
-				btn_GelösteTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/alert.png")));
-				btn_GelösteTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
-				GridBagConstraints gbc_btn_GelösteTickets = new GridBagConstraints();
-				gbc_btn_GelösteTickets.insets = new Insets(0, 0, 5, 0);
-				gbc_btn_GelösteTickets.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btn_GelösteTickets.gridx = 0;
-				gbc_btn_GelösteTickets.gridy = 10;
-				panel_10.add(btn_GelösteTickets, gbc_btn_GelösteTickets);
-		
-				btn_AllTickets = new JButton("Alle Tickets");
-				btn_AllTickets.addActionListener(new ActionListener() {
+				btn_FAQTickets = new JButton("FAQ");
+				btn_FAQTickets.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					}
 				});
-				btn_AllTickets.setHorizontalAlignment(SwingConstants.LEFT);
-				btn_AllTickets.setIcon(new ImageIcon(Main_View.class
-						.getResource("/lib/png/list.png")));
-				btn_AllTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
-				GridBagConstraints gbc_btn_AllTickets = new GridBagConstraints();
-				gbc_btn_AllTickets.insets = new Insets(0, 0, 5, 0);
-				gbc_btn_AllTickets.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btn_AllTickets.gridx = 0;
-				gbc_btn_AllTickets.gridy = 11;
-				panel_10.add(btn_AllTickets, gbc_btn_AllTickets);
-
-		btn_AbgeschlosseneTickets = new JButton("Abgeschlossene Tickets");
-		btn_AbgeschlosseneTickets.setIcon(new ImageIcon(Main_View.class
-				.getResource("/lib/png/check.png")));
-		btn_AbgeschlosseneTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_btn_AbgeschlosseneTickets = new GridBagConstraints();
-		gbc_btn_AbgeschlosseneTickets.insets = new Insets(0, 0, 5, 0);
-		gbc_btn_AbgeschlosseneTickets.gridx = 0;
-		gbc_btn_AbgeschlosseneTickets.gridy = 12;
-		panel_10.add(btn_AbgeschlosseneTickets, gbc_btn_AbgeschlosseneTickets);
-
-		btn_FAQTickets = new JButton("FAQ");
-		btn_FAQTickets.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-	
-		btn_FAQTickets.setHorizontalAlignment(SwingConstants.LEFT);
-		btn_FAQTickets.setIcon(new ImageIcon(Main_View.class
-				.getResource("/lib/png/help.png")));
-		btn_FAQTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_btn_FAQTickets = new GridBagConstraints();
-		gbc_btn_FAQTickets.insets = new Insets(0, 0, 5, 0);
-		gbc_btn_FAQTickets.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_FAQTickets.gridx = 0;
-		gbc_btn_FAQTickets.gridy = 13;
-		panel_10.add(btn_FAQTickets, gbc_btn_FAQTickets);
+									
+											btn_AllTickets = new JButton("Alle Tickets");
+											btn_AllTickets.addActionListener(new ActionListener() {
+												public void actionPerformed(ActionEvent e) {
+												}
+											});
+													
+													btn_TicketsOffen = new JButton("Offene Tickets");
+													btn_TicketsOffen.setHorizontalAlignment(SwingConstants.LEFT);
+													btn_TicketsOffen.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/files.png")));
+													btn_TicketsOffen.setFont(new Font("Tahoma", Font.BOLD, 12));
+													GridBagConstraints gbc_btn_TicketsOffen = new GridBagConstraints();
+													gbc_btn_TicketsOffen.fill = GridBagConstraints.HORIZONTAL;
+													gbc_btn_TicketsOffen.insets = new Insets(0, 0, 5, 0);
+													gbc_btn_TicketsOffen.gridx = 0;
+													gbc_btn_TicketsOffen.gridy = 9;
+													panel_10.add(btn_TicketsOffen, gbc_btn_TicketsOffen);
+											
+													btn_MeineTickets = new JButton("Meine Tickets");
+													btn_MeineTickets.setHorizontalAlignment(SwingConstants.LEFT);
+													btn_MeineTickets.setIcon(new ImageIcon(Main_View.class
+															.getResource("/lib/png/user-male.png")));
+													btn_MeineTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+													GridBagConstraints gbc_btn_MeineTickets = new GridBagConstraints();
+													gbc_btn_MeineTickets.insets = new Insets(0, 0, 5, 0);
+													gbc_btn_MeineTickets.fill = GridBagConstraints.HORIZONTAL;
+													gbc_btn_MeineTickets.gridx = 0;
+													gbc_btn_MeineTickets.gridy = 10;
+													panel_10.add(btn_MeineTickets, gbc_btn_MeineTickets);
+											btn_AllTickets.setHorizontalAlignment(SwingConstants.LEFT);
+											btn_AllTickets.setIcon(new ImageIcon(Main_View.class
+													.getResource("/lib/png/list.png")));
+											btn_AllTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+											GridBagConstraints gbc_btn_AllTickets = new GridBagConstraints();
+											gbc_btn_AllTickets.insets = new Insets(0, 0, 5, 0);
+											gbc_btn_AllTickets.fill = GridBagConstraints.HORIZONTAL;
+											gbc_btn_AllTickets.gridx = 0;
+											gbc_btn_AllTickets.gridy = 11;
+											panel_10.add(btn_AllTickets, gbc_btn_AllTickets);
+							
+									btn_GelösteTickets = new JButton("Tickets mit L\u00F6sung");
+									btn_GelösteTickets.setHorizontalAlignment(SwingConstants.LEFT);
+									btn_GelösteTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/alert.png")));
+									btn_GelösteTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+									GridBagConstraints gbc_btn_GelösteTickets = new GridBagConstraints();
+									gbc_btn_GelösteTickets.insets = new Insets(0, 0, 5, 0);
+									gbc_btn_GelösteTickets.fill = GridBagConstraints.HORIZONTAL;
+									gbc_btn_GelösteTickets.gridx = 0;
+									gbc_btn_GelösteTickets.gridy = 12;
+									panel_10.add(btn_GelösteTickets, gbc_btn_GelösteTickets);
+					
+							btn_AbgeschlosseneTickets = new JButton("Geschlossene Tickets");
+							btn_AbgeschlosseneTickets.setIcon(new ImageIcon(Main_View.class
+									.getResource("/lib/png/check.png")));
+							btn_AbgeschlosseneTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+							GridBagConstraints gbc_btn_AbgeschlosseneTickets = new GridBagConstraints();
+							gbc_btn_AbgeschlosseneTickets.insets = new Insets(0, 0, 5, 0);
+							gbc_btn_AbgeschlosseneTickets.gridx = 0;
+							gbc_btn_AbgeschlosseneTickets.gridy = 13;
+							panel_10.add(btn_AbgeschlosseneTickets, gbc_btn_AbgeschlosseneTickets);
+				
+					btn_FAQTickets.setHorizontalAlignment(SwingConstants.LEFT);
+					btn_FAQTickets.setIcon(new ImageIcon(Main_View.class
+							.getResource("/lib/png/help.png")));
+					btn_FAQTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
+					GridBagConstraints gbc_btn_FAQTickets = new GridBagConstraints();
+					gbc_btn_FAQTickets.insets = new Insets(0, 0, 5, 0);
+					gbc_btn_FAQTickets.fill = GridBagConstraints.HORIZONTAL;
+					gbc_btn_FAQTickets.gridx = 0;
+					gbc_btn_FAQTickets.gridy = 14;
+					panel_10.add(btn_FAQTickets, gbc_btn_FAQTickets);
 
 		panel_9 = new JPanel();
 		ticketView.add(panel_9, BorderLayout.CENTER);
@@ -453,10 +465,11 @@ public class Main_View extends JFrame {
 				BevelBorder.LOWERED, null, null, null, null));
 
 		tickets = new JTable();
+		tickets.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		tickets.setFont(new Font("Calibri", Font.BOLD, 15));
 		tickets.setFillsViewportHeight(true);
 		tickets.setBackground(new Color(240, 248, 255));
-
+		TicketscrollPane.setViewportView(tickets);
 		panel_ticketdetails = new JPanel();
 		panel_9.add(panel_ticketdetails, BorderLayout.SOUTH);
 		panel_ticketdetails.setBackground(new Color(245, 245, 245));
@@ -846,6 +859,7 @@ public class Main_View extends JFrame {
 		mitarbeiterView.add(MitarbeiterScrollPane, BorderLayout.CENTER);
 
 		mitarbeiter = new JTable();
+		mitarbeiter.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		mitarbeiter.setBackground(new Color(240, 248, 255));
 		mitarbeiter.setFont(new Font("Calibri", Font.BOLD, 15));
 		mitarbeiter.setFillsViewportHeight(true);
@@ -929,6 +943,7 @@ public class Main_View extends JFrame {
 		kundenView.add(KundenScrollPane, BorderLayout.CENTER);
 
 		kunden = new JTable();
+		kunden.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		kunden.setBackground(new Color(240, 248, 255));
 		kunden.setFont(new Font("Calibri", Font.BOLD, 15));
 		kunden.setFillsViewportHeight(true);
@@ -1104,14 +1119,19 @@ public class Main_View extends JFrame {
 
 	public void setTabelle(Ticket_Table t) {
 		setModel(t);
-		TicketscrollPane.setViewportView(tickets);
 	}
 
+	
+	public void viewDetails(Boolean b){
+			panel_3.setVisible(b);
+		
+	}
 	public void viewButtonsNeue() {
 		this.btn_TicketBearbeiten.setVisible(false);
-		this.btn_TicketLoesen.setVisible(false);
+		this.btn_TicketAnKunde.setVisible(false);
 		this.btn_TicketAlsFAQ.setVisible(false);
 		this.btn_TicketErfassen.setVisible(true);
+		this.btn_TicketsOffen.setVisible(true);
 
 		if (UserLevel == 1) {
 			this.btn_TicketErfassen.setVisible(true);
@@ -1127,28 +1147,33 @@ public class Main_View extends JFrame {
 		this.btn_TicketBearbeiten.setVisible(true);
 		this.btn_TicketAlsFAQ.setVisible(false);
 		this.btn_TicketErfassen.setVisible(false);
-		
+
+		this.btn_TicketsOffen.setVisible(true);
 
 	}
 
+
 	public void viewButtonsAlle() {
-		this.btn_TicketLoesen.setVisible(false);
+		this.btn_TicketAnKunde.setVisible(false);
 		this.btn_TicketAlsFAQ.setVisible(false);
 		this.btn_TicketErfassen.setVisible(false);
 		this.btn_TicketBearbeiten.setVisible(false);
+		this.btn_TicketsOffen.setVisible(true);
 	}
 	public void viewButtonsFertigeTickets(){
 		this.btn_TicketBearbeiten.setVisible(false);
-		this.btn_TicketLoesen.setVisible(true);
+		this.btn_TicketAnKunde.setVisible(true);
 		this.btn_TicketErfassen.setVisible(false);
 		this.btn_TicketAlsFAQ.setVisible(false);
+		this.btn_TicketsOffen.setVisible(true);
 	}
 
 	public void viewButtonsAbgeschlossene() {
 
 		this.btn_TicketBearbeiten.setVisible(false);
-		this.btn_TicketLoesen.setVisible(false);
+		this.btn_TicketAnKunde.setVisible(false);
 		this.btn_TicketErfassen.setVisible(false);
+		this.btn_TicketsOffen.setVisible(true);
 		if (UserLevel == 1) {
 			this.btn_TicketAlsFAQ.setVisible(true);
 		} else if (UserLevel == 2) {
@@ -1158,10 +1183,10 @@ public class Main_View extends JFrame {
 
 	public void viewButtonsFAQ() {
 		this.btn_TicketBearbeiten.setVisible(false);
-		this.btn_TicketLoesen.setVisible(false);
+		this.btn_TicketAnKunde.setVisible(false);
 		this.btn_TicketErfassen.setVisible(false);
 		this.btn_TicketAlsFAQ.setVisible(false);
-		
+		this.btn_TicketsOffen.setVisible(true);
 		if (UserLevel == 1) {
 			this.btn_TicketBearbeiten.setVisible(true);
 		}
@@ -1213,6 +1238,9 @@ public class Main_View extends JFrame {
 	}
 	public void addListenerTicketAbgeschlossene(ActionListener a) {
 		this.btn_AbgeschlosseneTickets.addActionListener(a);
+	}
+	public void addListenerTicketsOffen(ActionListener a){
+		this.btn_TicketsOffen.addActionListener(a);
 	}
 	
 	// ########### Suchfeld: Such-Text und die Such-Spalte wird an den
