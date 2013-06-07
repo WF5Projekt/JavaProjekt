@@ -550,35 +550,37 @@ public class Database_Operations extends Database_Model {
 
 			try {
 				
-				String idMitarbeiter= result.getString(1);
-				String name= result.getString(2);
-				String geburt= result.getString(3);
+				String idMitarbeiter= result.getString(1);				
+				String name= result.getString(3);
+				String vorname = result.getString(2);
+				String geburt= result.getString(4);
 				
-				String strasse= result.getString(4);
-				String hausnummer= result.getString(5);
-				String plz= result.getString(6);
-				String ort= result.getString(7);
-				String land= result.getString(8);
+				String strasse= result.getString(5);
+				String hausnummer= result.getString(6);
+				String plz= result.getString(7);
+				String ort= result.getString(8);
+				String idLand = result.getString(9);
+				String land= result.getString(10);
 
-				String abteilung= result.getString(10);
-				String idAbteilung= result.getString(9);
-				String level= result.getString(16);
-				String idLevel= result.getString(15);
-				String idZuständigkeit = result.getString(17);
-				String zuständigkeit = result.getString(18);
+				String idAbteilung= result.getString(11);
+				String abteilung= result.getString(12);
+
+				String idAccount= result.getString(13);
+				String account= result.getString(14);
+				String passwort = result.getString(15);
+				String email= result.getString(16);
+				String telefon= result.getString(17);
+				String idLevel= result.getString(18);
+				String level= result.getString(19);
+				String idZuständigkeit = result.getString(20);
+				String zuständigkeit = result.getString(21);
 				
-				String email= result.getString(13);
-				String telefon= result.getString(14);
-				String account= result.getString(12);
-				String idAccount= result.getString(11);
-				
-		
-				
-				newMitarbeiter = new Mitarbeiter( idMitarbeiter,  name,  geburt,
-						 strasse,  hausnummer,  plz,  ort,
-						 land,  abteilung,  idAbteilung,  level,
-						 idLevel, idZuständigkeit, zuständigkeit, email,  telefon,  account,
-						 idAccount);
+				newMitarbeiter = new Mitarbeiter( idMitarbeiter,  name,  vorname,
+						 geburt,  strasse,  hausnummer,  plz,
+						 ort,  idLand,  land,  idAbteilung,
+						 abteilung,  idAccount,  account,
+						 passwort,  email,  telefon,  idLevel,
+						 level,  idZuständigkeit,  zuständigkeit);
 
 			} catch (SQLException e) {
 				JOptionPane
@@ -655,7 +657,7 @@ public class Database_Operations extends Database_Model {
 				//Richtig, ID kam zurück, damit wird User erstellt
 				else if(!ergebnis.equals("")){
 					
-					user = getMitarbeiterWithID(ergebnis);	
+					user = getMitarbeiterWithID(ergebnis);
 				}
 				else{
 					JOptionPane.showMessageDialog(null,
@@ -698,15 +700,32 @@ public class Database_Operations extends Database_Model {
 			return mitarbeiter;
 		}
 
-		// Speichern der Tabelle
+		// Speichern des Mitarbeiters2
 
-		public void mitarbeiterSave() {
+		public void mitarbeiterSave(Mitarbeiter m) {
 			Connection con = getConnection();
 			try {
 				Statement stmt = con.createStatement();
-				String query = ""; 
-				
+				String query = "call sp_updateMitarbeiter('"
+						+ m.idMitarbeiter 	+ "','" 
+						+ m.vorname 		+ "','"
+						+ m.name 			+ "','"
+						+ m.geburt			+ "','"
+						+ m.idLand			+ "','"
+						+ m.idAbteilung		+ "','"
+						+ m.idLevel			+ "','"
+						+ m.idZuständigkeit	+ "','"
+						+ m.account			+ "','"
+						+ m.passwort		+ "','"
+						+ m.email			+ "','"
+						+ m.telefon			+ "','"
+						+ m.strasse			+ "','"
+						+ m.hausnummer		+ "','"
+						+ m.ort				+ "','"
+						+ m.plz				+ "')";
+		
 
+				
 				stmt.execute(query);
 				stmt.close();
 				con.close();

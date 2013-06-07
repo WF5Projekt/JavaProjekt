@@ -143,6 +143,7 @@ public class Main_View extends JFrame {
 	private JLabel _loesung;
 	private JLabel lblLsungsvorschlag;
 	private JButton btn_TicketsOffen;
+	private JButton btnBearbeiten;
 
 	public Main_View() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -424,7 +425,7 @@ public class Main_View extends JFrame {
 							
 									btn_GelösteTickets = new JButton("Tickets mit L\u00F6sung");
 									btn_GelösteTickets.setHorizontalAlignment(SwingConstants.LEFT);
-									btn_GelösteTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/alert.png")));
+									btn_GelösteTickets.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/arrow-1-backward.png")));
 									btn_GelösteTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
 									GridBagConstraints gbc_btn_GelösteTickets = new GridBagConstraints();
 									gbc_btn_GelösteTickets.insets = new Insets(0, 0, 5, 0);
@@ -833,7 +834,7 @@ public class Main_View extends JFrame {
 		btn_mitarbeiterRefresh.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_btn_mitarbeiterRefresh = new GridBagConstraints();
 		gbc_btn_mitarbeiterRefresh.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_mitarbeiterRefresh.insets = new Insets(0, 0, 5, 0);
+		gbc_btn_mitarbeiterRefresh.insets = new Insets(0, 0, 5, 5);
 		gbc_btn_mitarbeiterRefresh.gridx = 0;
 		gbc_btn_mitarbeiterRefresh.gridy = 0;
 		panel_12.add(btn_mitarbeiterRefresh, gbc_btn_mitarbeiterRefresh);
@@ -845,13 +846,24 @@ public class Main_View extends JFrame {
 		btn_mitarbeiterNew = new JButton("Neuer Mitarbeiter");
 		btn_mitarbeiterNew.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_btn_mitarbeiterNew = new GridBagConstraints();
-		gbc_btn_mitarbeiterNew.insets = new Insets(0, 0, 5, 0);
+		gbc_btn_mitarbeiterNew.insets = new Insets(0, 0, 5, 5);
 		gbc_btn_mitarbeiterNew.gridx = 0;
 		gbc_btn_mitarbeiterNew.gridy = 1;
 		panel_12.add(btn_mitarbeiterNew, gbc_btn_mitarbeiterNew);
 		btn_mitarbeiterNew.setIcon(new ImageIcon(Main_View.class
 				.getResource("/lib/png/add.png")));
 		btn_mitarbeiterNew.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		btnBearbeiten = new JButton("Bearbeiten");
+		btnBearbeiten.setHorizontalAlignment(SwingConstants.LEFT);
+		btnBearbeiten.setIcon(new ImageIcon(Main_View.class.getResource("/lib/png/edit.png")));
+		btnBearbeiten.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_btnBearbeiten = new GridBagConstraints();
+		gbc_btnBearbeiten.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnBearbeiten.insets = new Insets(0, 0, 0, 5);
+		gbc_btnBearbeiten.gridx = 0;
+		gbc_btnBearbeiten.gridy = 2;
+		panel_12.add(btnBearbeiten, gbc_btnBearbeiten);
 
 		MitarbeiterScrollPane = new JScrollPane();
 		MitarbeiterScrollPane.setViewportBorder(new SoftBevelBorder(
@@ -984,6 +996,9 @@ public class Main_View extends JFrame {
 
 	public void addListenerRefreshAll(ActionListener a) {
 		btnAllesAktualisieren.addActionListener(a);
+	}
+	public void addListenerSettings(ActionListener a){
+		this.btn_Einstellungen.addActionListener(a);
 	}
 
 	/*
@@ -1241,6 +1256,9 @@ public class Main_View extends JFrame {
 	}
 	public void addListenerTicketsOffen(ActionListener a){
 		this.btn_TicketsOffen.addActionListener(a);
+	}
+	public void addListenerTicketAnKunde(ActionListener a){
+		this.btn_TicketAnKunde.addActionListener(a);
 	}
 	
 	// ########### Suchfeld: Such-Text und die Such-Spalte wird an den
