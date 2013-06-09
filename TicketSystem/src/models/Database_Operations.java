@@ -428,24 +428,27 @@ public class Database_Operations extends Database_Model {
 
 			try {
 				String idKunde = result.getString(1); // getString(1)
-				String name = result.getString(2);
-				String geburtstag  = result.getString(3);
-				String strasse = result.getString(4);
-				String hausnummer = result.getString(5);
-				String plz = result.getString(6);
-				String ort = result.getString(7);
-				String land = result.getString(8);
+				String vorname = result.getString(2);
+				String name = result.getString(3);
+				String geburtstag  = result.getString(4);
+				String strasse = result.getString(5);
+				String hausnummer = result.getString(6);
+				String plz = result.getString(7);
+				String ort = result.getString(8);
+				String idLand = result.getString(9);
+				String land = result.getString(10);
+				String idErreichbar = result.getString(11);
+				String erreichbar = result.getString(12);
+				String idAccount = result.getString(13);
+				String account = result.getString(14);
+				String passwort = result.getString(15);
+				String email = result.getString(16);
+				String telefon = result.getString(17);
 				
-				String erreichbar = result.getString(9);
-				String idAccount = result.getString(10);
-				String account = result.getString(11);
-				String email = result.getString(12);
-				String telefon = result.getString(13);
 				
-				
-				newCustomer = new Kunde ( idKunde,  name,  geburtstag,  strasse,
-						 hausnummer,  plz,  ort,  land,
-						 erreichbar,  idAccount,  account,  email,
+				newCustomer = new Kunde ( idKunde, vorname, name,  geburtstag,  strasse,
+						 hausnummer,  plz,  ort,  idLand, land, idErreichbar,
+						 erreichbar,  idAccount,  account, passwort,  email,
 						 telefon);
 
 			} catch (SQLException e) {
@@ -490,7 +493,22 @@ public class Database_Operations extends Database_Model {
 			Connection con = getConnection();
 			try {
 				Statement stmt = con.createStatement();
-				String query = "";
+				String query = "call sp_updateKunde('"
+						+ k.idKunde +"','"
+						+ k.vorname+"','"
+						+ k.name+"','"
+						+ k.geburtstag+"','"
+						+ k.strasse+"','"
+						+ k.hausnummer+"','"
+						+ k.ort+"','"
+						+ k.plz+"','"
+						+ k.account+"','"
+						+ k.passwort+"','"
+						+ k.email+"','"
+						+ k.telefon+"','"
+						+ k.idLand+"','"
+						+ k.idErreichbar +"')";
+				
 				stmt.execute(query);
 				stmt.close();
 				con.close();

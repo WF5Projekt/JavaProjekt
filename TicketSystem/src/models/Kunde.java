@@ -4,34 +4,41 @@ public class Kunde{
 
 	public String idKunde;
 	public String name;
+	public String vorname;
 	public String geburtstag;
 	public String strasse;
 	public String hausnummer;
 	public String plz;
 	public String ort;
 	public String land;
-	
+	public String idLand;
+	public String idErreichbar;
 	public String erreichbar;
 	public String idAccount;
 	public String account;
+	public String passwort;
 	public String email;
 	public String telefon;
 
-	public Kunde(String idKunde, String name, String geburtstag, String strasse,
-			String hausnummer, String plz, String ort, String land,
-			String erreichbar, String idAccount, String account, String email,
+	public Kunde(String idKunde, String vorname, String name, String geburtstag, String strasse,
+			String hausnummer, String plz, String ort, String idLand, String land, String idErreichbar,
+			String erreichbar, String idAccount, String account, String passwort, String email,
 			String telefon) {
 		this.idKunde = idKunde;
 		this.geburtstag = geburtstag;
+		this.vorname = vorname;
 		this.name = name;
 		this.strasse = strasse;
 		this.hausnummer = hausnummer;
 		this.plz = plz;
 		this.ort = ort;
+		this.idLand = idLand;
 		this.land = land;
+		this.idErreichbar = idErreichbar;
 		this.erreichbar = erreichbar;
 		this.idAccount = idAccount;
 		this.account = account;
+		this.passwort = passwort;
 		this.email = email;
 		this.telefon = telefon;
 	}
@@ -43,11 +50,13 @@ public class Kunde{
 	public String getAdresse(){
 		return this.strasse +" "+ this.hausnummer + " - " + this.plz + " " + this.ort;
 	}
-	
+	public String getName(){
+		return this.vorname + " " + this.name;
+	}
 	public Object[] toJTableArray() {
 		Object[] kundenAttributeArray = { 
 				this.idKunde,
-				this.name,
+				this.getName(),
 				this.geburtstag,
 				this.getAdresse(),
 				this.land,
@@ -64,7 +73,7 @@ public class Kunde{
 		case 0:
 			return this.idKunde;
 		case 1:
-			return this.name;
+			return this.getName();
 		case 2:
 			return this.geburtstag;
 		case 3:

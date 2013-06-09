@@ -19,6 +19,7 @@ public class Main_Controller implements ListSelectionListener {
 	private Main_View MainView;
 	private ticketBearbeitung_View TicketEditView;
 	private mitarbeiter_View MitarbeiterView;
+	private kunden_View KundenView;
 
 	// Objekt des eingeloggten Mitarbeiters
 	private Mitarbeiter user;
@@ -151,15 +152,19 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addListenerKundeRefresh(new kundeRefreshListener());
 		MainView.addListenerKundeSuche(new kundeSucheListener());
 		MainView.addKeyListenerKundeSuche(new kundeSucheKeyListener());
+		MainView.addListenerKundeEdit(new kundeEditListener());
 
 		// Buttons im Mitarbeiter-Tab
 		MainView.addListenerMitarbeiterRefresh(new mitarbeiterRefreshListener());
 		MainView.addListenerMitarbeiterSuche(new mitarbeiterSucheListener());
 		MainView.addKeyListenerMitarbeiterSuche(new mitarbeiterSucheKeyListener());
+		MainView.addListenerMitarbeiterEdit(new mitarbeiterEditListener());
+		MainView.addListenerMitarbeiterNew(new mitarbeiterNewListener());
 
 		// Tabellen-Listener
 		MainView.tickets.getSelectionModel().addListSelectionListener(this);
 	}
+	
 	
 	class UserSettings implements ActionListener{
 
@@ -167,18 +172,19 @@ public class Main_Controller implements ListSelectionListener {
 		public void actionPerformed(ActionEvent e) {
 			MitarbeiterView = new mitarbeiter_View(kategorie, land, abteilung, level);
 			
-			MitarbeiterView.speichernEdit(new editMitarbeiterSpeichern());
-			MitarbeiterView.MitarbeiterÄndern(user);
+			//"Speichern Button"
+			MitarbeiterView.speichernEditAccount(new editAccountSpeichern());
+			MitarbeiterView.accountEdit(user);
 			
 			
 		}
 		
 	}
-	class editMitarbeiterSpeichern implements ActionListener{
+	class editAccountSpeichern implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Mitarbeiter tmpUser = MitarbeiterView.saveEditMitarbeiter();
+			Mitarbeiter tmpUser = MitarbeiterView.saveEditAccount();
 			if(tmpUser != null){
 			user = tmpUser;
 			db.mitarbeiterSave(user);
@@ -214,6 +220,7 @@ public class Main_Controller implements ListSelectionListener {
 	private void resetMitarbeiter() {
 		mitarbeiter.reset();
 	}
+		
 	// Methode ruft Suche im Array der Tabelle mit Werten aus
 	// Suchfeld+Suchspalte auf
 	private void mitarbeiterSuche() {
@@ -225,6 +232,55 @@ public class Main_Controller implements ListSelectionListener {
 
 	// ############### ActionListener
 
+	//Edit Mitarbeiter
+	class mitarbeiterEditListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent a) {
+			
+			MitarbeiterView = new mitarbeiter_View(kategorie, land, abteilung, level);
+			
+			MitarbeiterView.speichernEditMitarbeiter(new saveMitarbeiterEdit());
+			try{
+				MitarbeiterView.mitarbeiterEdit(mitarbeiter.getMitarbeiterAtRow(MainView.getSelectedMitarbeiter()));
+						
+				}catch(Exception e){
+					JOptionPane
+					.showMessageDialog(MainView, "Bitte zu bearbeitenden Mitarbeiter auswählen!");
+				}	
+		}
+		
+	}
+	class mitarbeiterNewListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			MitarbeiterView = new mitarbeiter_View(kategorie, land, abteilung, level);
+			
+			MitarbeiterView.speichernEditMitarbeiter(new saveMitarbeiterEdit());
+			
+			MitarbeiterView.mitarbeiterEdit(new Mitarbeiter());
+			
+		}
+		
+	}
+	class saveMitarbeiterEdit implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			Mitarbeiter tmpUser = MitarbeiterView.saveMitarbeiterEdit();
+			if(tmpUser != null){
+			db.mitarbeiterSave(tmpUser);
+
+			reloadMitarbeiter();
+			MitarbeiterView.dispose();
+			}
+		}
+		
+	}
+		
+	
 	// Refresh-Button
 	class mitarbeiterRefreshListener implements ActionListener {
 		@Override
@@ -233,14 +289,6 @@ public class Main_Controller implements ListSelectionListener {
 		}
 	}
 
-	class mitarbeiterNewListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-	}
 
 	// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
 	class mitarbeiterSucheListener implements ActionListener {
@@ -252,7 +300,7 @@ public class Main_Controller implements ListSelectionListener {
 
 	}
 
-	// Suchbutton ruft KundenSuche() auf bei Enter-Taste
+	// Suchbutton ruft Suche() auf bei Enter-Taste
 	class mitarbeiterSucheKeyListener implements KeyListener {
 
 		@Override
@@ -312,18 +360,38 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
+	class kundeEditListener implements ActionListener {
 
-	// Neuer Kunde-Button
+		@Override
+		public void actionPerformed(ActionEvent a) {
+			KundenView = new kunden_View(land, erreichbarkeit);
+			
+			try{
 
-	class kundeNewListener implements ActionListener {
+				KundenView.kundeEdit(kunden.getKundeAtRow(MainView.getSelectedKunde()));		
+				}catch(Exception e){
+					JOptionPane
+					.showMessageDialog(MainView, "Bitte zu bearbeitenden Kunden auswählen!");
+				}
+			KundenView.speichernEditKunde(new saveKundenEdit());
+		}
+		
+	}
+	class saveKundenEdit implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			Kunde tmpKunde = KundenView.saveKundeEdit();
+			if(tmpKunde != null){
+			db.kundeSave(tmpKunde);
 
+			reloadKunden();
+			KundenView.dispose();
+			}
 		}
+		
 	}
-
+	
 	// Suchbutton ruft die KundenSuche() auf mit Klick auf Button
 	class kundeSucheListener implements ActionListener {
 
@@ -865,7 +933,8 @@ public class Main_Controller implements ListSelectionListener {
 			}
 		}
 	}
+}
 		
 
 	
-}
+

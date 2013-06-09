@@ -107,11 +107,11 @@ public class Mitarbeiter_Table extends AbstractTableModel {
 		return tmpMitarbeiter;
 	}
 
-	public Mitarbeiter getEmployeeAtRow(int row) {
+	public Mitarbeiter getMitarbeiterAtRow(int row) {
 		return mitarbeiter.get(row);
 	}
 
-	public int getRowOfEmployee(Mitarbeiter c) {
+	public int getRowOfMitarbeiter(Mitarbeiter c) {
 		return mitarbeiter.indexOf(c);
 	}
 
