@@ -156,7 +156,10 @@ public class Ticket_Table extends AbstractTableModel {
 	}
 	public void ticketUpdate(Ticket tmp){
 		if(tmp.idTicket == null || tmp.idTicket.equals("") || tmp.idTicket.equals("0")) return;
+<<<<<<< HEAD
 		
+=======
+>>>>>>> tests….
 		for(Ticket t: backup){
 			
 			if(t.idTicket.matches(tmp.idTicket)){

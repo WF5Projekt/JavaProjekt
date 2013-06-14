@@ -135,6 +135,10 @@ public class Mitarbeiter extends Database_Model {
 	
 	@Override
 	public String toString() {
+<<<<<<< HEAD
 		return this.getName();
+=======
+		return this.name;
+>>>>>>> tests….
 	}
 }

@@ -438,7 +438,11 @@ public class Main_View extends JFrame {
 									gbc_btn_GelösteTickets.gridy = 12;
 									panel_10.add(btn_GelösteTickets, gbc_btn_GelösteTickets);
 					
+<<<<<<< HEAD
 							btn_AbgeschlosseneTickets = new JButton("Abgeschlossene Tickets");
+=======
+							btn_AbgeschlosseneTickets = new JButton("Geschlossene Tickets");
+>>>>>>> testsâ€¦.
 							btn_AbgeschlosseneTickets.setIcon(new ImageIcon(Main_View.class
 									.getResource("/lib/png/check.png")));
 							btn_AbgeschlosseneTickets.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -1018,7 +1022,11 @@ public class Main_View extends JFrame {
 			this.btn_NeueTickets.setVisible(true);
 			this.btn_TicketBearbeiten.setVisible(false);
 			this.btn_GelösteTickets.setVisible(true);
+<<<<<<< HEAD
 		} else if (UserLevel == 2 || UserLevel == 3) {
+=======
+		} else if (UserLevel == 2) {
+>>>>>>> testsâ€¦.
 
 			this.btn_GelösteTickets.setVisible(false);
 			this.btn_NeueTickets.setVisible(false);
@@ -1160,7 +1168,11 @@ public class Main_View extends JFrame {
 		if (UserLevel == 1) {
 			this.btn_TicketErfassen.setVisible(true);
 
+<<<<<<< HEAD
 		} else if (UserLevel == 2 || UserLevel == 3) {
+=======
+		} else if (UserLevel == 2) {
+>>>>>>> testsâ€¦.
 			this.btn_TicketErfassen.setVisible(false);
 
 		}
@@ -1200,7 +1212,11 @@ public class Main_View extends JFrame {
 		this.btn_TicketsOffen.setVisible(true);
 		if (UserLevel == 1) {
 			this.btn_TicketAlsFAQ.setVisible(true);
+<<<<<<< HEAD
 		} else if (UserLevel == 2 || UserLevel == 3) {
+=======
+		} else if (UserLevel == 2) {
+>>>>>>> testsâ€¦.
 			this.btn_TicketAlsFAQ.setVisible(false);
 		}
 	}
@@ -1269,9 +1285,12 @@ public class Main_View extends JFrame {
 	public void addListenerTicketAnKunde(ActionListener a){
 		this.btn_TicketAnKunde.addActionListener(a);
 	}
+<<<<<<< HEAD
 	public void addListenerTicketAlsFAQ(ActionListener a){
 		this.btn_TicketAlsFAQ.addActionListener(a);
 	}
+=======
+>>>>>>> testsâ€¦.
 	
 	// ########### Suchfeld: Such-Text und die Such-Spalte wird an den
 	// Controller gegeben.

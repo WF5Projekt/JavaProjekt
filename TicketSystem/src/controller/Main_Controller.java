@@ -18,8 +18,11 @@ public class Main_Controller implements ListSelectionListener {
 
 	private Main_View MainView;
 	private ticketBearbeitung_View TicketEditView;
+<<<<<<< HEAD
 	private FAQ_View FAQview;
 	
+=======
+>>>>>>> tests….
 	private mitarbeiter_View MitarbeiterView;
 	private kunden_View KundenView;
 
@@ -141,8 +144,11 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addListenerTicketEdit(new ticketEditListener());
 		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addListenerTicketAnKunde(new TicketAnKundeListener());
+<<<<<<< HEAD
 		MainView.addListenerTicketAlsFAQ(new TicketAlsFAQ());
 		
+=======
+>>>>>>> tests….
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 		MainView.addListenerAllTickets(new getAllTickets());
 		MainView.addListenerNeueTickets(new getNeueTickets());
@@ -262,9 +268,15 @@ public class Main_Controller implements ListSelectionListener {
 			
 			MitarbeiterView = new mitarbeiter_View(kategorie, land, abteilung, level);
 			
+<<<<<<< HEAD
 			MitarbeiterView.speichernEditAccount(new editAccountSpeichern());
 			
 			MitarbeiterView.accountEdit(new Mitarbeiter());
+=======
+			MitarbeiterView.speichernEditMitarbeiter(new saveMitarbeiterEdit());
+			
+			MitarbeiterView.mitarbeiterEdit(new Mitarbeiter());
+>>>>>>> tests….
 			
 		}
 		
@@ -459,8 +471,20 @@ public class Main_Controller implements ListSelectionListener {
 		tickets.searchTicket(spalte, suche);
 	}
 
+<<<<<<< HEAD
 	
 	
+=======
+	// ########### ActionListener Klassen
+	
+	/*
+	MainView.addListenerAllTickets(new getAllTickets());
+	MainView.addListenerTicketNew(new getNeueTickets());
+	MainView.addListenerMeineTickets(new getMeineTickets());
+	MainView.addListenerGeschlosseneTickets(new getGeschlosseneTickets());
+	MainView.addListenerFAQTickets(new getFAQTickets());
+*/
+>>>>>>> tests….
 	class getAllTickets implements ActionListener{
 
 		@Override
@@ -619,6 +643,7 @@ public class Main_Controller implements ListSelectionListener {
 	//3. Fenster stellt das Ticket dar (auch Komboboxen zeigen den Selektierten wert)
 	//4. Ticket kann bearbeitet werden
 	//5. wird Ticket gespeichert, wird Ticket an Datenbank geschickt
+<<<<<<< HEAD
 	class ticketEditListener implements ActionListener {
 
 		@Override
@@ -678,6 +703,33 @@ public class Main_Controller implements ListSelectionListener {
 			
 			
 		}
+=======
+	class ticketEditListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			try{
+			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
+					try{
+						TicketEditView = new ticketBearbeitung_View( kategorie, priorit�t, MitarbeiterCombo, KundenCombo);
+						
+						
+						TicketEditView.TicketBearbeiten(tmpTicket);
+						TicketEditView.addListenerTicketSave(new EditTicketListener());
+						TicketEditView.addListenerTicketLoesung(new EditTicketLoesungListener());
+						
+						} catch(Exception e){
+								JOptionPane
+										.showMessageDialog(MainView, "Ups! Da ging wohl etwas beim �ffnen des Ticket-Bearbeiten Fensters schief.");
+						}
+			}catch(Exception e){
+				JOptionPane
+				.showMessageDialog(MainView, "Bitte zu bearbeitendes Ticket ausw�hlen!");
+			}	
+		}
+		
+>>>>>>> tests….
 	}
 
 	class EditTicketListener implements ActionListener {
@@ -686,12 +738,47 @@ public class Main_Controller implements ListSelectionListener {
 		public void actionPerformed(ActionEvent arg0) {
 
 			Ticket temp = TicketEditView.saveEditedTicket();
+<<<<<<< HEAD
 			
 			
 			
 			db.ticketSaveEdit(temp);
 			reloadTickets();
 			MainView.viewButtonsMeine();
+=======
+
+
+			if(temp.idMitarbeiter == null){
+				int entscheidung = JOptionPane.showConfirmDialog(null,
+			
+					"Ticket wird Ihnen zugewiesen.",
+					"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
+				// 0 = Ja, 1= Nein
+				if (entscheidung == 1) {
+					TicketEditView.dispose();
+					return;
+				}					
+				else{
+					// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
+					// gesetzt.
+					if (temp.idStatus.equals("2"))
+						temp.idStatus = "3";
+			
+					db.ticketZumBearbeiten(temp, user);
+					//Ticket lokal updaten
+					tickets.ticketUpdate(temp);
+					
+					tickets.getMeineTickets(user);
+
+				
+					TicketEditView.dispose();
+				}
+			}
+			// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
+			// gesetzt.
+			db.ticketSaveEdit(temp);
+			reloadTickets();
+>>>>>>> tests….
 			
 			tickets.getMeineTickets(user);
 
@@ -708,10 +795,14 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Ticket temp = TicketEditView.saveEditedTicket();
+<<<<<<< HEAD
 			if(temp.idMitarbeiter == null){
 				
 			}
 			else if(!temp.tmploesung.trim().equals("")){
+=======
+			if(!temp.tmploesung.trim().equals("")){
+>>>>>>> tests….
 				int entscheidung = JOptionPane.showConfirmDialog(null,
 						"Ihr Ticket wird nun an das Level 1 zur�ckgeleitet!",
 						"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
@@ -770,6 +861,7 @@ public class Main_Controller implements ListSelectionListener {
 		}
 		
 	}
+<<<<<<< HEAD
 	class TicketAlsFAQ implements ActionListener{
 
 		@Override
@@ -811,6 +903,8 @@ public class Main_Controller implements ListSelectionListener {
 		}
 		
 	}
+=======
+>>>>>>> tests….
 	
 	class TicketAnKundeListener implements ActionListener{
 
@@ -846,6 +940,10 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> tests….
 	// Suchbutton ruft TicketSuche() auf bei Enter-Taste
 	class ticketSucheKeyListener implements KeyListener {
 

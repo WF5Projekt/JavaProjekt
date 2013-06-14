@@ -614,7 +614,11 @@ public class mitarbeiter_View extends JFrame {
 	}
 	public Mitarbeiter saveEditAccount(){
 		
+<<<<<<< HEAD
 		if(! ( pw_acc.getPassword().equals(null) || pw_acc.getPassword().equals(null) ) ){
+=======
+		if(! ( pw_acc.getText().isEmpty() || pw_acc.getText().isEmpty() ) ){
+>>>>>>> tests….
 			if( this.pw_acc.getPassword().toString().equals(pw2_acc.getPassword().toString() )  ){
 				m.passwort = MD5.MD5(String.valueOf(pw_acc.getPassword()));
 			}

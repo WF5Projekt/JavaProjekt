@@ -184,7 +184,10 @@ public class Database_Operations extends Database_Model {
 		}
 		return tickets;
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> testsâ€¦.
 	// Gibt die Liste der Gelösten Tickets zurück
 	public ArrayList<Ticket> getGelösteTickets() {
 
@@ -213,7 +216,63 @@ public class Database_Operations extends Database_Model {
 		return tickets;
 	}
 	
+<<<<<<< HEAD
 
+=======
+	// Rufe nur Tickets von einem Kunden auf
+	public static ArrayList<Ticket> getTicketsKunde(String idKunde) {
+
+		Connection con = getConnection();
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+		Statement query;
+		try {
+			query = con.createStatement();
+			String sql = "call showallTickets('" + idKunde + "','0')";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getTicketsWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Fehler bei Ticket-Abfrage für Kunden-Tickets)");
+		}
+		return tickets;
+	}
+
+	// Tickets von einem Mitarbeiter auf
+	public static ArrayList<Ticket> getTicketsMitarbeiter(String idMitarbeiter) {
+
+		Connection con = getConnection();
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+		Statement query;
+		try {
+			query = con.createStatement();
+			// showAllTickets liefert für Mitarb
+			String sql = "call showallTickets('" + idMitarbeiter + "', '1')";
+
+			ResultSet result = query.executeQuery(sql);
+			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
+			// mit Methode...
+			while (result.next()) {
+				tickets.add(getTicketsWithResultSet(result));
+			}
+			query.close();
+			con.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Fehler bei Ticket-Abfrage für Mitarbeiter-Tickets)");
+		}
+		return tickets;
+	}
+	
+>>>>>>> testsâ€¦.
 	// Neues Ticket in Datenbank erstellen
 	// gleichzeitig wird das neu erstellte Ticket an die Ticket-Table gegeben
 	public Ticket ticketNew(Ticket t) {
@@ -328,6 +387,7 @@ public class Database_Operations extends Database_Model {
 			/*
 			 * Ticket wird einem Mitarbeiter zugewiesen
 			 */
+<<<<<<< HEAD
 			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '', '"+ t.idKategorie
 					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
 			stmt.execute(query);
@@ -337,6 +397,14 @@ public class Database_Operations extends Database_Model {
 			
 			query = "call sp_bindTicket(' " + t.idTicket + "', '"+ user.idMitarbeiter + "')";
 			
+=======
+			
+			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '', '"+ t.idKategorie
+			+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
+			stmt.execute(query);
+			
+			query = "call sp_bindTicket(' " + t.idTicket + "', '"+ user.idMitarbeiter + "')";
+>>>>>>> testsâ€¦.
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -344,6 +412,7 @@ public class Database_Operations extends Database_Model {
 			ex.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
 
 	
 	public void ticketAlsFAQ(Ticket t){
@@ -355,6 +424,15 @@ public class Database_Operations extends Database_Model {
 			String query = "call newFAQ2(' " + t.idTicket + "', '"+ t.beschreibung + "', '" + t.tmploesung
 			+ "', '"+ t.idKategorie + "')";
 			
+=======
+	// Lösche Ticket aus Datenbank
+	public void ticketDelete(Ticket t) {
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM ticket WHERE idTicket = '" + t.idTicket
+					+ "';";
+>>>>>>> testsâ€¦.
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -362,6 +440,10 @@ public class Database_Operations extends Database_Model {
 			ex.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> testsâ€¦.
 	
 	/*
 	 * ######################################################################
