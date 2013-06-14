@@ -4,6 +4,7 @@
 
 
 .metadata
+.classpath*
 
 
 # External tool builders
