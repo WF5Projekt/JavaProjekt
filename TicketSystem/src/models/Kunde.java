@@ -108,7 +108,7 @@ public class Kunde{
 	}
 	
 	public String toString(){
-		return this.idKunde + "-" + this.name;
+		return this.idKunde + "-" + getName();
 	}
 	public String toID(){
 		return this.idKunde;

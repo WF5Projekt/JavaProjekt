@@ -18,6 +18,8 @@ public class Main_Controller implements ListSelectionListener {
 
 	private Main_View MainView;
 	private ticketBearbeitung_View TicketEditView;
+	private FAQ_View FAQview;
+	
 	private mitarbeiter_View MitarbeiterView;
 	private kunden_View KundenView;
 
@@ -139,6 +141,8 @@ public class Main_Controller implements ListSelectionListener {
 		MainView.addListenerTicketEdit(new ticketEditListener());
 		MainView.addListenerTicketSuche(new ticketSucheListener());
 		MainView.addListenerTicketAnKunde(new TicketAnKundeListener());
+		MainView.addListenerTicketAlsFAQ(new TicketAlsFAQ());
+		
 		MainView.addKeyListenerTicketSuche(new ticketSucheKeyListener());
 		MainView.addListenerAllTickets(new getAllTickets());
 		MainView.addListenerNeueTickets(new getNeueTickets());
@@ -258,9 +262,9 @@ public class Main_Controller implements ListSelectionListener {
 			
 			MitarbeiterView = new mitarbeiter_View(kategorie, land, abteilung, level);
 			
-			MitarbeiterView.speichernEditMitarbeiter(new saveMitarbeiterEdit());
+			MitarbeiterView.speichernEditAccount(new editAccountSpeichern());
 			
-			MitarbeiterView.mitarbeiterEdit(new Mitarbeiter());
+			MitarbeiterView.accountEdit(new Mitarbeiter());
 			
 		}
 		
@@ -455,15 +459,8 @@ public class Main_Controller implements ListSelectionListener {
 		tickets.searchTicket(spalte, suche);
 	}
 
-	// ########### ActionListener Klassen
 	
-	/*
-	MainView.addListenerAllTickets(new getAllTickets());
-	MainView.addListenerTicketNew(new getNeueTickets());
-	MainView.addListenerMeineTickets(new getMeineTickets());
-	MainView.addListenerGeschlosseneTickets(new getGeschlosseneTickets());
-	MainView.addListenerFAQTickets(new getFAQTickets());
-*/
+	
 	class getAllTickets implements ActionListener{
 
 		@Override
@@ -622,31 +619,65 @@ public class Main_Controller implements ListSelectionListener {
 	//3. Fenster stellt das Ticket dar (auch Komboboxen zeigen den Selektierten wert)
 	//4. Ticket kann bearbeitet werden
 	//5. wird Ticket gespeichert, wird Ticket an Datenbank geschickt
-	class ticketEditListener implements ActionListener{
+	class ticketEditListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
-			try{
-			Ticket tmpTicket = tickets.getTicketAtRow(MainView.getSelectedTicket());
-					try{
-						TicketEditView = new ticketBearbeitung_View( kategorie, priorität, MitarbeiterCombo, KundenCombo);
-						
-						
-						TicketEditView.TicketBearbeiten(tmpTicket);
-						TicketEditView.addListenerTicketSave(new EditTicketListener());
-						TicketEditView.addListenerTicketLoesung(new EditTicketLoesungListener());
-						
-						} catch(Exception e){
-								JOptionPane
-										.showMessageDialog(MainView, "Ups! Da ging wohl etwas beim Öffnen des Ticket-Bearbeiten Fensters schief.");
+
+			try {
+				Ticket tmpTicket = tickets.getTicketAtRow(MainView
+						.getSelectedTicket());
+
+				if (tmpTicket.idMitarbeiter == null) {
+					
+					int entscheidung = JOptionPane.showConfirmDialog(null,
+
+					"Ticket wird Ihnen zugewiesen.", "Sind Sie sicher?",
+							JOptionPane.YES_NO_OPTION);
+					// 0 = Ja, 1= Nein
+					if (entscheidung == 1) {
+						return;
+					} else {
+							// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung" gesetzt
+							tmpTicket.idStatus = "3";
+							//Statusupdate an Datenbank und Mitarbeiter zuweisen
+							db.ticketZumBearbeiten(tmpTicket, user);
+
+							
+							//Ticket Lokal update 
+							tickets.ticketUpdate(tmpTicket);
+							
+							tickets.getMeineTickets(user);
+
+					}
+				}
+				try{
+							
+							TicketEditView = new ticketBearbeitung_View(
+									kategorie, priorität, MitarbeiterCombo,
+									KundenCombo);
+
+							TicketEditView.TicketBearbeiten(tmpTicket);
+							TicketEditView
+									.addListenerTicketSave(new EditTicketListener());
+							TicketEditView
+									.addListenerTicketLoesung(new EditTicketLoesungListener());
+
+						} catch (Exception e) {
+							JOptionPane
+									.showMessageDialog(MainView,
+											"Ups! Da ging wohl etwas beim Öffnen des Ticket-Bearbeiten Fensters schief.");
 						}
-			}catch(Exception e){
-				JOptionPane
-				.showMessageDialog(MainView, "Bitte zu bearbeitendes Ticket auswählen!");
-			}	
+					
+			
+				
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(MainView,
+						"Bitte zu bearbeitendes Ticket auswählen!");
+			}
+			
+			
 		}
-		
 	}
 
 	class EditTicketListener implements ActionListener {
@@ -655,38 +686,12 @@ public class Main_Controller implements ListSelectionListener {
 		public void actionPerformed(ActionEvent arg0) {
 
 			Ticket temp = TicketEditView.saveEditedTicket();
-
-
-			if(temp.idMitarbeiter == null){
-				int entscheidung = JOptionPane.showConfirmDialog(null,
 			
-					"Ticket wird Ihnen zugewiesen.",
-					"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
-				// 0 = Ja, 1= Nein
-				if (entscheidung == 1) {
-					TicketEditView.dispose();
-					return;
-				}					
-				else{
-					// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
-					// gesetzt.
-					if (temp.idStatus.equals("2"))
-						temp.idStatus = "3";
 			
-					db.ticketZumBearbeiten(temp, user);
-					//Ticket lokal updaten
-					tickets.ticketUpdate(temp);
-					
-					tickets.getMeineTickets(user);
-
-				
-					TicketEditView.dispose();
-				}
-			}
-			// Falls Ticket bearbeitet wird, wird Status auf "In Bearbeitung"
-			// gesetzt.
+			
 			db.ticketSaveEdit(temp);
 			reloadTickets();
+			MainView.viewButtonsMeine();
 			
 			tickets.getMeineTickets(user);
 
@@ -703,7 +708,10 @@ public class Main_Controller implements ListSelectionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Ticket temp = TicketEditView.saveEditedTicket();
-			if(!temp.tmploesung.trim().equals("")){
+			if(temp.idMitarbeiter == null){
+				
+			}
+			else if(!temp.tmploesung.trim().equals("")){
 				int entscheidung = JOptionPane.showConfirmDialog(null,
 						"Ihr Ticket wird nun an das Level 1 zurückgeleitet!",
 						"Sind Sie sicher?", JOptionPane.YES_NO_OPTION);
@@ -762,6 +770,47 @@ public class Main_Controller implements ListSelectionListener {
 		}
 		
 	}
+	class TicketAlsFAQ implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try{
+			Ticket tmpTicket = gelöst.getTicketAtRow(MainView.getSelectedTicket());
+			
+			FAQview = new FAQ_View(kategorie);
+			FAQview.addListenerTicketSave(new SaveFAQ());
+			
+			
+			} catch(Exception e){
+				JOptionPane.showMessageDialog(MainView, "Dazu muss man ein Ticket auswählen!");	
+			}
+		}
+		
+	}
+	class SaveFAQ implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			Ticket temp = FAQview.saveFAQ();
+
+					db.ticketAlsFAQ(temp);
+					
+					reloadTickets();
+					MainView.viewButtonsFAQ();
+					showTicketInfo();
+					MainView.viewDetails(false);
+					
+					tickets.aktuell = "faq";
+					MainView.setTabelle(faq);
+				
+					TicketEditView.dispose();
+				
+			
+	
+		}
+		
+	}
 	
 	class TicketAnKundeListener implements ActionListener{
 
@@ -797,7 +846,6 @@ public class Main_Controller implements ListSelectionListener {
 		}
 
 	}
-
 	// Suchbutton ruft TicketSuche() auf bei Enter-Taste
 	class ticketSucheKeyListener implements KeyListener {
 

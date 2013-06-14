@@ -184,6 +184,7 @@ public class Database_Operations extends Database_Model {
 		}
 		return tickets;
 	}
+	
 	// Gibt die Liste der Gelösten Tickets zurück
 	public ArrayList<Ticket> getGelösteTickets() {
 
@@ -212,59 +213,7 @@ public class Database_Operations extends Database_Model {
 		return tickets;
 	}
 	
-	// Rufe nur Tickets von einem Kunden auf
-	public static ArrayList<Ticket> getTicketsKunde(String idKunde) {
 
-		Connection con = getConnection();
-		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-		Statement query;
-		try {
-			query = con.createStatement();
-			String sql = "call showallTickets('" + idKunde + "','0')";
-
-			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
-			// mit Methode...
-			while (result.next()) {
-				tickets.add(getTicketsWithResultSet(result));
-			}
-			query.close();
-			con.close();
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					"Fehler bei Ticket-Abfrage für Kunden-Tickets)");
-		}
-		return tickets;
-	}
-
-	// Tickets von einem Mitarbeiter auf
-	public static ArrayList<Ticket> getTicketsMitarbeiter(String idMitarbeiter) {
-
-		Connection con = getConnection();
-		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-		Statement query;
-		try {
-			query = con.createStatement();
-			// showAllTickets liefert für Mitarb
-			String sql = "call showallTickets('" + idMitarbeiter + "', '1')";
-
-			ResultSet result = query.executeQuery(sql);
-			// Jede Abfrage = Eine Zeile -> Bilde aus der Zeile ein Ticket
-			// mit Methode...
-			while (result.next()) {
-				tickets.add(getTicketsWithResultSet(result));
-			}
-			query.close();
-			con.close();
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					"Fehler bei Ticket-Abfrage für Mitarbeiter-Tickets)");
-		}
-		return tickets;
-	}
-	
 	// Neues Ticket in Datenbank erstellen
 	// gleichzeitig wird das neu erstellte Ticket an die Ticket-Table gegeben
 	public Ticket ticketNew(Ticket t) {
@@ -379,26 +328,15 @@ public class Database_Operations extends Database_Model {
 			/*
 			 * Ticket wird einem Mitarbeiter zugewiesen
 			 */
-			
 			String query = "call sp_updateTicket(' " + t.idTicket + "', '"+ t.beschreibung + "', '', '"+ t.idKategorie
-			+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
-			stmt.execute(query);
-			
-			query = "call sp_bindTicket(' " + t.idTicket + "', '"+ user.idMitarbeiter + "')";
+					+ "', '"+ t.idPrioritaet + "', '"+ t.idStatus + "', '"+ t.idLevel + "')";
 			stmt.execute(query);
 			stmt.close();
-			con.close();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-	}
-	// Lösche Ticket aus Datenbank
-	public void ticketDelete(Ticket t) {
-		Connection con = getConnection();
-		try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM ticket WHERE idTicket = '" + t.idTicket
-					+ "';";
+			
+			stmt = con.createStatement();
+			
+			query = "call sp_bindTicket(' " + t.idTicket + "', '"+ user.idMitarbeiter + "')";
+			
 			stmt.execute(query);
 			stmt.close();
 			con.close();
@@ -407,6 +345,23 @@ public class Database_Operations extends Database_Model {
 		}
 	}
 
+	
+	public void ticketAlsFAQ(Ticket t){
+		Connection con = getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			
+			
+			String query = "call newFAQ2(' " + t.idTicket + "', '"+ t.beschreibung + "', '" + t.tmploesung
+			+ "', '"+ t.idKategorie + "')";
+			
+			stmt.execute(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 	/*
 	 * ######################################################################
